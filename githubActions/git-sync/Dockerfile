@@ -2,7 +2,7 @@ FROM alpine
 
 LABEL \
   "name"="GitHub Repo Sync" \
-  "repository"="https://github.com/BimberLabInternal/githubActions/git-sync" \
+  "repository"="https://github.com/BimberLabInternal/DevOps.git" \
   "maintainer"="Ben Bimber"
 
 RUN apk add --no-cache git openssh-client && \

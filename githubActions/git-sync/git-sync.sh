@@ -1,4 +1,5 @@
 #!/bin/sh
+# Adapted from: https://github.com/repo-sync/github-sync
 
 set -e
 
@@ -7,8 +8,8 @@ SOURCE_BRANCH=$2
 DESTINATION_BRANCH=$3
 DESTINATION_REPO=$4
 
-if [ -z $DESTINATION_REPO ];
-	DESTINATION_REPO = $GITHUB_REPOSITORY
+if [ -z $DESTINATION_REPO ];then
+	DESTINATION_REPO=$GITHUB_REPOSITORY
 fi
 
 if ! echo $SOURCE_REPO | grep '.git'
