@@ -2,6 +2,7 @@
 # Adapted from: https://github.com/repo-sync/github-sync
 
 set -e
+set -x
 
 SOURCE_REPO=$1
 SOURCE_BRANCH=$2
