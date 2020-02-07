@@ -1,0 +1,33 @@
+  
+name: LabKey Branch Creation
+author: Ben Bimber
+description: Sync current repository with remote
+branding:
+  icon: 'git-branch'
+  color: 'black'
+inputs:
+  source_repo:
+    description: GitHub public repo slug or full https clone url (with access_token if needed)
+    required: true
+  source_branch_prefix:
+    description: Any branches in the source repo starting with this string will be considered (i.e. 'release')
+    required: true
+  destination_repo:
+    description: GitHub public repo slug or full https clone url (with access_token if needed).  Defaults to this repo.
+    required: false
+  destination_branch_prefix:
+    description: For any potential source branch, the source_branch_prefix will be substituted for the destination_branch_prefix to create the destination branch name
+    required: true
+  github_token:
+    description: GitHub token secret
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    GITHUB_TOKEN: ${{ inputs.github_token }}
+  args:
+    - ${{ inputs.source_repo }}
+    - ${{ inputs.source_branch_prefix }}    
+    - ${{ inputs.destination_repo }}
+    - ${{ inputs.destination_branch_prefix }}
