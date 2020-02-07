@@ -71,6 +71,8 @@ do
 	LATEST=`echo -e "$LOCAL_NAME\n$LATEST_LOCAL" | sort -V | tail -n 1`	
 	if [ $LATEST != $LATEST_LOCAL ];then
 		echo 'Branch will be created: '$BRANCH' -> '$LOCAL_NAME
+		#git checkout -b ${LOCAL_NAME} source/${BRANCH}
+		#git push
 	else
 		echo 'Branch version lower than highest existing, will not create: '$BRANCH
 	fi
