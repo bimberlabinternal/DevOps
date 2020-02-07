@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Adapted from: https://github.com/repo-sync/github-sync
 
 set -e

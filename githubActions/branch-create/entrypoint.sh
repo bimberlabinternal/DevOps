@@ -12,4 +12,4 @@ fi
 mkdir -p ~/.ssh
 cp /root/.ssh/* ~/.ssh/ 2> /dev/null || true 
 
-sh -c "/lk-branch-create.sh $*"
+bash -c "/lk-branch-create.sh $*"
