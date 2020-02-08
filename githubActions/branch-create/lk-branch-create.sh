@@ -43,7 +43,7 @@ then
     DESTINATION_REPO="git@github.com:${DESTINATION_REPO}.git"
     GIT_SSH_COMMAND="ssh -v"
   else
-    DESTINATION_REPO="https://github.com/${DESTINATION_REPO}.git"
+    DESTINATION_REPO="https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/${DESTINATION_REPO}.git"
   fi
 fi
 
@@ -52,6 +52,7 @@ echo "SOURCE_PREFIX=$SOURCE_PREFIX"
 echo "DESTINATION=$DESTINATION_REPO"
 echo "DESTINATION_PREFIX=$DESTINATION_PREFIX"
 
+git config user.name "${GITHUB_ACTOR}"
 git clone "$DESTINATION_REPO" 
 cd `basename "$DESTINATION_REPO" .git`
 git remote add source "$SOURCE_REPO"
