@@ -52,7 +52,6 @@ echo "SOURCE_PREFIX=$SOURCE_PREFIX"
 echo "DESTINATION=$DESTINATION_REPO"
 echo "DESTINATION_PREFIX=$DESTINATION_PREFIX"
 
-git config user.name "${GITHUB_ACTOR}"
 git clone "$DESTINATION_REPO" 
 cd `basename "$DESTINATION_REPO" .git`
 git remote add source "$SOURCE_REPO"

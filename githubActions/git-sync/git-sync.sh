@@ -37,7 +37,6 @@ fi
 echo "SOURCE=$SOURCE_REPO:$SOURCE_BRANCH"
 echo "DESTINATION=$DESTINATION_REPO:$DESTINATION_BRANCH"
 
-git config user.name "${GITHUB_ACTOR}"
 git clone "$DESTINATION_REPO" -b ${DESTINATION_BRANCH}
 cd `basename "$DESTINATION_REPO" .git`
 git remote add source "$SOURCE_REPO"
