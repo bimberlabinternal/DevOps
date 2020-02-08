@@ -37,11 +37,10 @@ fi
 echo "SOURCE=$SOURCE_REPO:$SOURCE_BRANCH"
 echo "DESTINATION=$DESTINATION_REPO:$DESTINATION_BRANCH"
 
-git clone "$DESTINATION_REPO" && cd `basename "$DESTINATION_REPO" .git`
+git clone "$DESTINATION_REPO" -b ${DESTINATION_BRANCH}
+cd `basename "$DESTINATION_REPO" .git`
 git remote add source "$SOURCE_REPO"
-
-git checkout ${DESTINATION_BRANCH}
 git fetch source
 
-#git merge --ff-only source/${SOURCE_BRANCH}
-#git push
+git merge --ff-only source/${SOURCE_BRANCH}
+git push
