@@ -47,32 +47,51 @@ git config user.email "${GITHUB_EMAIL}"
 git remote add merge-dest https://$GITHUB_TOKEN@github.com/${TARGET_ORG}/${REPO}.git
 git fetch merge-dest
 
-git checkout --no-track -b $STAGING_BRANCH merge-dest/${DESTINATION_BRANCH}
-git merge --no-ff origin/${SOURCE_BRANCH} -m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}"
+# Note, if staging exists simply merge changes into it
+STAGING_EXISTS=`git branch -r --list "merge-dest/${STAGING_BRANCH}" | wc -l`
+if [ $STAGING_EXISTS == 0 ];then
+	echo "Staging branch does not exist, creating and merging"
+	git checkout --no-track -b $STAGING_BRANCH merge-dest/${DESTINATION_BRANCH}
+	git merge --no-ff origin/${SOURCE_BRANCH} -m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}"
 
-#Determine if we actually have differences:
-GIT_COMMAND="git cherry -v merge-dest/$DESTINATION_BRANCH $SOURCE_BRANCH"	
-$GIT_COMMAND
-NEW_COMMITS=`$GIT_COMMAND | wc -l `
-if [ $NEW_COMMITS == 0 ];then
-	echo 'There are no new commits, aborting'
-	exit 0
+	#Determine if we actually have differences:
+	GIT_COMMAND="git cherry -v merge-dest/$DESTINATION_BRANCH $SOURCE_BRANCH"	
+	$GIT_COMMAND
+	NEW_COMMITS=`$GIT_COMMAND | wc -l `
+	if [ $NEW_COMMITS == 0 ];then
+		echo 'There are no new commits, aborting'
+		exit 0
+	fi
+
+	if [ ! -z $DRY_RUN ];then
+		echo "Dry run only, aborting before push"
+		exit 0
+	fi
+
+	git push --set-upstream merge-dest $STAGING_BRANCH
+
+	REVIEWER_ARGS=
+	if [ ! -z $PR_REVIEWERS ];then
+		REVIEWER_ARGS="-r "$PR_REVIEWERS
+	fi
+
+
+	hub pull-request \
+		--base ${TARGET_ORG}:${DESTINATION_BRANCH} \
+		--head ${TARGET_ORG}:${STAGING_BRANCH} \
+		$REVIEWER_ARGS \
+		-m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}, automatically created"
+
+else
+	echo "Staging branch exists, merging into it and assuming PR exists"
+	git fetch merge-dest
+	git checkout -b $STAGING_BRANCH merge-dest/$STAGING_BRANCH
+	git merge --ff-only origin/${SOURCE_BRANCH}
+	
+	if [ ! -z $DRY_RUN ];then
+		echo "Dry run only, aborting before push"
+		exit 0
+	fi
+	
+	git push -u merge-dest
 fi
-
-if [ ! -z $DRY_RUN ];then
-	echo "Dry run only, aborting before commit"
-	exit 0
-fi
-
-git push --set-upstream merge-dest $STAGING_BRANCH
-
-REVIEWER_ARGS=
-if [ ! -z $PR_REVIEWERS ];then
-	REVIEWER_ARGS="-r "$PR_REVIEWERS
-fi
-
-hub pull-request \
-	--base ${TARGET_ORG}:${DESTINATION_BRANCH} \
-	--head ${TARGET_ORG}:${STAGING_BRANCH} \
-	$REVIEWER_ARGS \
-	-m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}"

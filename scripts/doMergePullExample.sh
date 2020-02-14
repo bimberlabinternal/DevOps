@@ -9,8 +9,8 @@ mergeRepo() {
 	# -e DRY_RUN=1
 	# To use another org (such as for testing):
 	# -e TARGET_ORG='anotherOrg'
-	docker run \
-		-e GITHUB_EMAIL='<EMAIL>' \		 
+	docker run --rm \
+		-e GITHUB_EMAIL='<EMAIL>' \
 		-e GITHUB_TOKEN='<TOKEN>' \
 		-i lk-merge-pull \
 		$1 $2 $3
