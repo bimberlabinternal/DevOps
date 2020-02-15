@@ -86,7 +86,7 @@ else
 	echo "Staging branch exists, merging into it and assuming PR exists"
 	git fetch origin
 	git checkout -b $STAGING_BRANCH merge-dest/$STAGING_BRANCH
-	git merge --ff-only origin/${SOURCE_BRANCH}
+	git merge origin/${SOURCE_BRANCH}
 	
 	if [ ! -z $DRY_RUN ];then
 		echo "Dry run only, aborting before push"
