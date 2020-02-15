@@ -29,7 +29,7 @@ if [ -z $TARGET_ORG ];then
 	TARGET_ORG=labkey
 fi
 
-STAGING_BRANCH=fb_merge_testing_${SOURCE_BRANCH}
+STAGING_BRANCH=fb_merge_${SOURCE_BRANCH}
 DESTINATION_BRANCH=develop
 
 echo "REPO: $REPO"
