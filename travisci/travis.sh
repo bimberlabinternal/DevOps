@@ -171,7 +171,7 @@ if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
 
     mkdir -p $CATALINA_HOME
     cd $CATALINA_HOME
-    curl -O http://mirror.olnevhost.net/pub/apache/tomcat/tomcat-8/v8.5.50/bin/apache-tomcat-8.5.50.tar.gz
+	curl -O https://downloads.apache.org/tomcat/tomcat-8/v8.5.51/bin/apache-tomcat-8.5.51.tar.gz 
     tar xzvf apache-tomcat-8*tar.gz -C $CATALINA_HOME --strip-components=1
     rm apache-tomcat-8*tar.gz
 fi
