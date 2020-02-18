@@ -4,7 +4,6 @@
 # changes into the LabKey fork, and automatically open a PR.
 
 set -e
-set -x
 
 SOURCE_ORG=$1
 if [ -z $SOURCE_ORG ];then

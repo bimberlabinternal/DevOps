@@ -18,6 +18,8 @@ fi
 
 echo "Base version inferred from branch: "$BASE_VERSION
 echo "Short base version inferred from branch: "$BASE_VERSION_SHORT
+date +%F" "%T
+pwd
 
 #Determine a unique build dir, based on where we pull from:
 BASEDIR=$HOME"/labkey_build/"$BASE_VERSION
@@ -152,6 +154,8 @@ cloneGit BimberLabInternal BimberLabKeyModules $BRANCH
 cloneGit Labkey ehrModules $LK_BRANCH
 
 cd $SVN_DIR
+echo 'Git clone complete'
+date +%F" "%T
 
 # Modify gradle config:
 echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODULES_DIR, BuildUtils.OPTIONAL_MODULES_DIR], ['ehr', 'ehr_billing', 'EHR_ComplianceDB'], true)" >> settings.gradle
@@ -178,6 +182,9 @@ fi
 
 cd $SVN_DIR
 
+echo 'Starting build'
+date +%F" "%T
+
 GRADLE_OPTS=-Xmx2048m
 ./gradlew \
     -Dorg.gradle.daemon=false \
@@ -188,20 +195,26 @@ GRADLE_OPTS=-Xmx2048m
     -PdeployMode=prod \
     cleanNodeModules cleanBuild cleanDeploy deployApp
 
-./gradlew \
-    -Dorg.gradle.daemon=false \
-    -Dtomcat.home=$CATALINA_HOME \
-    -PincludeVcs \
-    -PbuildFromSource=true \
-    -PdeployMode=prod \
-    -PmoduleSet=distributions \
-    -PdistDir=$DIST_DIR \
-    :distributions:discvr:dist :distributions:discvr_modules:dist :distributions:prime-seq-modules:dist
-
-mv ./dist/* $DIST_DIR
+echo 'deployApp Complete'
+date +%F" "%T
 
 #Rename artifacts if a public release:
 if [ ! -z $TRAVIS_TAG ];then
+	./gradlew \
+		-Dorg.gradle.daemon=false \
+		-Dtomcat.home=$CATALINA_HOME \
+		-PincludeVcs \
+		-PbuildFromSource=true \
+		-PdeployMode=prod \
+		-PmoduleSet=distributions \
+		-PdistDir=$DIST_DIR \
+		:distributions:discvr:dist :distributions:discvr_modules:dist :distributions:prime-seq-modules:dist
+
+	mv ./dist/* $DIST_DIR
+
+	echo 'dist Complete'
+	date +%F" "%T
+
     echo "Renaming artifact for release"
     mv $DIST_DIR/discvr/*.gz $DIST_DIR/discvr/DISVCR-${BASE_VERSION}.installer.tar.gz
     mv $DIST_DIR/discvr_modules/*.zip $DIST_DIR/discvr/DISVCR-${BASE_VERSION}.modules.zip
