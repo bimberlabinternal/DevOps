@@ -47,20 +47,20 @@ git config user.email "${GITHUB_EMAIL}"
 git remote add merge-dest https://$GITHUB_TOKEN@github.com/${TARGET_ORG}/${REPO}.git
 git fetch merge-dest
 
-# Note, if staging exists simply merge changes into it
-STAGING_EXISTS=`git branch -r --list "merge-dest/${STAGING_BRANCH}" | wc -l`
-if [ $STAGING_EXISTS == 0 ];then
-	echo "Staging branch does not exist, creating and merging"
-	git checkout --no-track -b $STAGING_BRANCH merge-dest/${DESTINATION_BRANCH}
+NEW_COMMITS=`git cherry -v merge-dest/$DESTINATION_BRANCH origin/$SOURCE_BRANCH | wc -l `
+if [ $NEW_COMMITS != 0 ];then
+	git branch --force $STAGING_BRANCH --no-track merge-dest/${DESTINATION_BRANCH}
+	git checkout $STAGING_BRANCH
 	git merge --no-ff origin/${SOURCE_BRANCH} -m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}"
-
-	#Determine if we actually have differences:
-	GIT_COMMAND="git cherry -v merge-dest/$DESTINATION_BRANCH $SOURCE_BRANCH"	
-	$GIT_COMMAND
-	NEW_COMMITS=`$GIT_COMMAND | wc -l `
-	if [ $NEW_COMMITS == 0 ];then
-		echo 'There are no new commits, aborting'
-		exit 0
+	
+	# Check whether existing staging branch had any changes made directly to it
+	PREVIOUS_CHANGES=`git cherry -v $STAGING_BRANCH origin/$STAGING_BRANCH | wc -l `
+	if [ $PREVIOUS_CHANGES != 0 ];then
+		# Re-apply changes from previous staging branch
+		git checkout -b previous_staging --no-track origin/$STAGING_BRANCH
+		git rebase $STAGING_BRANCH
+		git checkout $STAGING_BRANCH
+		git merge --ff-only previous_staging
 	fi
 
 	if [ ! -z $DRY_RUN ];then
@@ -68,30 +68,22 @@ if [ $STAGING_EXISTS == 0 ];then
 		exit 0
 	fi
 
-	git push --set-upstream merge-dest $STAGING_BRANCH
+	git push --force $STAGING_BRANCH -u merge-dest $STAGING_BRANCH
 
-	REVIEWER_ARGS=
-	if [ ! -z $PR_REVIEWERS ];then
-		REVIEWER_ARGS="-r "$PR_REVIEWERS
+	PR_EXISTS=`hub pr -h $STAGING_BRANCH -s open | wc -l`
+	if [ $PR_EXISTS == 0 ]; then
+		# Create pull request
+		REVIEWER_ARGS=
+		if [ ! -z $PR_REVIEWERS ];then
+			REVIEWER_ARGS="-r "$PR_REVIEWERS
+		fi
+
+		hub pull-request \
+			--base ${TARGET_ORG}:${DESTINATION_BRANCH} \
+			--head ${TARGET_ORG}:${STAGING_BRANCH} \
+			$REVIEWER_ARGS \
+			-m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}, automatically created"
 	fi
-
-
-	hub pull-request \
-		--base ${TARGET_ORG}:${DESTINATION_BRANCH} \
-		--head ${TARGET_ORG}:${STAGING_BRANCH} \
-		$REVIEWER_ARGS \
-		-m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}, automatically created"
-
 else
-	echo "Staging branch exists, merging into it and assuming PR exists"
-	git fetch origin
-	git checkout -b $STAGING_BRANCH merge-dest/$STAGING_BRANCH
-	git merge origin/${SOURCE_BRANCH}
-	
-	if [ ! -z $DRY_RUN ];then
-		echo "Dry run only, aborting before push"
-		exit 0
-	fi
-	
-	git push -u merge-dest
+	echo 'No new commits, will not merge'
 fi
