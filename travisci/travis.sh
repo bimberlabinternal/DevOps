@@ -185,15 +185,31 @@ cd $SVN_DIR
 echo 'Starting build'
 date +%F" "%T
 
+INCLUDE_VCS=
+if [ ! -z $TRAVIS_TAG ];then
+	INCLUDE_VCS="-PincludeVcs"
+fi
+
 GRADLE_OPTS=-Xmx2048m
+
 ./gradlew \
     -Dorg.gradle.daemon=false \
     --parallel \
     -Dtomcat.home=$CATALINA_HOME \
-    -PincludeVcs \
+    -PbuildFromSource=true \
+    cleanNodeModules cleanBuild cleanDeploy
+	
+echo 'clean Complete'
+date +%F" "%T
+	
+./gradlew \
+    -Dorg.gradle.daemon=false \
+    --parallel \
+    -Dtomcat.home=$CATALINA_HOME \
+	$INCLUDE_VCS \
     -PbuildFromSource=true \
     -PdeployMode=prod \
-    cleanNodeModules cleanBuild cleanDeploy deployApp
+    deployApp
 
 echo 'deployApp Complete'
 date +%F" "%T
@@ -202,8 +218,9 @@ date +%F" "%T
 if [ ! -z $TRAVIS_TAG ];then
 	./gradlew \
 		-Dorg.gradle.daemon=false \
+		--parallel \
 		-Dtomcat.home=$CATALINA_HOME \
-		-PincludeVcs \
+		$INCLUDE_VCS \
 		-PbuildFromSource=true \
 		-PdeployMode=prod \
 		-PmoduleSet=distributions \
