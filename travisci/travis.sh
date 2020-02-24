@@ -238,3 +238,6 @@ if [ ! -z $TRAVIS_TAG ];then
 fi
 
 echo $RELEASE_NAME > ${TRAVIS_BUILD_DIR}/release.txt
+
+echo 'Cleaning build dir to reduce cache'
+rm -Rf ${SVN_DIR}/build/deploy

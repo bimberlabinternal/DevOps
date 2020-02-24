@@ -4,6 +4,7 @@
 # changes into the LabKey fork, and automatically open a PR.
 
 set -e
+set -x
 
 SOURCE_ORG=$1
 if [ -z $SOURCE_ORG ];then
@@ -53,10 +54,10 @@ if [ $NEW_COMMITS != 0 ];then
 	git merge --no-ff origin/${SOURCE_BRANCH} -m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}"
 	
 	# Check whether existing staging branch had any changes made directly to it
-	PREVIOUS_CHANGES=`git cherry -v $STAGING_BRANCH origin/$STAGING_BRANCH | wc -l `
+	PREVIOUS_CHANGES=`git cherry -v $STAGING_BRANCH merge-dest/$STAGING_BRANCH | wc -l `
 	if [ $PREVIOUS_CHANGES != 0 ];then
 		# Re-apply changes from previous staging branch
-		git checkout -b previous_staging --no-track origin/$STAGING_BRANCH
+		git checkout -b previous_staging --no-track merge-dest/$STAGING_BRANCH
 		git rebase $STAGING_BRANCH
 		git checkout $STAGING_BRANCH
 		git merge --ff-only previous_staging
@@ -66,10 +67,12 @@ if [ $NEW_COMMITS != 0 ];then
 		echo "Dry run only, aborting before push"
 		exit 0
 	fi
+	
+	git push --force -u merge-dest $STAGING_BRANCH
 
-	git push --force $STAGING_BRANCH -u merge-dest $STAGING_BRANCH
+	hub pr list -u --head ${TARGET_ORG}:${STAGING_BRANCH}
 
-	PR_EXISTS=`hub pr -h $STAGING_BRANCH -s open | wc -l`
+	PR_EXISTS=`hub pr list --base ${TARGET_ORG}:${DESTINATION_BRANCH} --head ${TARGET_ORG}:${STAGING_BRANCH} -s open | wc -l`
 	if [ $PR_EXISTS == 0 ]; then
 		# Create pull request
 		REVIEWER_ARGS=
@@ -82,6 +85,8 @@ if [ $NEW_COMMITS != 0 ];then
 			--head ${TARGET_ORG}:${STAGING_BRANCH} \
 			$REVIEWER_ARGS \
 			-m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}, automatically created"
+	else
+		echo 'PR already exists, will not create'
 	fi
 else
 	echo 'No new commits, will not merge'
