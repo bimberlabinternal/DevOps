@@ -241,3 +241,12 @@ echo $RELEASE_NAME > ${TRAVIS_BUILD_DIR}/release.txt
 
 echo 'Cleaning build dir to reduce cache'
 rm -Rf ${SVN_DIR}/build/deploy
+
+# Information relevant to cache size:
+du -s -h  $HOME/.gradle/caches
+du -s -h  $HOME/.gradle/wrapper
+du -s -h  $HOME/.m2
+du -s -h  $HOME/labkey_build
+df -s -h  $HOME/site-library
+
+ls $HOME/site-library
