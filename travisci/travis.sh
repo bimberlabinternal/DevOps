@@ -28,6 +28,15 @@ if [ ! -e $BASEDIR ];then
 fi
 cd $BASEDIR
 
+# Note: when travis setups up a branch, it uses the cache from the default branch, which means the cache can hold builds from other branches:
+for dir in ${HOME}/labkey_build/*
+do
+	if [ $dir != $BASEDIR];then
+		echo "Removing old build dir: "$dir
+		rm -Rf $dir
+	fi
+done
+
 # Download primary SVN repo
 if [ $BASE_VERSION == 'develop' ];then
     SVN_URL=https://svn.mgt.labkey.host/stedi/trunk
@@ -242,12 +251,5 @@ echo $RELEASE_NAME > ${TRAVIS_BUILD_DIR}/release.txt
 echo 'Cleaning build dir to reduce cache'
 rm -Rf ${SVN_DIR}/build/deploy
 
-# Information relevant to cache size:
-du -s -h  $HOME/.gradle/caches
-du -s -h  $HOME/.gradle/wrapper
-du -s -h  $HOME/.m2
+# Double check the contents of the cache
 du -s -h  $HOME/labkey_build/*
-du -s -h  $HOME/site-library
-
-ls $HOME/labkey_build
-ls $HOME/site-library
