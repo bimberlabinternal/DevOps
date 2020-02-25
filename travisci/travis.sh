@@ -31,7 +31,7 @@ cd $BASEDIR
 # Note: when travis setups up a branch, it uses the cache from the default branch, which means the cache can hold builds from other branches:
 for dir in ${HOME}/labkey_build/*
 do
-	if [ $dir != $BASEDIR];then
+	if [[ $dir != $BASEDIR && $dir != ${HOME}"/labkey_build/tomcat8.5" ]];then
 		echo "Removing old build dir: "$dir
 		rm -Rf $dir
 	fi
