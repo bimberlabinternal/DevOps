@@ -246,7 +246,8 @@ rm -Rf ${SVN_DIR}/build/deploy
 du -s -h  $HOME/.gradle/caches
 du -s -h  $HOME/.gradle/wrapper
 du -s -h  $HOME/.m2
-du -s -h  $HOME/labkey_build
-df -s -h  $HOME/site-library
+du -s -h  $HOME/labkey_build/*
+du -s -h  $HOME/site-library
 
+ls $HOME/labkey_build
 ls $HOME/site-library
