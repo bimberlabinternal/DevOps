@@ -28,10 +28,13 @@ if [ ! -e $BASEDIR ];then
 fi
 cd $BASEDIR
 
+#Note: gradle's :server:stopTomcat will fail without tomcat.home set
+export CATALINA_HOME=$HOME"/labkey_build/tomcat8.5"
+
 # Note: when travis setups up a branch, it uses the cache from the default branch, which means the cache can hold builds from other branches:
 for dir in ${HOME}/labkey_build/*
 do
-	if [[ $dir != $BASEDIR && $dir != ${HOME}"/labkey_build/tomcat8.5" ]];then
+	if [[ $dir != $BASEDIR && $dir != $CATALINA_HOME ]];then
 		echo "Removing old build dir: "$dir
 		rm -Rf $dir
 	fi
@@ -175,8 +178,6 @@ if [ ! -e $DIST_DIR ];then
     mkdir -p $DIST_DIR ];
 fi
 
-#Note: gradle's :server:stopTomcat will fail without tomcat.home set
-export CATALINA_HOME=$HOME"/labkey_build/tomcat8.5"
 if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
     if [ -e $$CATALINA_HOME ];then
         rm -Rf $CATALINA_HOME
