@@ -24,7 +24,7 @@ pwd
 #Determine a unique build dir, based on where we pull from:
 BASEDIR=$HOME"/labkey_build/"$BASE_VERSION
 if [ ! -e $BASEDIR ];then
-	mkdir $BASEDIR
+	mkdir -p $BASEDIR
 fi
 cd $BASEDIR
 
