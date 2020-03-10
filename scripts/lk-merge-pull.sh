@@ -26,7 +26,7 @@ fi
 
 #Allow this to be overridden by environment
 if [ -z $TARGET_ORG ];then
-	TARGET_ORG=labkey
+	TARGET_ORG=LabKey
 fi
 
 STAGING_BRANCH=fb_merge_${SOURCE_BRANCH}
@@ -70,9 +70,7 @@ if [ $NEW_COMMITS != 0 ];then
 	
 	git push --force -u merge-dest $STAGING_BRANCH
 
-	hub pr list -u --head ${TARGET_ORG}:${STAGING_BRANCH}
-
-	PR_EXISTS=`hub pr list --base ${TARGET_ORG}:${DESTINATION_BRANCH} --head ${TARGET_ORG}:${STAGING_BRANCH} -s open | wc -l`
+	PR_EXISTS=`hub pr list --base ${TARGET_ORG}:${DESTINATION_BRANCH} --head ${TARGET_ORG}:${STAGING_BRANCH} | wc -l`
 	if [ $PR_EXISTS == 0 ]; then
 		# Create pull request
 		REVIEWER_ARGS=

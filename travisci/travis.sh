@@ -5,15 +5,15 @@ set -x
 
 # Allows override of settings
 if [ -e travisSettings.sh ];then
-    source travisSettings.sh
+	source travisSettings.sh
 fi
 
 BASE_VERSION=`echo $TRAVIS_BRANCH | grep -E -o '[0-9\.]{4,8}' || echo 'develop'`
 
 if [ $BASE_VERSION == 'develop' ];then
-    BASE_VERSION_SHORT='develop'
+	BASE_VERSION_SHORT='develop'
 else
-    BASE_VERSION_SHORT=`echo $BASE_VERSION | awk '{ print substr($0,1,4) }'`
+	BASE_VERSION_SHORT=`echo $BASE_VERSION | awk '{ print substr($0,1,4) }'`
 fi
 
 echo "Base version inferred from branch: "$BASE_VERSION
@@ -24,17 +24,17 @@ pwd
 #Determine a unique build dir, based on where we pull from:
 BASEDIR=$HOME"/labkey_build/"$BASE_VERSION
 if [ ! -e $BASEDIR ];then
-    mkdir $BASEDIR
+	mkdir $BASEDIR
 fi
 cd $BASEDIR
 
 #Note: gradle's :server:stopTomcat will fail without tomcat.home set
-export CATALINA_HOME=$HOME"/labkey_build/tomcat8.5"
+export CATALINA_HOME=$HOME"/tomcat8.5"
 
 # Note: when travis setups up a branch, it uses the cache from the default branch, which means the cache can hold builds from other branches:
 for dir in ${HOME}/labkey_build/*
 do
-	if [[ $dir != $BASEDIR && $dir != $CATALINA_HOME ]];then
+	if [[ $dir != $BASEDIR ]];then
 		echo "Removing old build dir: "$dir
 		rm -Rf $dir
 	fi
@@ -42,100 +42,100 @@ done
 
 # Download primary SVN repo
 if [ $BASE_VERSION == 'develop' ];then
-    SVN_URL=https://svn.mgt.labkey.host/stedi/trunk
-    SVN_DIR=${BASEDIR}/trunk
+	SVN_URL=https://svn.mgt.labkey.host/stedi/trunk
+	SVN_DIR=${BASEDIR}/trunk
 else
-    SVN_URL=https://svn.mgt.labkey.host/stedi/branches/release${BASE_VERSION_SHORT}-SNAPSHOT
-    SVN_DIR=${BASEDIR}/release${BASE_VERSION}-SNAPSHOT
+	SVN_URL=https://svn.mgt.labkey.host/stedi/branches/release${BASE_VERSION_SHORT}-SNAPSHOT
+	SVN_DIR=${BASEDIR}/release${BASE_VERSION}-SNAPSHOT
 fi
 
 if [ ! -e $SVN_DIR ];then
-    mkdir -p $SVN_DIR
-    cd $BASEDIR
-    svn co $SVN_URL
+	mkdir -p $SVN_DIR
+	cd $BASEDIR
+	svn co $SVN_URL
 else
-    cd $SVN_DIR
-    svn revert --depth=infinity .
-    svn update
+	cd $SVN_DIR
+	svn revert --depth=infinity .
+	svn update
 fi
 
 export RELEASE_NAME=`grep -e 'labkeyVersion=' ${SVN_DIR}/gradle.properties | sed 's/labkeyVersion=//'`
 echo "Release name: "$RELEASE_NAME
 
 function identifyBranch {
-    GIT_ORG=$1
-    REPONAME=$2
+	GIT_ORG=$1
+	REPONAME=$2
 
-    #First try based on Tag, if present
-    if [ ! -z $TRAVIS_TAG ];then
-        BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TRAVIS_TAG} | wc -l)
-        if [ "$BRANCH_EXISTS" != "0" ];then
-            BRANCH=$TRAVIS_TAG
-            echo 'Branch found, using '$BRANCH
-            return
-        fi
-    fi
+	#First try based on Tag, if present
+	if [ ! -z $TRAVIS_TAG ];then
+		BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TRAVIS_TAG} | wc -l)
+		if [ "$BRANCH_EXISTS" != "0" ];then
+			BRANCH=$TRAVIS_TAG
+			echo 'Branch found, using '$BRANCH
+			return
+		fi
+	fi
 
-    # Then try branch of same name:
-    BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TRAVIS_BRANCH} | wc -l)
-    if [ "$BRANCH_EXISTS" != "0" ];then
-        BRANCH=$TRAVIS_BRANCH
-        echo 'Branch found, using '$BRANCH
-        return
-    fi
+	# Then try branch of same name:
+	BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TRAVIS_BRANCH} | wc -l)
+	if [ "$BRANCH_EXISTS" != "0" ];then
+		BRANCH=$TRAVIS_BRANCH
+		echo 'Branch found, using '$BRANCH
+		return
+	fi
 
-    # Otherwise discvr
-    TO_TEST='discvr-'$BASE_VERSION_SHORT
-    if [ $TO_TEST != $TRAVIS_BRANCH ];then
-        BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TO_TEST} | wc -l)
-        if [ "$BRANCH_EXISTS" != "0" ];then
-            BRANCH=$TO_TEST
-            echo 'Branch found, using '$BRANCH
-            return
-        fi
-    fi
+	# Otherwise discvr
+	TO_TEST='discvr-'$BASE_VERSION_SHORT
+	if [ $TO_TEST != $TRAVIS_BRANCH ];then
+		BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TO_TEST} | wc -l)
+		if [ "$BRANCH_EXISTS" != "0" ];then
+			BRANCH=$TO_TEST
+			echo 'Branch found, using '$BRANCH
+			return
+		fi
+	fi
 
-    # Otherwise release
-    TO_TEST='release'${BASE_VERSION_SHORT}-SNAPSHOT
-    if [ $TO_TEST != $TRAVIS_BRANCH ];then
-        BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TO_TEST} | wc -l)
-        if [ "$BRANCH_EXISTS" != "0" ];then
-            BRANCH=$TO_TEST
-            echo 'Branch found, using '$BRANCH
-            return
-        fi
-    fi
+	# Otherwise release
+	TO_TEST='release'${BASE_VERSION_SHORT}-SNAPSHOT
+	if [ $TO_TEST != $TRAVIS_BRANCH ];then
+		BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TO_TEST} | wc -l)
+		if [ "$BRANCH_EXISTS" != "0" ];then
+			BRANCH=$TO_TEST
+			echo 'Branch found, using '$BRANCH
+			return
+		fi
+	fi
 
-    echo 'Branch not found, using default: develop'
-    BRANCH='develop'
+	echo 'Branch not found, using default: develop'
+	BRANCH='develop'
 }
 
 function cloneGit {
-    GIT_ORG=$1
-    REPONAME=$2
-    BRANCH=$3
-    echo "Repo: "${REPONAME}"Using branch: "$BRANCH
+	GIT_ORG=$1
+	REPONAME=$2
+	BRANCH=$3
+	echo "Repo: "${REPONAME}"Using branch: "$BRANCH
 
-    BASE=/server/modules/
-    if [ -n "$4" ];then
-        BASE=$4
-    fi
+	BASE=/server/modules/
+	if [ -n "$4" ];then
+		BASE=$4
+	fi
 
-    TARGET_DIR=${SVN_DIR}${BASE}${REPONAME}
-    GIT_URL=https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git
-    if [ ! -e $TARGET_DIR ];then
-        cd ${SVN_DIR}${BASE}
-        git clone -b $BRANCH $GIT_URL
-    else
-        cd ${SVN_DIR}${BASE}${REPONAME}
-        git fetch origin
-        git reset --hard HEAD
-        git clean -f -d
-        git checkout -f $BRANCH
-        git reset --hard HEAD
-        git clean -f -d
-        git pull origin $BRANCH
-    fi
+	TARGET_DIR=${SVN_DIR}${BASE}${REPONAME}
+	GIT_URL=https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git
+	if [ ! -e $TARGET_DIR ];then
+		cd ${SVN_DIR}${BASE}
+		git clone -b $BRANCH $GIT_URL
+	else
+		cd ${SVN_DIR}${BASE}${REPONAME}
+		git fetch origin
+		git reset --hard HEAD
+		git clean -f -d
+		git checkout -f $BRANCH
+		git reset --hard HEAD
+		git clean -f -d
+		git pull origin $BRANCH
+	fi
 }
 
 # Labkey/Platform
@@ -175,19 +175,19 @@ echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODUL
 #make distribution
 DIST_DIR=${TRAVIS_BUILD_DIR}/lkDist
 if [ ! -e $DIST_DIR ];then
-    mkdir -p $DIST_DIR ];
+	mkdir -p $DIST_DIR ];
 fi
 
 if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
-    if [ -e $$CATALINA_HOME ];then
-        rm -Rf $CATALINA_HOME
-    fi
+	if [ -e $$CATALINA_HOME ];then
+		rm -Rf $CATALINA_HOME
+	fi
 
-    mkdir -p $CATALINA_HOME
-    cd $CATALINA_HOME
+	mkdir -p $CATALINA_HOME
+	cd $CATALINA_HOME
 	curl -O https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.5/bin/apache-tomcat-8.5.5.tar.gz 
-    tar xzvf apache-tomcat-8*tar.gz -C $CATALINA_HOME --strip-components=1
-    rm apache-tomcat-8*tar.gz
+	tar xzvf apache-tomcat-8*tar.gz -C $CATALINA_HOME --strip-components=1
+	rm apache-tomcat-8*tar.gz
 fi
 
 cd $SVN_DIR
@@ -203,23 +203,23 @@ fi
 GRADLE_OPTS=-Xmx2048m
 
 ./gradlew \
-    -Dorg.gradle.daemon=false \
-    --parallel \
-    -Dtomcat.home=$CATALINA_HOME \
-    -PbuildFromSource=true \
-    cleanNodeModules cleanBuild cleanDeploy
+	-Dorg.gradle.daemon=false \
+	--parallel \
+	-Dtomcat.home=$CATALINA_HOME \
+	cleanNodeModules cleanBuild cleanDeploy
 	
 echo 'clean Complete'
 date +%F" "%T
 	
 ./gradlew \
-    -Dorg.gradle.daemon=false \
-    --parallel \
-    -Dtomcat.home=$CATALINA_HOME \
+	-Dorg.gradle.daemon=false \
+	--parallel \
+	-Dtomcat.home=$CATALINA_HOME \
 	$INCLUDE_VCS \
-    -PbuildFromSource=true \
-    -PdeployMode=prod \
-    deployApp
+	-Partifactory_user=${ARTIFACTORY_USER} \
+	-Partifactory_password=${ARTIFACTORY_PASSWORD} \
+	-PdeployMode=prod \
+	deployApp
 
 echo 'deployApp Complete'
 date +%F" "%T
@@ -231,7 +231,8 @@ if [ ! -z $TRAVIS_TAG ];then
 		--parallel \
 		-Dtomcat.home=$CATALINA_HOME \
 		$INCLUDE_VCS \
-		-PbuildFromSource=true \
+		-Partifactory_user=${ARTIFACTORY_USER} \
+		-Partifactory_password=${ARTIFACTORY_PASSWORD} \
 		-PdeployMode=prod \
 		-PmoduleSet=distributions \
 		-PdistDir=$DIST_DIR \
@@ -242,9 +243,9 @@ if [ ! -z $TRAVIS_TAG ];then
 	echo 'dist Complete'
 	date +%F" "%T
 
-    echo "Renaming artifact for release"
-    mv $DIST_DIR/discvr/*.gz $DIST_DIR/discvr/DISVCR-${BASE_VERSION}.installer.tar.gz
-    mv $DIST_DIR/discvr_modules/*.zip $DIST_DIR/discvr/DISVCR-${BASE_VERSION}.modules.zip
+	echo "Renaming artifact for release"
+	mv $DIST_DIR/discvr/*.gz $DIST_DIR/discvr/DISVCR-${BASE_VERSION}.installer.tar.gz
+	mv $DIST_DIR/discvr_modules/*.zip $DIST_DIR/discvr/DISVCR-${BASE_VERSION}.modules.zip
 fi
 
 echo $RELEASE_NAME > ${TRAVIS_BUILD_DIR}/release.txt
