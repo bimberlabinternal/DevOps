@@ -141,14 +141,16 @@ function cloneGit {
 # Labkey/Platform
 identifyBranch Labkey platform
 LK_BRANCH=$BRANCH
-cloneGit Labkey platform $LK_BRANCH
+# NOTE: this should be downloaded from the artifactory
+# cloneGit Labkey platform $LK_BRANCH
 
 # Labkey/distributions. Note: user does not have right run ls-remote, so infer from platform
 BRANCH=`echo $LK_BRANCH | sed 's/-SNAPSHOT//'`
 cloneGit Labkey distributions $BRANCH /
 
 # Labkey/dataintegration. Note: user does not have right run ls-remote, so infer from platform
-cloneGit Labkey dataintegration $LK_BRANCH /server/optionalModules/
+# NOTE: this should be downloaded from the artifactory
+# cloneGit Labkey dataintegration $LK_BRANCH /server/optionalModules/
 
 # BimberLab/DiscvrLabKeyModules
 identifyBranch BimberLab DiscvrLabKeyModules
