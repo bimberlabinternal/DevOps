@@ -29,8 +29,11 @@ if [ -z $TARGET_ORG ];then
 	TARGET_ORG=LabKey
 fi
 
+if [ -z $DESTINATION_BRANCH ];then
+	DESTINATION_BRANCH=develop
+fi
+
 STAGING_BRANCH=fb_merge_${SOURCE_BRANCH}
-DESTINATION_BRANCH=develop
 
 echo "REPO: $REPO"
 echo "SOURCE_ORG: $SOURCE_ORG"
@@ -82,7 +85,7 @@ if [ $NEW_COMMITS != 0 ];then
 			--base ${TARGET_ORG}:${DESTINATION_BRANCH} \
 			--head ${TARGET_ORG}:${STAGING_BRANCH} \
 			$REVIEWER_ARGS \
-			-m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}, automatically created"
+			-m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}"
 	else
 		echo 'PR already exists, will not create'
 	fi
