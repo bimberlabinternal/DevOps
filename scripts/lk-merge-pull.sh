@@ -56,16 +56,19 @@ if [ $NEW_COMMITS != 0 ];then
 	git checkout $STAGING_BRANCH
 	git merge --no-ff origin/${SOURCE_BRANCH} -m "Merge "${SOURCE_BRANCH}" to ${DESTINATION_BRANCH}"
 	
-	# Check whether existing staging branch had any changes made directly to it
-	PREVIOUS_CHANGES=`git cherry -v $STAGING_BRANCH merge-dest/$STAGING_BRANCH | wc -l `
-	if [ $PREVIOUS_CHANGES != 0 ];then
-		# Re-apply changes from previous staging branch
-		git checkout -b previous_staging --no-track merge-dest/$STAGING_BRANCH
-		git rebase $STAGING_BRANCH
-		git checkout $STAGING_BRANCH
-		git merge --ff-only previous_staging
+	# Check whether staging branch exists and if so whether it had any changes made directly to it
+	BRANCH_EXISTS=$(git ls-remote --heads merge-dest $STAGING_BRANCH | wc -l)
+	if [ "$BRANCH_EXISTS" != "0" ];then
+		PREVIOUS_CHANGES=`git cherry -v $STAGING_BRANCH merge-dest/$STAGING_BRANCH | wc -l `
+		if [ $PREVIOUS_CHANGES != 0 ];then
+			# Re-apply changes from previous staging branch
+			git checkout -b previous_staging --no-track merge-dest/$STAGING_BRANCH
+			git rebase $STAGING_BRANCH
+			git checkout $STAGING_BRANCH
+			git merge --ff-only previous_staging
+		fi
 	fi
-
+	
 	if [ ! -z $DRY_RUN ];then
 		echo "Dry run only, aborting before push"
 		exit 0

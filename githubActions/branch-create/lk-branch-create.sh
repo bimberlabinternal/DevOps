@@ -5,13 +5,13 @@ set -e
 
 SOURCE_REPO=$1
 if [ -z $SOURCE_REPO ];then
-	echo 'Source SOURCE_REPO provided'
+	echo 'Source SOURCE_REPO not provided'
 	exit 1
 fi
 
 SOURCE_PREFIX=$2
 if [ -z $SOURCE_PREFIX ];then
-	echo 'Source SOURCE_PREFIX provided'
+	echo 'Source SOURCE_PREFIX not provided'
 	exit 1
 fi
 
@@ -22,7 +22,7 @@ fi
 
 DESTINATION_PREFIX=$4
 if [ -z $DESTINATION_PREFIX ];then
-	echo 'Source DESTINATION_PREFIX provided'
+	echo 'Source DESTINATION_PREFIX not provided'
 	exit 1
 fi
 
