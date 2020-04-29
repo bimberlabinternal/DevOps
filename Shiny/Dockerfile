@@ -35,8 +35,8 @@ RUN Rscript -e "devtools::install_github(repo = 'kolabx/geneSetVis@pkg', depende
 	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 RUN mkdir -p ${APP_DIR}/geneSetVis && echo 'shinyAppDir(appDir = system.file("app", package = "geneSetVis"))' > ${APP_DIR}/geneSetVis/app.R
 
-#RUN Rscript -e "devtools::install_github(repo = 'bimberlabinternal/ShinySDA', dependencies = T, upgrade = 'always')"
-#RUN mkdir -p ${APP_DIR}/ShinySDA && echo 'shinyAppDir(appDir = system.file("app", package = "ShinySDA"))' > ${APP_DIR}/ShinySDA/app.R
+RUN Rscript -e "devtools::install_github(repo = 'bimberlabinternal/ShinySDA', dependencies = T, upgrade = 'always')"
+RUN mkdir -p ${APP_DIR}/ShinySDA && echo 'shinyAppDir(appDir = system.file("app", package = "ShinySDA"))' > ${APP_DIR}/ShinySDA/app.R
 
 RUN sed -i '/run_as shiny;/a preserve_logs true;' /etc/shiny-server/shiny-server.conf \
 	&& sed -i '/run_as shiny;/a app_init_timeout 3600;' /etc/shiny-server/shiny-server.conf \
