@@ -43,7 +43,8 @@ RUN sed -i '/run_as shiny;/a preserve_logs true;' /etc/shiny-server/shiny-server
 	&& sed -i '/listen 3838;/a sanitize_errors false;' /etc/shiny-server/shiny-server.conf 
 
 RUN rm ${APP_DIR}/index.html \
-	&& rm -rf ${APP_DIR}/sample-apps
+	&& rm -rf ${APP_DIR}/sample-apps \
+	&& rm -rf ${APP_DIR}/shiny-examples
 
 # select port
 EXPOSE 3838
