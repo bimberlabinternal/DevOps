@@ -33,7 +33,7 @@ RUN rm ${APP_DIR}/index.html
 
 # Install dependencies & packages. Also create stub app.R in the expected location
 RUN Rscript -e "devtools::install_github(repo = 'kolabx/geneSetVis@pkg', dependencies = T, upgrade = 'always')" \
-	&& Rscript -e "devtools::install_github(repo = 'bimberlabinternal/ShinySDA', dependencies = T, upgrade = 'always')"
+	&& Rscript -e "devtools::install_github(repo = 'bimberlabinternal/ShinySDA', dependencies = T, upgrade = 'always')" \
 	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
 RUN mkdir -p ${APP_DIR}/geneSetVis && echo 'shinyAppDir(appDir = system.file("app", package = "geneSetVis"))' > ${APP_DIR}/geneSetVis/app.R
