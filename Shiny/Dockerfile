@@ -29,7 +29,10 @@ RUN sed 's,^DAEMON.*$,DAEMON=/opt/shiny-server/bin/shiny-server,' \
 	&& update-rc.d shiny-server defaults \
 	&& update-rc.d rstudio-server disable
 
-RUN rm ${APP_DIR}/index.html 
+RUN rm ${APP_DIR}/index.html && rm -Rf ${APP_DIR}/sample-apps
+
+#NOTE: for some reason environment variables set above are available to root, but not the shiny user, so repeat here:
+RUN echo "SCRATCH_DIR="${SCRATCH_DIR} >> /usr/local/lib/R/etc/Renviron.site
 
 # Install dependencies & packages. Also create stub app.R in the expected location
 RUN Rscript -e "devtools::install_github(repo = 'kolabx/geneSetVis@pkg', dependencies = T, upgrade = 'always')" \
