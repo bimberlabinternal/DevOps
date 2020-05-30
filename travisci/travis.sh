@@ -29,7 +29,7 @@ fi
 cd $BASEDIR
 
 #Note: gradle's :server:stopTomcat will fail without tomcat.home set
-export CATALINA_HOME=$HOME"/tomcat8.5"
+export CATALINA_HOME=$HOME"/tomcat9"
 
 # Note: when travis setups up a branch, it uses the cache from the default branch, which means the cache can hold builds from other branches:
 for dir in ${HOME}/labkey_build/*
@@ -186,9 +186,9 @@ if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
 
 	mkdir -p $CATALINA_HOME
 	cd $CATALINA_HOME
-	curl -O https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.5/bin/apache-tomcat-8.5.5.tar.gz 
-	tar xzvf apache-tomcat-8*tar.gz -C $CATALINA_HOME --strip-components=1
-	rm apache-tomcat-8*tar.gz
+	curl -O https://downloads.apache.org/tomcat/tomcat-9/v9.0.35/bin/apache-tomcat-9.0.35.tar.gz
+	tar xzvf apache-tomcat-9*tar.gz -C $CATALINA_HOME --strip-components=1
+	rm apache-tomcat-9*tar.gz
 fi
 
 cd $SVN_DIR
