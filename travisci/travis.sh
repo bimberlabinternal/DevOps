@@ -186,7 +186,7 @@ if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
 
 	mkdir -p $CATALINA_HOME
 	cd $CATALINA_HOME
-	curl --insecure -O https://downloads.apache.org/tomcat/tomcat-9/v9.0.35/bin/apache-tomcat-9.0.35.tar.gz
+	curl --insecure -O https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.35/bin/apache-tomcat-9.0.35.tar.gz	
 	tar xzvf apache-tomcat-9*tar.gz -C $CATALINA_HOME --strip-components=1
 	rm apache-tomcat-9*tar.gz
 fi
