@@ -45,7 +45,8 @@ RUN mkdir -p ${APP_DIR}/ShinySDA && echo 'shinyAppDir(appDir = system.file("app"
 RUN mkdir -p ${APP_DIR}/HISTA && echo 'shinyAppDir(appDir = system.file("app", package = "HISTA"))' > ${APP_DIR}/HISTA/app.R
 
 RUN sed -i '/run_as shiny;/a preserve_logs true;' /etc/shiny-server/shiny-server.conf \
-	&& sed -i '/run_as shiny;/a app_init_timeout 10001;' /etc/shiny-server/shiny-server.conf \
+	&& sed -i '/run_as shiny;/a app_init_timeout 10000;' /etc/shiny-server/shiny-server.conf \
+	&& sed -i '/run_as shiny;/a app_idle_timeout 10000;' /etc/shiny-server/shiny-server.conf \
 	&& sed -i '/listen 3838;/a sanitize_errors false;' /etc/shiny-server/shiny-server.conf 
 
 # select port
