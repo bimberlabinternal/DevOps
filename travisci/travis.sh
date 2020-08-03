@@ -48,7 +48,7 @@ else
 	SVN_URL=https://svn.mgt.labkey.host/stedi/branches/release${BASE_VERSION_SHORT}-SNAPSHOT
 	SVN_DIR=${BASEDIR}/release${BASE_VERSION_SHORT}-SNAPSHOT
 	
-	SVN_EXISTS=`svn list $SVN_URL | grep -e 'non-existent' | wc -l`
+	SVN_EXISTS=`svn list $SVN_URL 2>&1 >/dev/null | grep -e 'non-existent' | wc -l`
 	if [ "$SVN_EXISTS" != "0" ];then
 		echo 'SVN branch not found, using trunk'
 		SVN_URL=https://svn.mgt.labkey.host/stedi/trunk
