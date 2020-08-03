@@ -26,7 +26,9 @@ if [ ! -e $SETTINGS_FILE ];then
 	exit 1
 fi
 
+set -o allexport
 source $SETTINGS_FILE
+set +o allexport
 
 if [ -z $MAJOR ];then
 	echo 'Need to set environment variable MAJOR'

@@ -1,3 +1,7 @@
+#!/bin/sh
+set -x
+set -e
+
 #Exacloud:
 
 MAJOR=20

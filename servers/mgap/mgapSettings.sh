@@ -1,3 +1,7 @@
+#!/bin/sh
+set -x
+set -e
+
 #mGAP:
 
 MAJOR=20
