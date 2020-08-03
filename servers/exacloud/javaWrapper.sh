@@ -24,7 +24,6 @@ wget -O $SETTINGS https://github.com/bimberlabinternal/DevOps/raw/master/servers
 
 set -o allexport
 source $SETTINGS
-SKIP_INSTALL=1
 set +o allexport
 
 GZ_PREFIX=LabKey${MAJOR}.${MINOR_FULL}

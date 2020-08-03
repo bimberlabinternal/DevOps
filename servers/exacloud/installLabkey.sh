@@ -23,7 +23,6 @@ fi
 
 wget -O $INSTALL https://github.com/bimberlabinternal/DevOps/raw/master/servers/installLabkeyBase.sh
 
-export SKIP_INSTALL=1
 bash $INSTALL $SETTINGS
 
 rm $INSTALL

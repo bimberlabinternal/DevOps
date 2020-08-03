@@ -16,3 +16,4 @@ JAVA=${JAVA_HOME}/bin/java
 LK_SRC_DIR=/home/exacloud/lustre1/prime-seq/src
 TOMCAT_HOME=/home/exacloud/lustre1/prime-seq/tomcat
 
+SKIP_INSTALL=1
