@@ -36,17 +36,6 @@ if [[ ! -v WORK_BASEDIR ]];then
 	WORK_BASEDIR=/home/exacloud/lustre1/prime-seq/workDir/
 fi
 
-PREMIUM=${LK_SRC_DIR}/premium-${MAJOR}.${MINOR_SHORT}.module
-DATAINTEGRATION=${LK_SRC_DIR}/dataintegration-${MAJOR}.${MINOR_SHORT}.module
-
-if [ ! -e $PREMIUM ];then
-	exit 1;
-fi
-
-if [ ! -e $DATAINTEGRATION ];then
-	exit 1;
-fi
-
 #Note: this used to use lustre space; however, now use local scratch
 #TEMP_BASEDIR=/home/exacloud/lustre1/prime-seq/tempDir
 TEMP_BASEDIR=/mnt/scratch
@@ -116,24 +105,7 @@ mkdir -p $LABKEY_HOME
 	#copy relevant code locally
 	cd $LABKEY_HOME
 	
-	MODULE_ZIP=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.zip$" | tail -n -1)
-	rm -Rf ${LABKEY_HOME}/externalModules
-	mkdir -p ${LABKEY_HOME}/externalModules
-	if [ -e modules_unzip ];then
-		rm -Rf modules_unzip
-	fi
-
-	cp ${LK_SRC_DIR}/$MODULE_ZIP ./
-	MODULE_ZIP=$(basename $MODULE_ZIP)
-	unzip $MODULE_ZIP -d ./modules_unzip
-	MODULE_DIR=$(ls ./modules_unzip | tail -n -1)
-	cp ./modules_unzip/${MODULE_DIR}/modules/*.module ${LABKEY_HOME}/externalModules
-	rm -Rf ./modules_unzip
-	rm -Rf $MODULE_ZIP
-
-	cp $PREMIUM ${LABKEY_HOME}/externalModules/premium-${MAJOR}.${MINOR_FULL}.module
-	cp $DATAINTEGRATION ${LABKEY_HOME}/externalModules/dataintegration-${MAJOR}.${MINOR_FULL}.module
-
+	#Main server:
 	GZ=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.gz$" | tail -n -1)
 	cp ${LK_SRC_DIR}/$GZ ./
 	GZ=$(basename $GZ)
@@ -147,6 +119,20 @@ mkdir -p $LABKEY_HOME
 
 	./manual-upgrade.sh -u $LABKEY_USER -c $TOMCAT_HOME -l $LABKEY_HOME --noPrompt --skip_tomcat
 
+	#Extra modules:
+	MODULE_ZIP=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.zip$" | tail -n -1)
+	if [ -e modules_unzip ];then
+		rm -Rf modules_unzip
+	fi
+	cp ${LK_SRC_DIR}/$MODULE_ZIP ./
+	MODULE_ZIP=$(basename $MODULE_ZIP)
+	unzip $MODULE_ZIP -d ./modules_unzip
+	MODULE_DIR=$(ls ./modules_unzip | tail -n -1)
+	cp ./modules_unzip/${MODULE_DIR}/modules/*.module ${LABKEY_HOME}/modules
+	rm -Rf ./modules_unzip
+	rm -Rf $MODULE_ZIP
+
+	#Config:
 	cp -R $LK_SRC_DIR/config $LABKEY_HOME
 	if [ $? != 0 ]; then print_error; fi # exit if the last command failed
 

@@ -1,9 +1,8 @@
 #Exacloud:
 
 MAJOR=20
-MINOR_FULL="3"
-MINOR_SHORT=3
-ARTIFACT=LabKey${MAJOR}.${MINOR_FULL}Beta
+MINOR_FULL="7"
+MINOR_SHORT=7
 
 TOMCAT_HOME=/usr/share/tomcat
 TEAMCITY_USERNAME=bbimber
@@ -16,4 +15,4 @@ JAVA_HOME=/home/groups/prime-seq/exacloud/java/current
 JAVA=${JAVA_HOME}/bin/java
 LK_DIR=/home/exacloud/lustre1/prime-seq/labkey
 LK_SRC_DIR=/home/exacloud/lustre1/prime-seq/src
-TOMCAT_HOME=
+TOMCAT_HOME=/home/exacloud/lustre1/prime-seq/tomcat
