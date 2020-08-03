@@ -210,9 +210,10 @@ GRADLE_OPTS=-Xmx2048m
 echo 'clean Complete'
 date +%F" "%T
 
+# This should force download of release snapshots from artifactory
 GRADLE_RELEASE=$RELEASE_NAME
-if [ $BASE_VERSION != 'develop' ];then
-	GRADLE_RELEASE=${BASE_VERSION}
+if [ $BASE_VERSION_SHORT != 'develop' ];then
+	GRADLE_RELEASE=${BASE_VERSION_SHORT}-SNAPSHOT
 fi
 
 ./gradlew \
