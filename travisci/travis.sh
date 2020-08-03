@@ -49,15 +49,13 @@ else
 	SVN_DIR=${BASEDIR}/release${BASE_VERSION}-SNAPSHOT
 fi
 
-if [ ! -e $SVN_DIR ];then
-	mkdir -p $SVN_DIR
-	cd $BASEDIR
-	svn co $SVN_URL
-else
-	cd $SVN_DIR
-	svn revert --depth=infinity .
-	svn update
+if [ -e $SVN_DIR ];then
+	rm -Rf $SVN_DIR
 fi
+
+mkdir -p $SVN_DIR
+cd $BASEDIR
+svn co $SVN_URL
 
 export RELEASE_NAME=`grep -e 'labkeyVersion=' ${SVN_DIR}/gradle.properties | sed 's/labkeyVersion=//'`
 echo "Release name: "$RELEASE_NAME
