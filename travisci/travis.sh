@@ -52,6 +52,7 @@ else
 	if [ "$SVN_EXISTS" != "0" ];then
 		echo 'SVN branch not found, using trunk'
 		SVN_URL=https://svn.mgt.labkey.host/stedi/trunk
+		SVN_DIR=${BASEDIR}/trunk
 	fi
 fi
 
