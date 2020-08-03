@@ -209,7 +209,12 @@ GRADLE_OPTS=-Xmx2048m
 	
 echo 'clean Complete'
 date +%F" "%T
-	
+
+GRADLE_RELEASE=$RELEASE_NAME
+if [ $BASE_VERSION != 'develop' ];then
+	GRADLE_RELEASE=${BASE_VERSION}
+fi
+
 ./gradlew \
 	-Dorg.gradle.daemon=false \
 	--parallel \
@@ -217,6 +222,7 @@ date +%F" "%T
 	$INCLUDE_VCS \
 	-Partifactory_user=${ARTIFACTORY_USER} \
 	-Partifactory_password=${ARTIFACTORY_PASSWORD} \
+	-PlabkeyVersion=${GRADLE_RELEASE} \
 	-PdeployMode=prod \
 	deployApp
 
@@ -232,6 +238,7 @@ if [ ! -z $TRAVIS_TAG ];then
 		$INCLUDE_VCS \
 		-Partifactory_user=${ARTIFACTORY_USER} \
 		-Partifactory_password=${ARTIFACTORY_PASSWORD} \
+		-PlabkeyVersion=${GRADLE_RELEASE} \
 		-PdeployMode=prod \
 		-PmoduleSet=distributions \
 		-PdistDir=$DIST_DIR \
