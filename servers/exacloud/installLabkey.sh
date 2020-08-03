@@ -32,12 +32,12 @@ CONFIG_DIR=${LK_SRC_DIR}/config
 if [ ! -e $CONFIG_DIR ];then
 	mkdir -p $CONFIG_DIR
 	
-	wget -O sequenceanalysisConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/sequenceanalysisConfig.xml
-	wget -O pipelineConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/pipelineConfig.xml
-	wget -O blastConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/blastConfig.xml
+	wget -O ${CONFIG_DIR}/sequenceanalysisConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/sequenceanalysisConfig.xml
+	wget -O ${CONFIG_DIR}/pipelineConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/pipelineConfig.xml
+	wget -O ${CONFIG_DIR}/blastConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/blastConfig.xml
 fi
 
-JAVA_WRAPPER=${LABKEY_HOME}/javaWrapper.sh
+JAVA_WRAPPER=${LK_SRC_DIR}/javaWrapper.sh
 if [ ! -e $JAVA_WRAPPER ];then
 	wget -O $JAVA_WRAPPER https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/javaWrapper.sh
 	chmod +x $JAVA_WRAPPER
