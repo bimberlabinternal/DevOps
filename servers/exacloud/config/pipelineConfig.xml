@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="activeMqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<constructor-arg value="tcp://137.53.221.85:61616"/>
+		<property name="redeliveryPolicy" ref="redeliveryPolicy"/>
+	</bean>
+
+	<bean id="redeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">
+		<property name="maximumRedeliveries" value="-1"/>
+	</bean>
+
+	<bean id="pipelineJobService" class="org.labkey.pipeline.api.PipelineJobServiceImpl">
+		<property name="appProperties">
+			<bean class="org.labkey.pipeline.api.properties.ApplicationPropertiesImpl">
+				<property name="toolsDirectory" value="/home/groups/prime-seq/pipeline_tools/bin/" />
+			</bean>
+		</property>
+
+		<property name="configProperties">
+			<bean class="org.labkey.pipeline.api.properties.ConfigPropertiesImpl">
+				<property name="softwarePackages">
+					<map>
+						<!--If the sequence tools are not in the standard pipeline tools dir, this is required-->
+						<entry key="SEQUENCEANALYSIS_TOOLS" value="/home/groups/prime-seq/pipeline_tools/bin"/>
+						<entry key="JAVA_HOME" value="/home/groups/prime-seq/exacloud/java/current"/>
+						<entry key="JAVA_HOME_8" value="/home/groups/prime-seq/exacloud/java/java8"/>
+						<entry key="JAVA_HOME_7" value="/home/groups/prime-seq/exacloud/java/jdk1.7.0_55"/>
+						<entry key="JAVA_HOME_6" value="/home/groups/prime-seq/exacloud/java/jdk1.6.0_45"/>
+						<entry key="SEQUENCEANALYSIS_MAX_THREADS" value="10"/>
+						<entry key="SEQUENCEANALYSIS_MAX_RAM" value="24"/>
+						<entry key="SEQUENCEANALYSIS_JAVA_OPTS" value="-Xss2m"/>
+						<entry key="LOCAL_DATA_CACHE_DIR" value="/home/exacloud/lustre1/prime-seq/cachedData" />
+						<!--<entry key="REMOTE_GENOME_CACHE_DIR" value="/home/exacloud/lustre1/prime-seq/cachedGenomes"/>-->
+						<!--<entry key="JAVA_TMP_DIR" value=""/>-->
+					</map>
+				</property>
+			</bean>
+	        </property>
+
+		<property name="workDirFactory">
+			<bean class="org.labkey.pipeline.api.WorkDirectoryRemote$Factory">
+				<!--<property name="tempDirectory" value="/home/exacloud/lustre1/prime-seq/workDir/"/>-->
+				<property name="tempDirectory" value="WORK_DIR"/>
+				<property name="sharedTempDirectory" value="true"/>
+				<property name="allowReuseExistingTempDirectory" value="true"/>
+				<property name="deterministicWorkingDirName" value="true"/>
+			</bean>
+		</property>
+
+		<property name="statusWriter">
+			<bean class="org.labkey.pipeline.mule.JMSStatusWriter"/>
+		</property>
+	</bean>
+</beans>

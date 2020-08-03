@@ -28,6 +28,7 @@ SKIP_INSTALL=1
 set +o allexport
 
 GZ_PREFIX=LabKey${MAJOR}.${MINOR_FULL}
+TOOL_DIR=/home/groups/prime-seq/pipeline_tools/bin
 
 ORIG_WORK_DIR=$(pwd)
 
@@ -45,7 +46,7 @@ if [ ! -e $TEMP_BASEDIR ];then
 	mkdir -p $TEMP_BASEDIR
 fi
 
-export PATH=${JAVA_HOME}/bin/:/home/groups/prime-seq/pipeline_tools/bin:$PATH
+export PATH=${JAVA_HOME}/bin/:$TOOL_DIR:$PATH
 
 umask 0006
 
@@ -98,6 +99,11 @@ if [ -e $LABKEY_HOME ];then
 	rm -Rf $LABKEY_HOME
 fi
 
+if [ ! -e $LK_SRC_DIR/config ];then
+	echo "Config dir not found: $LK_SRC_DIR/config"
+	exit 1
+fi
+
 mkdir -p $LABKEY_HOME
 
 #try/catch/finally
@@ -134,7 +140,6 @@ mkdir -p $LABKEY_HOME
 
 	#Config:
 	cp -R $LK_SRC_DIR/config $LABKEY_HOME
-	if [ $? != 0 ]; then print_error; fi # exit if the last command failed
 
 	cd $ORIG_WORK_DIR
 	rm -Rf $DIR

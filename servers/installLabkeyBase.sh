@@ -8,9 +8,9 @@ set -x
 set -e
 
 # A separate settings file should provide the following:
-#MAJOR=XX
-#MINOR_FULL="X"
-#MINOR_SHORT=X
+#MAJOR=20
+#MINOR_FULL="7"
+#MINOR_SHORT=7
 #TOMCAT_HOME=XXXX
 
 TC_PROJECT=LabKey_${MAJOR}${MINOR_FULL}Release_External_Discvr_Installers
