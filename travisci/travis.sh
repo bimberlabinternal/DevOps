@@ -62,6 +62,11 @@ fi
 export RELEASE_NAME=`grep -e 'labkeyVersion=' ${SVN_DIR}/gradle.properties | sed 's/labkeyVersion=//'`
 echo "Release name: "$RELEASE_NAME
 
+# Debugging:
+ls ${SVN_DIR}
+ls ${SVN_DIR}/server
+ls ${SVN_DIR}/server/modules
+
 function identifyBranch {
 	GIT_ORG=$1
 	REPONAME=$2
@@ -114,7 +119,7 @@ function cloneGit {
 	GIT_ORG=$1
 	REPONAME=$2
 	BRANCH=$3
-	echo "Repo: "${REPONAME}"Using branch: "$BRANCH
+	echo "Repo: "${REPONAME}", using branch: "$BRANCH
 
 	BASE=/server/modules/
 	if [ -n "$4" ];then
@@ -127,7 +132,7 @@ function cloneGit {
 		cd ${SVN_DIR}${BASE}
 		git clone -b $BRANCH $GIT_URL
 	else
-		cd ${SVN_DIR}${BASE}${REPONAME}
+		cd $TARGET_DIR
 		git fetch origin
 		git reset --hard HEAD
 		git clean -f -d
