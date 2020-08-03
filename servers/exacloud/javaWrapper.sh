@@ -122,8 +122,20 @@ mkdir -p $LABKEY_HOME
 	echo "DIR: $DIR"
 	cd $DIR
 
+	TOMCAT_HOME=${LABKEY_HOME}/tomcat
+	export $TOMCAT_HOME
+	
+	mkdir -p $TOMCAT_HOME
+	mkdir -p $TOMCAT_HOME/lib
+	
 	./manual-upgrade.sh -u $LABKEY_USER -c $TOMCAT_HOME -l $LABKEY_HOME --noPrompt --skip_tomcat
 
+	if [ ! -e $TOMCAT_HOME/lib/labkeyBootstrap.jar ];then
+		echo "Unable to find $TOMCAT_HOME/lib/labkeyBootstrap.jar"
+		exit 1
+	fi
+	cp $TOMCAT_HOME/lib/labkeyBootstrap.jar $LABKEY_HOME
+	
 	#Extra modules:
 	MODULE_ZIP=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.zip$" | tail -n -1)
 	if [ -e modules_unzip ];then
@@ -154,6 +166,8 @@ mkdir -p $LABKEY_HOME
 		TO_SUB=$LK_SRC_DIR
 		updatedArgs[$a]=${arg//$TO_SUB/$LABKEY_HOME}
 	done
+	
+	cp ${LABKEY_HOME}/labkeyBootstrap.jar
 
 	#also add /externalModules
 	lastArg=${updatedArgs[${#updatedArgs[@]} - 1]}
@@ -166,7 +180,7 @@ mkdir -p $LABKEY_HOME
 	ESCAPE=$(echo $WORK_DIR | sed 's/\//\\\//g')
 	sed -i 's/WORK_DIR/'$ESCAPE'/g' ${LABKEY_HOME}/config/pipelineConfig.xml
 
-	$JAVA -XX:HeapBaseMinAddress=4294967296 -verbose:class -Djava.io.tmpdir=${TEMP_DIR} ${updatedArgs[@]}
+	$JAVA -XX:HeapBaseMinAddress=4294967296 -Djava.io.tmpdir=${TEMP_DIR} ${updatedArgs[@]}
 
 	if [ ! -z $SLURM_JOBID ];then
 		sacct -o reqmem,maxrss,averss,elapsed,cputime,alloccpus -j $SLURM_JOBID
