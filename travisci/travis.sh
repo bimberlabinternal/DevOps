@@ -46,7 +46,7 @@ if [ $BASE_VERSION == 'develop' ];then
 	SVN_DIR=${BASEDIR}/trunk
 else
 	SVN_URL=https://svn.mgt.labkey.host/stedi/branches/release${BASE_VERSION_SHORT}-SNAPSHOT
-	SVN_DIR=${BASEDIR}/release${BASE_VERSION}-SNAPSHOT
+	SVN_DIR=${BASEDIR}/release${BASE_VERSION_SHORT}-SNAPSHOT
 fi
 
 if [ -e $SVN_DIR ];then
@@ -59,11 +59,6 @@ svn co $SVN_URL
 
 export RELEASE_NAME=`grep -e 'labkeyVersion=' ${SVN_DIR}/gradle.properties | sed 's/labkeyVersion=//'`
 echo "Release name: "$RELEASE_NAME
-
-# Debugging:
-ls ${SVN_DIR}
-ls ${SVN_DIR}/server
-ls ${SVN_DIR}/server/modules
 
 function identifyBranch {
 	GIT_ORG=$1
