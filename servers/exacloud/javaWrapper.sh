@@ -122,8 +122,7 @@ mkdir -p $LABKEY_HOME
 	echo "DIR: $DIR"
 	cd $DIR
 
-	TOMCAT_HOME=${LABKEY_HOME}/tomcat
-	export $TOMCAT_HOME
+	export TOMCAT_HOME=${LABKEY_HOME}/tomcat
 	
 	mkdir -p $TOMCAT_HOME
 	mkdir -p $TOMCAT_HOME/lib
@@ -134,7 +133,7 @@ mkdir -p $LABKEY_HOME
 		echo "Unable to find $TOMCAT_HOME/lib/labkeyBootstrap.jar"
 		exit 1
 	fi
-	cp $TOMCAT_HOME/lib/labkeyBootstrap.jar $LABKEY_HOME
+	cp $TOMCAT_HOME/lib/labkeyBootstrap.jar $LABKEY_HOME/labkeyBootstrap.jar
 	
 	#Extra modules:
 	MODULE_ZIP=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.zip$" | tail -n -1)
