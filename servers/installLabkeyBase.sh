@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # This script is designed to upgrade LabKey on this server
 # usage: ./installLabKey.sh ${distribution}
