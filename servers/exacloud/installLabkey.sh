@@ -14,7 +14,6 @@ wget -O $SETTINGS https://github.com/bimberlabinternal/DevOps/raw/master/servers
 
 set -o allexport
 source $SETTINGS
-SKIP_INSTALL=1
 set +o allexport
 
 INSTALL=installLabkeyBase.sh
@@ -24,14 +23,8 @@ fi
 
 wget -O $INSTALL https://github.com/bimberlabinternal/DevOps/raw/master/servers/installLabkeyBase.sh
 
+export SKIP_INSTALL=1
 bash $INSTALL $SETTINGS
-
-JAVA_WRAPPER=${LABKEY_HOME}/javaWrapper.sh
-if [ -e $JAVA_WRAPPER ];then
-	rm $JAVA_WRAPPER
-fi
-
-wget -O $JAVA_WRAPPER https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/${JAVA_WRAPPER}
 
 rm $INSTALL
 
@@ -45,7 +38,8 @@ if [ ! -e $CONFIG_DIR ];then
 	wget -O blastConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/blastConfig.xml
 fi
 
-if [ ! -e javaWrapper.sh ];then
-	wget -O javaWrapper.sh https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/javaWrapper.sh
-	chmod +x javaWrapper.sh
+JAVA_WRAPPER=${LABKEY_HOME}/javaWrapper.sh
+if [ ! -e $JAVA_WRAPPER ];then
+	wget -O $JAVA_WRAPPER https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/javaWrapper.sh
+	chmod +x $JAVA_WRAPPER
 fi
