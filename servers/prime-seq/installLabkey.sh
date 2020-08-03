@@ -16,6 +16,17 @@ set -o allexport
 source $SETTINGS
 set +o allexport
 
+# Only populate from github when missing.  This allows one-off local edits
+# Note: this needs to run before the actual server install below to take effect
+CONFIG_DIR=${LABKEY_HOME}/configs
+if [ ! -e $CONFIG_DIR ];then
+	mkdir -p $CONFIG_DIR
+	
+	wget -O ${CONFIG_DIR}/sequenceanalysisConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/configs/sequenceanalysisConfig.xml
+	wget -O ${CONFIG_DIR}/pipelineConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/configs/pipelineConfig.xml
+	wget -O ${CONFIG_DIR}/blastConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/configs/blastConfig.xml
+fi
+
 INSTALL=installLabkeyBase.sh
 if [ -e $INSTALL ];then
 	rm $INSTALL
@@ -27,13 +38,3 @@ bash $INSTALL $SETTINGS
 
 rm $INSTALL
 rm $SETTINGS
-
-# Only populate from github when missing.  This allows one-off local edits
-CONFIG_DIR=${LABKEY_HOME}/configs
-if [ ! -e $CONFIG_DIR ];then
-	mkdir -p $CONFIG_DIR
-	
-	wget -O ${CONFIG_DIR}/sequenceanalysisConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/configs/sequenceanalysisConfig.xml
-	wget -O ${CONFIG_DIR}/pipelineConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/configs/pipelineConfig.xml
-	wget -O ${CONFIG_DIR}/blastConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/configs/blastConfig.xml
-fi
