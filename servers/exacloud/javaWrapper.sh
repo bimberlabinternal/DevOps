@@ -71,8 +71,8 @@ function finish {
         rm -Rf $LOCAL_TEMP_LK
     fi
 
-    if [ -e $LABKEY_HOME ];then
-        rm -Rf $LABKEY_HOME
+    if [ -e $LABKEY_HOME_LOCAL ];then
+        rm -Rf $LABKEY_HOME_LOCAL
     fi
 }
 
