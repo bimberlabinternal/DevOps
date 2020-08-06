@@ -15,12 +15,12 @@ set -x
 echo $SLURM_JOBID
 hostname
 
-SETTINGS=exacloudSettings.sh
-if [ -e $SETTINGS ];then
-	rm $SETTINGS
+SCRIPT_DIR=`dirname "$0"`
+SETTINGS=${SCRIPT_DIR}/exacloudSettings.sh
+if [ ! -e $SETTINGS ];then
+	echo "Settings files not found: "${SETTINGS}
+	exit 1
 fi
-
-wget -O $SETTINGS https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/${SETTINGS}
 
 set -o allexport
 source $SETTINGS
