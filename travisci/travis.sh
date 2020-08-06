@@ -149,7 +149,7 @@ LK_BRANCH=$BRANCH
 cloneGit Labkey platform $LK_BRANCH
 
 # Labkey/distributions
-identifyBranch Labkey platform
+identifyBranch Labkey distributions
 cloneGit Labkey distributions $BRANCH /
 
 # Labkey/dataintegration. Note: user does not have right run ls-remote, so infer from platform
