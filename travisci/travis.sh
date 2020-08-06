@@ -73,7 +73,7 @@ function identifyBranch {
 
 	#First try based on Tag, if present
 	if [ ! -z $TRAVIS_TAG ];then
-		BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TRAVIS_TAG} | wc -l)
+		BRANCH_EXISTS=$(git ls-remote --tags https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TRAVIS_TAG} | wc -l)
 		if [ "$BRANCH_EXISTS" != "0" ];then
 			BRANCH=$TRAVIS_TAG
 			echo 'Branch found, using '$BRANCH
