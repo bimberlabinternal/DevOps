@@ -148,8 +148,8 @@ identifyBranch Labkey platform
 LK_BRANCH=$BRANCH
 cloneGit Labkey platform $LK_BRANCH
 
-# Labkey/distributions. Note: user does not have right run ls-remote, so infer from platform
-BRANCH=`echo $LK_BRANCH | sed 's/-SNAPSHOT//'`
+# Labkey/distributions
+identifyBranch Labkey platform
 cloneGit Labkey distributions $BRANCH /
 
 # Labkey/dataintegration. Note: user does not have right run ls-remote, so infer from platform
