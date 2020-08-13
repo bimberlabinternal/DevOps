@@ -36,6 +36,15 @@ if [[ ! -v WORK_BASEDIR ]];then
 	WORK_BASEDIR=/home/exacloud/lustre1/prime-seq/workDir/
 fi
 
+if [[ ! -v USE_GSCRATCH ]];then
+	USE_GSCRATCH=0
+fi
+
+if [ $USE_GSCRATCH == 1 ];then
+	echo 'using gscratch'
+	WORK_BASEDIR=/home/exacloud/gscratch/prime-seq/workDir/
+fi
+
 #Note: this used to use lustre space; however, now use local scratch
 #TEMP_BASEDIR=/home/exacloud/lustre1/prime-seq/tempDir
 TEMP_BASEDIR=/mnt/scratch
@@ -174,9 +183,14 @@ mkdir -p $LABKEY_HOME_LOCAL
 	#add -Djava.io.tmpdir
 	ESCAPE=$(echo $TEMP_DIR | sed 's/\//\\\//g')
 	sed -i 's/<!--<entry key="JAVA_TMP_DIR" value=""\/>-->/<entry key="JAVA_TMP_DIR" value="'$ESCAPE'"\/>/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
-	ESCAPE=$(echo $WORK_DIR | sed 's/\//\\\//g')
+	ESCAPE=$(echo $WORK_DIR | sed 's/\//\\\//g')	
 	sed -i 's/WORK_DIR/'$ESCAPE'/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
 
+	if [ $USE_GSCRATCH == 1 ];then
+		echo 'swapping lustre1 for gscratch in XML file'
+		sed -i 's/exacloud\/lustre1/exacloud\/gscratch/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
+	fi
+	
 	$JAVA -XX:HeapBaseMinAddress=4294967296 -Djava.io.tmpdir=${TEMP_DIR} ${updatedArgs[@]}
 
 	if [ ! -z $SLURM_JOBID ];then
