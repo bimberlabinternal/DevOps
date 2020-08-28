@@ -27,8 +27,8 @@
 		<property name="location" value="slurm" />
 		<property name="submitCommand" value="ssh -q labkey_submit@exacloud.ohsu.edu /usr/bin/sbatch -A ${clusterUser} '${submitScript}'"/>
 		<property name="statusCommand" value="ssh -q labkey_submit@exacloud.ohsu.edu /usr/bin/squeue --all"/>
-		<property name="removeCommand" value="ssh -q labkey_submit@exacloud.ohsu.edu /usr/bin/scancel ${clusterId}"/>
-		<property name="historyCommand" value="ssh -q labkey_submit@exacloud.ohsu.edu /usr/bin/sacct --allusers --jobs=${clusterId} -o JobId,JobName,Partition,Account,AllocCPUS,State,ExitCode,NodeList"/>
+		<property name="removeCommand" value="ssh -q labkey_submit@exacloud.ohsu.edu /usr/bin/scancel ${clusterId} -O -o JobId,State,NodeList"/>
+		<property name="historyCommand" value="ssh -q labkey_submit@exacloud.ohsu.edu /usr/bin/sacct --allusers --jobs=${clusterId} -o JobId,State,NodeList"/>
 
 		<property name="labKeyDir" value="/home/exacloud/lustre1/prime-seq/src/" />
 		<property name="remoteExecutable" value="/home/exacloud/lustre1/prime-seq/src/javaWrapper.sh" />
