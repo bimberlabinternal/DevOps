@@ -12,7 +12,7 @@ set -e
 set -u
 set -x
 
-function finish {
+finish() {
 	EXIT_CODE=$?
 	if [ $EXIT_CODE != 0 ];then
 		echo "ERROR RUNNING JOB"
@@ -39,6 +39,10 @@ function finish {
 }
 
 trap finish SIGTERM SIGKILL SIGINT SIGHUP EXIT SIGQUIT
+
+#Basic job info:
+hostname
+echo $SLURM_JOBID
 
 # Ensure NFS mounts exist:
 
@@ -69,9 +73,6 @@ if [ ! -w /home/groups/prime-seq/production/ ];then
 	ls -lah df /home/groups/prime-seq/production/
 	exit 1
 fi
-
-echo $SLURM_JOBID
-hostname
 
 SCRIPT_DIR=`dirname "$0"`
 SETTINGS=${SCRIPT_DIR}/exacloudSettings.sh
