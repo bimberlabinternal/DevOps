@@ -12,6 +12,28 @@ set -e
 set -u
 set -x
 
+function finish {
+	EXIT_CODE=$?
+	if [ $EXIT_CODE != 0 ];then
+		echo "ERROR RUNNING JOB"
+		ps -e -T -o pid,lwp,pri,nice,start,stat,bsdtime,cmd,comm,user
+	fi
+	
+	echo "cleaning up temp dir, exit status: $EXIT_CODE"
+	rm -Rf $TEMP_DIR
+	if [ -e $LOCAL_TEMP_LK ];then
+		rm -Rf $LOCAL_TEMP_LK
+	fi
+
+	if [ -e $LABKEY_HOME_LOCAL ];then
+		rm -Rf $LABKEY_HOME_LOCAL
+	fi
+	
+	exit $EXIT_CODE
+}
+
+trap finish SIGTERM SIGKILL SIGINT SIGHUP EXIT SIGQUIT
+
 echo $SLURM_JOBID
 hostname
 
@@ -73,23 +95,6 @@ echo $WORK_DIR
 LOCAL_TEMP_LK=`mktemp -d --tmpdir=/tmp --suffix=$BASENAME`
 echo $LOCAL_TEMP_LK
 
-function finish {
-	EXIT_CODE=$?
-	echo "cleaning up temp dir, exit status: $EXIT_CODE"
-	rm -Rf $TEMP_DIR
-	if [ -e $LOCAL_TEMP_LK ];then
-		rm -Rf $LOCAL_TEMP_LK
-	fi
-
-	if [ -e $LABKEY_HOME_LOCAL ];then
-		rm -Rf $LABKEY_HOME_LOCAL
-	fi
-	
-	exit $EXIT_CODE
-}
-
-trap finish SIGTERM SIGKILL SIGINT SIGHUP EXIT SIGQUIT
-
 mkdir -p $TEMP_DIR
 
 #If temp directory is on lustre:
@@ -117,89 +122,83 @@ fi
 
 mkdir -p $LABKEY_HOME_LOCAL
 
-#try/catch/finally
-{
-	#copy relevant code locally
-	cd $LABKEY_HOME_LOCAL
-	
-	#Main server:
-	GZ=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.gz$" | tail -n -1)
-	cp ${LK_SRC_DIR}/$GZ ./
-	GZ=$(basename $GZ)
-	gunzip $GZ
-	TAR=`echo $GZ | sed -e "s/.gz$//"`
-	echo "TAR: $TAR"
-	tar -xf $TAR
-	DIR=`echo $TAR | sed -e "s/.tar$//"`
-	echo "DIR: $DIR"
-	cd $DIR
+#copy relevant code locally
+cd $LABKEY_HOME_LOCAL
 
-	export TOMCAT_HOME=${LABKEY_HOME_LOCAL}/tomcat
-	
-	mkdir -p $TOMCAT_HOME
-	mkdir -p $TOMCAT_HOME/lib
-	
-	./manual-upgrade.sh -u $LABKEY_USER -c $TOMCAT_HOME -l $LABKEY_HOME_LOCAL --noPrompt --skip_tomcat
+#Main server:
+GZ=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.gz$" | tail -n -1)
+cp ${LK_SRC_DIR}/$GZ ./
+GZ=$(basename $GZ)
+gunzip $GZ
+TAR=`echo $GZ | sed -e "s/.gz$//"`
+echo "TAR: $TAR"
+tar -xf $TAR
+DIR=`echo $TAR | sed -e "s/.tar$//"`
+echo "DIR: $DIR"
+cd $DIR
 
-	if [ ! -e $TOMCAT_HOME/lib/labkeyBootstrap.jar ];then
-		echo "Unable to find $TOMCAT_HOME/lib/labkeyBootstrap.jar"
-		exit 1
-	fi
-	cp $TOMCAT_HOME/lib/labkeyBootstrap.jar $LABKEY_HOME_LOCAL/labkeyBootstrap.jar
-	
-	#Extra modules:
-	MODULE_ZIP=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.zip$" | tail -n -1)
-	if [ -e modules_unzip ];then
-		rm -Rf modules_unzip
-	fi
-	cp ${LK_SRC_DIR}/$MODULE_ZIP ./
-	MODULE_ZIP=$(basename $MODULE_ZIP)
-	unzip $MODULE_ZIP -d ./modules_unzip
-	MODULE_DIR=$(ls ./modules_unzip | tail -n -1)
-	cp ./modules_unzip/${MODULE_DIR}/modules/*.module ${LABKEY_HOME_LOCAL}/modules
-	rm -Rf ./modules_unzip
-	rm -Rf $MODULE_ZIP
+export TOMCAT_HOME=${LABKEY_HOME_LOCAL}/tomcat
 
-	#Config:
-	cp -R $LK_SRC_DIR/config $LABKEY_HOME_LOCAL
+mkdir -p $TOMCAT_HOME
+mkdir -p $TOMCAT_HOME/lib
 
-	cd $ORIG_WORK_DIR
-	rm -Rf $DIR
-	rm -Rf $TAR
+./manual-upgrade.sh -u $LABKEY_USER -c $TOMCAT_HOME -l $LABKEY_HOME_LOCAL --noPrompt --skip_tomcat
 
-	#edit arguments
-	updatedArgs=( "$@" )
-	for(( a=0; a<${#updatedArgs[@]}-1 ;a++ ));  do
-		arg=${updatedArgs[$a]}
-		#echo $arg
+if [ ! -e $TOMCAT_HOME/lib/labkeyBootstrap.jar ];then
+	echo "Unable to find $TOMCAT_HOME/lib/labkeyBootstrap.jar"
+	exit 1
+fi
+cp $TOMCAT_HOME/lib/labkeyBootstrap.jar $LABKEY_HOME_LOCAL/labkeyBootstrap.jar
 
-		#if matches origial dir, replace path
-		TO_SUB=$LK_SRC_DIR
-		updatedArgs[$a]=${arg//$TO_SUB/$LABKEY_HOME_LOCAL}
-	done
-	
-	#also add /externalModules
-	#lastArg=${updatedArgs[${#updatedArgs[@]} - 1]}
-	#updatedArgs[${#updatedArgs[@]} - 1]="-Dlabkey.externalModulesDir="${LABKEY_HOME_LOCAL}"/externalModules"
-	#updatedArgs[${#updatedArgs[@]}]=$lastArg
+#Extra modules:
+MODULE_ZIP=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.zip$" | tail -n -1)
+if [ -e modules_unzip ];then
+	rm -Rf modules_unzip
+fi
+cp ${LK_SRC_DIR}/$MODULE_ZIP ./
+MODULE_ZIP=$(basename $MODULE_ZIP)
+unzip $MODULE_ZIP -d ./modules_unzip
+MODULE_DIR=$(ls ./modules_unzip | tail -n -1)
+cp ./modules_unzip/${MODULE_DIR}/modules/*.module ${LABKEY_HOME_LOCAL}/modules
+rm -Rf ./modules_unzip
+rm -Rf $MODULE_ZIP
 
-	#add -Djava.io.tmpdir
-	ESCAPE=$(echo $TEMP_DIR | sed 's/\//\\\//g')
-	sed -i 's/<!--<entry key="JAVA_TMP_DIR" value=""\/>-->/<entry key="JAVA_TMP_DIR" value="'$ESCAPE'"\/>/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
-	ESCAPE=$(echo $WORK_DIR | sed 's/\//\\\//g')	
-	sed -i 's/WORK_DIR/'$ESCAPE'/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
+#Config:
+cp -R $LK_SRC_DIR/config $LABKEY_HOME_LOCAL
 
-	if [ $USE_GSCRATCH == 1 ];then
-		echo 'swapping lustre1 for gscratch in XML file'
-		sed -i 's/exacloud\/lustre1/exacloud\/gscratch/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
-	fi
-	
-	$JAVA -XX:HeapBaseMinAddress=4294967296 -Djava.io.tmpdir=${TEMP_DIR} ${updatedArgs[@]}
+cd $ORIG_WORK_DIR
+rm -Rf $DIR
+rm -Rf $TAR
 
-	if [ ! -z $SLURM_JOBID ];then
-		sacct -o reqmem,maxrss,averss,elapsed,cputime,alloccpus -j $SLURM_JOBID
-	fi
-} || {
-	echo "ERROR RUNNING JOB"
-	ps -e -T -o pid,lwp,pri,nice,start,stat,bsdtime,cmd,comm,user
-}
+#edit arguments
+updatedArgs=( "$@" )
+for(( a=0; a<${#updatedArgs[@]}-1 ;a++ ));  do
+	arg=${updatedArgs[$a]}
+	#echo $arg
+
+	#if matches origial dir, replace path
+	TO_SUB=$LK_SRC_DIR
+	updatedArgs[$a]=${arg//$TO_SUB/$LABKEY_HOME_LOCAL}
+done
+
+#also add /externalModules
+#lastArg=${updatedArgs[${#updatedArgs[@]} - 1]}
+#updatedArgs[${#updatedArgs[@]} - 1]="-Dlabkey.externalModulesDir="${LABKEY_HOME_LOCAL}"/externalModules"
+#updatedArgs[${#updatedArgs[@]}]=$lastArg
+
+#add -Djava.io.tmpdir
+ESCAPE=$(echo $TEMP_DIR | sed 's/\//\\\//g')
+sed -i 's/<!--<entry key="JAVA_TMP_DIR" value=""\/>-->/<entry key="JAVA_TMP_DIR" value="'$ESCAPE'"\/>/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
+ESCAPE=$(echo $WORK_DIR | sed 's/\//\\\//g')	
+sed -i 's/WORK_DIR/'$ESCAPE'/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
+
+if [ $USE_GSCRATCH == 1 ];then
+	echo 'swapping lustre1 for gscratch in XML file'
+	sed -i 's/exacloud\/lustre1/exacloud\/gscratch/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
+fi
+
+$JAVA -XX:HeapBaseMinAddress=4294967296 -Djava.io.tmpdir=${TEMP_DIR} ${updatedArgs[@]}
+
+if [ ! -z $SLURM_JOBID ];then
+	sacct -o reqmem,maxrss,averss,elapsed,cputime,alloccpus -j $SLURM_JOBID
+fi
