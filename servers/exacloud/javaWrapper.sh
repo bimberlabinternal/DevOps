@@ -19,20 +19,56 @@ function finish {
 		ps -e -T -o pid,lwp,pri,nice,start,stat,bsdtime,cmd,comm,user
 	fi
 	
-	echo "cleaning up temp dir, exit status: $EXIT_CODE"
-	rm -Rf $TEMP_DIR
-	if [ -e $LOCAL_TEMP_LK ];then
-		rm -Rf $LOCAL_TEMP_LK
+	if [ ! -z "${TEMP_DIR-}" ];then
+		rm -Rf $TEMP_DIR
 	fi
-
-	if [ -e $LABKEY_HOME_LOCAL ];then
-		rm -Rf $LABKEY_HOME_LOCAL
+	
+	if [ ! -z "${LOCAL_TEMP_LK-}" ];then
+		if [ -e $LOCAL_TEMP_LK ];then
+			rm -Rf $LOCAL_TEMP_LK
+		fi
+	fi
+	
+	if [ ! -z "${LABKEY_HOME_LOCAL-}" ];then
+		if [ -e $LABKEY_HOME_LOCAL ];then
+			rm -Rf $LABKEY_HOME_LOCAL
+		fi
 	fi
 	
 	exit $EXIT_CODE
 }
 
 trap finish SIGTERM SIGKILL SIGINT SIGHUP EXIT SIGQUIT
+
+# Ensure NFS mounts exist:
+
+# Note: this is a separate RDS dataset mounted within the prime-seq tree:
+CHECK_204=`df /home/groups/prime-seq/production/Internal/ColonyData/204/@files | grep -e 'MgapGenomicsDb' | wc -l`
+if [ $CHECK_204 != '1' ];then
+	echo 'Improper mount for: workbook 204'
+	df /home/groups/prime-seq/production/Internal/ColonyData/204/@files
+	exit 1
+fi
+
+CHECK_51=`df -h /home/groups/prime-seq/production/Internal/ColonyData/51 | grep 51 | wc -l`
+if [ $CHECK_51 != '1' ];then
+	echo 'Improper mount for: workbook 51'
+	df /home/groups/prime-seq/production/Internal/ColonyData/51
+	exit 1
+fi
+
+CHECK_121=`df -h /home/groups/prime-seq/production/Internal/ColonyData/121 | grep 121 | wc -l`
+if [ $CHECK_121 != '1' ];then
+	echo 'Improper mount for: workbook 121'
+	df /home/groups/prime-seq/production/Internal/ColonyData/121
+	exit 1
+fi
+
+if [ ! -w /home/groups/prime-seq/production/ ];then
+	echo '/home/groups/prime-seq/production/ not writable!'
+	ls -lah df /home/groups/prime-seq/production/
+	exit 1
+fi
 
 echo $SLURM_JOBID
 hostname
@@ -47,6 +83,12 @@ fi
 set -o allexport
 source $SETTINGS
 set +o allexport
+
+# This should be provided by $SETTINGS
+if [ ! -e $JAVA ];then
+	echo "java executable not found: "$JAVA	
+	exit 1
+fi
 
 GZ_PREFIX=LabKey${MAJOR}.${MINOR_FULL}
 TOOL_DIR=/home/groups/prime-seq/pipeline_tools/bin
