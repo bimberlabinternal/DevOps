@@ -74,15 +74,15 @@ LOCAL_TEMP_LK=`mktemp -d --tmpdir=/tmp --suffix=$BASENAME`
 echo $LOCAL_TEMP_LK
 
 function finish {
-    echo "cleaning up temp dir, exit status: $?"
-    rm -Rf $TEMP_DIR
-    if [ -e $LOCAL_TEMP_LK ];then
-        rm -Rf $LOCAL_TEMP_LK
-    fi
+	echo "cleaning up temp dir, exit status: $?"
+	rm -Rf $TEMP_DIR
+	if [ -e $LOCAL_TEMP_LK ];then
+		rm -Rf $LOCAL_TEMP_LK
+	fi
 
-    if [ -e $LABKEY_HOME_LOCAL ];then
-        rm -Rf $LABKEY_HOME_LOCAL
-    fi
+	if [ -e $LABKEY_HOME_LOCAL ];then
+		rm -Rf $LABKEY_HOME_LOCAL
+	fi
 	
 	exit $?
 }
