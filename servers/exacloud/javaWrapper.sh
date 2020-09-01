@@ -74,7 +74,8 @@ LOCAL_TEMP_LK=`mktemp -d --tmpdir=/tmp --suffix=$BASENAME`
 echo $LOCAL_TEMP_LK
 
 function finish {
-	echo "cleaning up temp dir, exit status: $?"
+	EXIT_CODE=$?
+	echo "cleaning up temp dir, exit status: $EXIT_CODE"
 	rm -Rf $TEMP_DIR
 	if [ -e $LOCAL_TEMP_LK ];then
 		rm -Rf $LOCAL_TEMP_LK
@@ -84,7 +85,7 @@ function finish {
 		rm -Rf $LABKEY_HOME_LOCAL
 	fi
 	
-	exit $?
+	exit $EXIT_CODE
 }
 
 trap finish SIGTERM SIGKILL SIGINT SIGHUP EXIT SIGQUIT
