@@ -47,12 +47,12 @@ echo $SLURM_JOBID
 # Ensure NFS mounts exist:
 
 # Note: this is a separate RDS dataset mounted within the prime-seq tree:
-CHECK_204=`df /home/groups/prime-seq/production/Internal/ColonyData/204/@files | grep -e 'MgapGenomicsDb' | wc -l`
-if [ $CHECK_204 != '1' ];then
-	echo 'Improper mount for: workbook 204'
-	df /home/groups/prime-seq/production/Internal/ColonyData/204/@files
-	exit 1
-fi
+#CHECK_204=`df /home/groups/prime-seq/production/Internal/ColonyData/204/@files | grep -e 'MgapGenomicsDb' | wc -l`
+#if [ $CHECK_204 != '1' ];then
+#	echo 'Improper mount for: workbook 204'
+#	df /home/groups/prime-seq/production/Internal/ColonyData/204/@files
+#	exit 1
+#fi
 
 CHECK_51=`df -h /home/groups/prime-seq/production/Internal/ColonyData/51 | grep 51 | wc -l`
 if [ $CHECK_51 != '1' ];then
@@ -98,20 +98,19 @@ ORIG_WORK_DIR=$(pwd)
 
 #Allow this to be overridden in environment
 if [[ ! -v WORK_BASEDIR ]];then
-	WORK_BASEDIR=/home/exacloud/lustre1/prime-seq/workDir/
-fi
-
-if [[ ! -v USE_GSCRATCH ]];then
-	USE_GSCRATCH=0
-fi
-
-if [ $USE_GSCRATCH == 1 ];then
-	echo 'using gscratch'
 	WORK_BASEDIR=/home/exacloud/gscratch/prime-seq/workDir/
 fi
 
+if [[ ! -v USE_LUSTRE ]];then
+	USE_LUSTRE=0
+fi
+
+if [ $USE_LUSTRE == 1 ];then
+	echo 'using old lustre'
+	WORK_BASEDIR=/home/exacloud/lustre1/prime-seq/workDir/
+fi
+
 #Note: this used to use lustre space; however, now use local scratch
-#TEMP_BASEDIR=/home/exacloud/lustre1/prime-seq/tempDir
 TEMP_BASEDIR=/mnt/scratch
 
 TEMP_BASEDIR=$TEMP_BASEDIR/prime-seq
@@ -235,9 +234,9 @@ sed -i 's/<!--<entry key="JAVA_TMP_DIR" value=""\/>-->/<entry key="JAVA_TMP_DIR"
 ESCAPE=$(echo $WORK_DIR | sed 's/\//\\\//g')	
 sed -i 's/WORK_DIR/'$ESCAPE'/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
 
-if [ $USE_GSCRATCH == 1 ];then
-	echo 'swapping lustre1 for gscratch in XML file'
-	sed -i 's/exacloud\/lustre1/exacloud\/gscratch/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
+if [ $USE_LUSTRE == 1 ];then
+	echo 'swapping gscratch for lustre1 in XML file'
+	sed -i 's/exacloud\/gscratch/exacloud\/lustre1/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
 fi
 
 $JAVA -XX:HeapBaseMinAddress=4294967296 -Djava.io.tmpdir=${TEMP_DIR} ${updatedArgs[@]}

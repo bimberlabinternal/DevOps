@@ -11,15 +11,14 @@
 				</bean>
 			</list>
 		</property>
-
-                <property name="configProperties">
-                        <bean class="org.labkey.pipeline.api.properties.ConfigPropertiesImpl">
-                                <property name="softwarePackages">
-                                        <map>
-                                                <entry key="PERLPATH" value="/bin"/>
-                                       </map>
-                                </property>
-                        </bean>
+		<property name="configProperties">
+			<bean class="org.labkey.pipeline.api.properties.ConfigPropertiesImpl">
+				<property name="softwarePackages">
+					<map>
+						<entry key="PERLPATH" value="/bin"/>
+					</map>
+				</property>
+			</bean>
 		</property>
 	</bean>
 
@@ -30,28 +29,23 @@
 		<property name="removeCommand" value="ssh -q labkey_submit@exacloud.ohsu.edu /usr/bin/scancel ${clusterId}"/>
 		<property name="historyCommand" value="ssh -q labkey_submit@exacloud.ohsu.edu /usr/bin/sacct --allusers --jobs=${clusterId} -o JobId,State,NodeList"/>
 
-		<property name="labKeyDir" value="/home/exacloud/lustre1/prime-seq/src/" />
-		<property name="remoteExecutable" value="/home/exacloud/lustre1/prime-seq/src/javaWrapper.sh" />
-
-		<!--
-		<property name="labKeyDir" value="/home/groups/prime-seq/exacloud/code/labkey/" />
-                <property name="remoteExecutable" value="/home/groups/prime-seq/exacloud/code/labkey/javaWrapper.sh" />
-		-->
+		<property name="labKeyDir" value="/home/exacloud/gscratch/prime-seq/src/" />
+		<property name="remoteExecutable" value="/home/exacloud/gscratch/prime-seq/src/javaWrapper.sh" />
 
 		<property name="requestMemory" value="36" />
 		<property name="requestCpus" value="8" />
-		<property name="javaHome" value="/home/groups/prime-seq/exacloud/java/current"/>
-	        <property name="javaOpts">
+		<property name="javaHome" value="/home/exacloud/gscratch/java/current"/>
+			<property name="javaOpts">
 			<list>
 				<value>-Xmx8g</value>
 			</list>
 		</property>
-                <property name="extraSubmitScriptLines">
-                        <list>
-                                <value>#SBATCH --partition=exacloud</value>
+		<property name="extraSubmitScriptLines">
+			<list>
+				<value>#SBATCH --partition=exacloud</value>
 				<value>#SBATCH --time=2160</value>
 				<value>#SBATCH --gres=disk:1024</value>
-                        </list>
-                </property>
+			</list>
+		</property>
 	</bean>
 </beans>
