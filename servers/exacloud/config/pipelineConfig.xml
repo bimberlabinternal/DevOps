@@ -33,7 +33,7 @@
 						<entry key="SEQUENCEANALYSIS_MAX_RAM" value="24"/>
 						<entry key="SEQUENCEANALYSIS_JAVA_OPTS" value="-Xss2m"/>
 						<entry key="LOCAL_DATA_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedData" />
-						<entry key="REMOTE_GENOME_CACHE_DIR" value="/home/exacloudexacloud/gscratch/prime-seq/cachedGenomes"/>
+						<entry key="REMOTE_GENOME_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedGenomes"/>
 						<!--<entry key="JAVA_TMP_DIR" value=""/>-->
 					</map>
 				</property>

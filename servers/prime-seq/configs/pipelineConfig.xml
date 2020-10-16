@@ -16,6 +16,9 @@
 				<property name="softwarePackages">
 					<map>
 						<entry key="PERLPATH" value="/bin"/>
+						
+						<!-- This is required on the webserver as well, to indicate we need to submit the caching tasks -->
+						<entry key="REMOTE_GENOME_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedGenomes"/>
 					</map>
 				</property>
 			</bean>

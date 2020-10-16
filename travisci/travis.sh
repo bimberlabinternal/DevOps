@@ -2,10 +2,19 @@
 
 set -e
 set -x
+set -u
 
 # Allows override of settings
 if [ -e travisSettings.sh ];then
 	source travisSettings.sh
+fi
+
+if [[ ! -v TRAVIS_TAG ]];then
+	TRAVIS_TAG=
+fi
+
+if [[ ! -v TRAVIS_BRANCH ]];then
+	TRAVIS_BRANCH=develop
 fi
 
 BASE_VERSION=`echo $TRAVIS_BRANCH | grep -E -o '[0-9\.]{4,8}' || echo 'develop'`
@@ -13,7 +22,7 @@ BASE_VERSION=`echo $TRAVIS_BRANCH | grep -E -o '[0-9\.]{4,8}' || echo 'develop'`
 if [ $BASE_VERSION == 'develop' ];then
 	BASE_VERSION_SHORT='develop'
 else
-	BASE_VERSION_SHORT=`echo $BASE_VERSION | awk '{ print substr($0,1,4) }'`
+	BASE_VERSION_SHORT=`echo $BASE_VERSION | awk -F. '{ print $1"."$2 }'`
 fi
 
 echo "Base version inferred from branch: "$BASE_VERSION
@@ -39,33 +48,6 @@ do
 		rm -Rf $dir
 	fi
 done
-
-# Download primary SVN repo
-if [ $BASE_VERSION == 'develop' ];then
-	SVN_URL=https://svn.mgt.labkey.host/stedi/trunk
-	SVN_DIR=${BASEDIR}/trunk
-else
-	SVN_URL=https://svn.mgt.labkey.host/stedi/branches/release${BASE_VERSION_SHORT}-SNAPSHOT
-	SVN_DIR=${BASEDIR}/release${BASE_VERSION_SHORT}-SNAPSHOT
-	
-	SVN_EXISTS=`svn list $SVN_URL 2>&1 >/dev/null | grep -e 'non-existent' | wc -l`
-	if [ "$SVN_EXISTS" != "0" ];then
-		echo 'SVN branch not found, using trunk'
-		SVN_URL=https://svn.mgt.labkey.host/stedi/trunk
-		SVN_DIR=${BASEDIR}/trunk
-	fi
-fi
-
-if [ -e $SVN_DIR ];then
-	rm -Rf $SVN_DIR
-fi
-
-mkdir -p $SVN_DIR
-cd $BASEDIR
-svn co $SVN_URL
-
-export RELEASE_NAME=`grep -e 'labkeyVersion=' ${SVN_DIR}/gradle.properties | sed 's/labkeyVersion=//'`
-echo "Release name: "$RELEASE_NAME
 
 function identifyBranch {
 	GIT_ORG=$1
@@ -119,17 +101,18 @@ function cloneGit {
 	GIT_ORG=$1
 	REPONAME=$2
 	BRANCH=$3
+
 	echo "Repo: "${REPONAME}", using branch: "$BRANCH
 
 	BASE=/server/modules/
-	if [ -n "$4" ];then
+	if [[ $# -gt 3 ]] ; then
 		BASE=$4
 	fi
 
-	TARGET_DIR=${SVN_DIR}${BASE}${REPONAME}
+	TARGET_DIR=${SERVER_ROOT}${BASE}${REPONAME}
 	GIT_URL=https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git
 	if [ ! -e $TARGET_DIR ];then
-		cd ${SVN_DIR}${BASE}
+		cd ${SERVER_ROOT}${BASE}
 		git clone -b $BRANCH $GIT_URL
 	else
 		cd $TARGET_DIR
@@ -142,6 +125,39 @@ function cloneGit {
 		git pull origin $BRANCH
 	fi
 }
+
+cd $BASEDIR
+
+# Labkey/server
+HIGHEST_SVN=20.9
+GREATEST_VERSION=`echo -e "${BASE_VERSION_SHORT}\n${HIGHEST_SVN}" | sort -V | head -n1`
+if [[ $BASE_VERSION == 'develop' || $GREATEST_VERSION != $HIGHEST_SVN ]] ;then
+	SERVER_ROOT=${BASEDIR}
+	identifyBranch Labkey server
+	LK_BRANCH=$BRANCH
+	cloneGit Labkey server $LK_BRANCH /
+	SERVER_ROOT=${BASEDIR}/server
+else
+	SVN_URL=https://svn.mgt.labkey.host/stedi/branches/release${BASE_VERSION_SHORT}-SNAPSHOT
+	SERVER_ROOT=${BASEDIR}/release${BASE_VERSION_SHORT}-SNAPSHOT
+	
+	SVN_EXISTS=`svn list $SVN_URL 2>&1 >/dev/null | grep -e 'non-existent' | wc -l`
+	if [ "$SVN_EXISTS" != "0" ];then
+		echo 'SVN branch not found, using trunk'
+		SVN_URL=https://svn.mgt.labkey.host/stedi/trunk
+		SERVER_ROOT=${BASEDIR}/trunk
+	fi
+	
+	if [ -e $SERVER_ROOT ];then
+		rm -Rf $SERVER_ROOT
+	fi
+
+	mkdir -p $SERVER_ROOT
+	svn co $SVN_URL
+fi
+
+export RELEASE_NAME=`grep -e 'labkeyVersion=' ${SERVER_ROOT}/gradle.properties | sed 's/labkeyVersion=//'`
+echo "Release name: "$RELEASE_NAME
 
 # Labkey/Platform
 identifyBranch Labkey platform
@@ -171,7 +187,7 @@ cloneGit BimberLabInternal BimberLabKeyModules $BRANCH
 # Labkey/ehrModules.  Only retain Viral_Load_Assay
 cloneGit Labkey ehrModules $LK_BRANCH
 
-cd $SVN_DIR
+cd $SERVER_ROOT
 echo 'Git clone complete'
 date +%F" "%T
 
@@ -196,7 +212,7 @@ if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
 	rm apache-tomcat-9*tar.gz
 fi
 
-cd $SVN_DIR
+cd $SERVER_ROOT
 
 echo 'Starting build'
 date +%F" "%T
@@ -223,13 +239,17 @@ if [ $BASE_VERSION_SHORT != 'develop' ];then
 	GRADLE_RELEASE=${BASE_VERSION_SHORT}-SNAPSHOT
 fi
 
+ARTIFACTORY_SETTINGS=
+if [[ -v ARTIFACTORY_USER ]];then
+	ARTIFACTORY_SETTINGS="-Partifactory_user=${ARTIFACTORY_USER} -Partifactory_password=${ARTIFACTORY_PASSWORD}"
+fi
+
 ./gradlew \
 	-Dorg.gradle.daemon=false \
 	--parallel \
 	-Dtomcat.home=$CATALINA_HOME \
 	$INCLUDE_VCS \
-	-Partifactory_user=${ARTIFACTORY_USER} \
-	-Partifactory_password=${ARTIFACTORY_PASSWORD} \
+	$ARTIFACTORY_SETTINGS \
 	-PlabkeyVersion=${GRADLE_RELEASE} \
 	-PdeployMode=prod \
 	deployApp
@@ -238,14 +258,13 @@ echo 'deployApp Complete'
 date +%F" "%T
 
 #Rename artifacts if a public release:
-if [ ! -z $TRAVIS_TAG ];then
+if [ ! -z "$TRAVIS_TAG" ];then
 	./gradlew \
 		-Dorg.gradle.daemon=false \
 		--parallel \
 		-Dtomcat.home=$CATALINA_HOME \
 		$INCLUDE_VCS \
-		-Partifactory_user=${ARTIFACTORY_USER} \
-		-Partifactory_password=${ARTIFACTORY_PASSWORD} \
+		$ARTIFACTORY_SETTINGS \
 		-PlabkeyVersion=${GRADLE_RELEASE} \
 		-PdeployMode=prod \
 		-PmoduleSet=distributions \
@@ -265,7 +284,7 @@ fi
 echo $RELEASE_NAME > ${TRAVIS_BUILD_DIR}/release.txt
 
 echo 'Cleaning build dir to reduce cache'
-rm -Rf ${SVN_DIR}/build/deploy
+rm -Rf ${SERVER_ROOT}/build/deploy
 
 # Double check the contents of the cache
 du -s -h  $HOME/labkey_build/*
