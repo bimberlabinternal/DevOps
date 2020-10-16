@@ -128,10 +128,10 @@ function cloneGit {
 
 cd $BASEDIR
 
-# Labkey/server
-HIGHEST_SVN=20.9
-GREATEST_VERSION=`echo -e "${BASE_VERSION_SHORT}\n${HIGHEST_SVN}" | sort -V | head -n1`
-if [[ $BASE_VERSION == 'develop' || $GREATEST_VERSION != $HIGHEST_SVN ]] ;then
+# Labkey/server. Note: for 20.11 and lower, use SVN. Otherwise git:
+LOWEST_GIT=20.11
+LOWER_VERSION=`echo -e "${BASE_VERSION_SHORT}\n${LOWEST_GIT}" | sort -V | head -n1`
+if [[ $BASE_VERSION == 'develop' || $LOWER_VERSION == $LOWEST_GIT ]] ;then
 	SERVER_ROOT=${BASEDIR}
 	identifyBranch Labkey server
 	LK_BRANCH=$BRANCH
