@@ -17,6 +17,11 @@ if [[ ! -v TRAVIS_BRANCH ]];then
 	TRAVIS_BRANCH=develop
 fi
 
+GH_CREDENTIALS=
+if [[ -v GH_TOKEN ]];then
+	GH_CREDENTIALS="${GH_TOKEN}@"
+fi
+
 BASE_VERSION=`echo $TRAVIS_BRANCH | grep -E -o '[0-9\.]{4,8}' || echo 'develop'`
 
 if [ $BASE_VERSION == 'develop' ];then
@@ -55,7 +60,7 @@ function identifyBranch {
 
 	#First try based on Tag, if present
 	if [ ! -z $TRAVIS_TAG ];then
-		BRANCH_EXISTS=$(git ls-remote --tags https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TRAVIS_TAG} | wc -l)
+		BRANCH_EXISTS=$(git ls-remote --tags https://${GH_CREDENTIALS}github.com/${GIT_ORG}/${REPONAME}.git ${TRAVIS_TAG} | wc -l)
 		if [ "$BRANCH_EXISTS" != "0" ];then
 			BRANCH=$TRAVIS_TAG
 			echo 'Branch found, using '$BRANCH
@@ -64,7 +69,7 @@ function identifyBranch {
 	fi
 
 	# Then try branch of same name:
-	BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TRAVIS_BRANCH} | wc -l)
+	BRANCH_EXISTS=$(git ls-remote --heads https://${GH_CREDENTIALS}github.com/${GIT_ORG}/${REPONAME}.git ${TRAVIS_BRANCH} | wc -l)
 	if [ "$BRANCH_EXISTS" != "0" ];then
 		BRANCH=$TRAVIS_BRANCH
 		echo 'Branch found, using '$BRANCH
@@ -74,7 +79,7 @@ function identifyBranch {
 	# Otherwise discvr
 	TO_TEST='discvr-'$BASE_VERSION_SHORT
 	if [ $TO_TEST != $TRAVIS_BRANCH ];then
-		BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TO_TEST} | wc -l)
+		BRANCH_EXISTS=$(git ls-remote --heads https://${GH_CREDENTIALS}github.com/${GIT_ORG}/${REPONAME}.git ${TO_TEST} | wc -l)
 		if [ "$BRANCH_EXISTS" != "0" ];then
 			BRANCH=$TO_TEST
 			echo 'Branch found, using '$BRANCH
@@ -85,7 +90,7 @@ function identifyBranch {
 	# Otherwise release
 	TO_TEST='release'${BASE_VERSION_SHORT}-SNAPSHOT
 	if [ $TO_TEST != $TRAVIS_BRANCH ];then
-		BRANCH_EXISTS=$(git ls-remote --heads https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git ${TO_TEST} | wc -l)
+		BRANCH_EXISTS=$(git ls-remote --heads https://${GH_CREDENTIALS}github.com/${GIT_ORG}/${REPONAME}.git ${TO_TEST} | wc -l)
 		if [ "$BRANCH_EXISTS" != "0" ];then
 			BRANCH=$TO_TEST
 			echo 'Branch found, using '$BRANCH
@@ -110,7 +115,7 @@ function cloneGit {
 	fi
 
 	TARGET_DIR=${SERVER_ROOT}${BASE}${REPONAME}
-	GIT_URL=https://${GH_TOKEN}@github.com/${GIT_ORG}/${REPONAME}.git
+	GIT_URL=https://${GH_CREDENTIALS}github.com/${GIT_ORG}/${REPONAME}.git
 	if [ ! -e $TARGET_DIR ];then
 		cd ${SERVER_ROOT}${BASE}
 		git clone -b $BRANCH $GIT_URL
