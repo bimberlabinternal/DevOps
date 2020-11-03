@@ -48,7 +48,6 @@
 				<value>#SBATCH --partition=exacloud</value>
 				<value>#SBATCH --time=2160</value>
 				<value>#SBATCH --gres=disk:1024</value>
-				<value>#SBATCH -C IB</value>
 			</list>
 		</property>
 	</bean>
