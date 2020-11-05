@@ -92,7 +92,7 @@ if [ ! -e $JAVA ];then
 fi
 
 GZ_PREFIX=LabKey${MAJOR}.${MINOR_FULL}
-TOOL_DIR=/home/groups/prime-seq/pipeline_tools/bin
+TOOL_DIR=/home/exacloud/gscratch/prime-seq/bin/
 
 ORIG_WORK_DIR=$(pwd)
 
