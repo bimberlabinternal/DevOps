@@ -15,7 +15,8 @@ inputs:
     description: LabKey Artifactory Password
     required: false  
 runs:
-  runs-on: ubuntu-latest  
+  using: 'docker'
+  image: 'Dockerfile'
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
     ARTIFACTORY_USER: ${{ inputs.artifactory_user }}
