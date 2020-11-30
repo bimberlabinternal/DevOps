@@ -11,8 +11,8 @@ fi
 
 BRANCH_NAME=${GITHUB_REF##*/}
 
-if [[ ! -v IS_RELEASE ]];then
-	if [[ $IS_RELEASE == 'true' ]];then
+if [[ ! -v GITHUB_EVENT_NAME ]];then
+	if [[ $GITHUB_EVENT_NAME == 'release' ]];then
 		TAG_NAME=$BRANCH_NAME
 	fi
 fi
