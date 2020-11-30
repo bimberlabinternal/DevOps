@@ -7,4 +7,4 @@ if [[ -z "$GITHUB_TOKEN" ]]; then
   exit 1
 fi
 
-sh -c "/doBuild.sh $*"
+ash /doBuild.sh
