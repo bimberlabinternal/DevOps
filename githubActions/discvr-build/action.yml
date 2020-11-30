@@ -1,0 +1,23 @@
+name: DISCVR Build
+author: Ben Bimber
+description: Build the DISCVR modules
+branding:
+  icon: 'git-branch'
+  color: 'black'
+inputs:
+  github_token:
+    description: GitHub token secret
+    required: true
+  artifactory_user:
+    description: LabKey Artifactory User
+    required: false
+  artifactory_password:
+    description: LabKey Artifactory Password
+    required: false  
+runs:
+  runs-on: ubuntu-latest  
+  env:
+    GITHUB_TOKEN: ${{ inputs.github_token }}
+    ARTIFACTORY_USER: ${{ inputs.artifactory_user }}
+    ARTIFACTORY_PASSWORD: ${{ inputs.artifactory_password }}    
+    IS_RELEASE: ${{github.event_name == 'release'}}
