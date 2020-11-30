@@ -21,4 +21,4 @@ runs:
     GITHUB_TOKEN: ${{ inputs.github_token }}
     ARTIFACTORY_USER: ${{ inputs.artifactory_user }}
     ARTIFACTORY_PASSWORD: ${{ inputs.artifactory_password }}    
-    IS_RELEASE: ${{ github.event_name == 'release' }}
+    IS_RELEASE: "${{ github.event_name == 'release' }}"
