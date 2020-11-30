@@ -192,7 +192,7 @@ date +%F" "%T
 echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODULES_DIR], ['ehr', 'ehr_billing', 'EHR_ComplianceDB'], true)" >> settings.gradle
 
 #make distribution
-DIST_DIR=${TRAVIS_BUILD_DIR}/lkDist
+DIST_DIR=/lkDist
 if [ ! -e $DIST_DIR ];then
 	mkdir -p $DIST_DIR ];
 fi
@@ -278,7 +278,7 @@ if [ ! -z "$TAG_NAME" ];then
 	mv $DIST_DIR/discvr_modules/*.zip $DIST_DIR/discvr/DISVCR-${BASE_VERSION}.modules.zip
 fi
 
-echo $RELEASE_NAME > ${TRAVIS_BUILD_DIR}/release.txt
+echo $RELEASE_NAME > release.txt
 
 echo 'Cleaning build dir to reduce cache'
 rm -Rf ${SERVER_ROOT}/build/deploy
