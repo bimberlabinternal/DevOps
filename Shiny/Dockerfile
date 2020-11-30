@@ -35,7 +35,7 @@ RUN rm ${APP_DIR}/index.html && rm -Rf ${APP_DIR}/sample-apps
 RUN echo "SCRATCH_DIR="${SCRATCH_DIR} >> /usr/local/lib/R/etc/Renviron.site
 
 # Install dependencies & packages. Also create stub app.R in the expected location
-RUN Rscript -e "devtools::install_github(repo = 'kolabx/geneSetVis@pkg', dependencies = T, upgrade = 'always')" \
+RUN Rscript -e "devtools::install_github(repo = 'bimberlabinternal/geneSetVis', dependencies = T, upgrade = 'always')" \
 	&& Rscript -e "devtools::install_github(repo = 'bimberlabinternal/ShinySDA', dependencies = T, upgrade = 'always')" \
 	&& Rscript -e "devtools::install_github(repo = 'eisascience/HISTA', dependencies = T, upgrade = 'always')" \
 	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds
