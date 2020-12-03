@@ -239,6 +239,8 @@ fi
 ARTIFACTORY_SETTINGS=
 if [[ -v ARTIFACTORY_USER ]];then
 	ARTIFACTORY_SETTINGS="-Partifactory_user=${ARTIFACTORY_USER} -Partifactory_password=${ARTIFACTORY_PASSWORD}"
+else
+	echo "ARTIFACTORY_USER not supplied"
 fi
 
 ./gradlew \
