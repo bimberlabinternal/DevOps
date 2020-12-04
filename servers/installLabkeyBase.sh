@@ -86,19 +86,19 @@ rm -Rf $MODULE_ZIP
 wget -O $MODULE_ZIP https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/${MODULE_DIST_NAME}/${ARTIFACT}-ExtraModules.zip
 isGzOrZip $MODULE_ZIP
 
-GZ=${ARTIFACT}-${DATE}-discvr-bin.tar.gz
+GZ=${ARTIFACT}-${DATE}-discvr.tar.gz
 rm -Rf $GZ
-wget -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/discvr/${ARTIFACT}-discvr-bin.tar.gz
+wget -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/discvr/${ARTIFACT}-discvr.tar.gz
 isGzOrZip $GZ
 
 #extract, find name
 tar -xf $GZ
-DIR=$(ls -tr | grep "^${ARTIFACT}*" | grep 'discvr-bin$' | tail -n -1)
+DIR=$(ls -tr | grep "^${ARTIFACT}*" | grep 'discvr$' | tail -n -1)
 echo "DIR: $DIR"
-BASENAME=$(echo ${DIR} | sed 's/-discvr-bin//')
-mv $GZ ./${BASENAME}-discvr-bin.tar.gz
+BASENAME=$(echo ${DIR} | sed 's/-discvr//')
+mv $GZ ./${BASENAME}-discvr.tar.gz
 mv $MODULE_ZIP ./${BASENAME}-ExtraModules.zip
-GZ=${BASENAME}-discvr-bin.tar.gz
+GZ=${BASENAME}-discvr.tar.gz
 MODULE_ZIP=${BASENAME}-ExtraModules.zip
 
 if [ -z $SKIP_INSTALL ];then
