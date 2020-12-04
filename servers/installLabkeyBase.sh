@@ -14,7 +14,7 @@ set -e
 #TOMCAT_HOME=XXXX
 
 TC_PROJECT=LabKey_${MAJOR}${MINOR_FULL}Release_External_Discvr_Installers
-ARTIFACT=LabKey${MAJOR}.${MINOR_FULL}-SNAPSHOT-{build.number}
+ARTIFACT=LabKey${MAJOR}.${MINOR_FULL}-SNAPSHOT
 
 SKIP_INSTALL=
 TEAMCITY_USERNAME=bbimber
@@ -83,22 +83,22 @@ isGzOrZip() {
 DATE=$(date +"%Y%m%d%H%M")
 MODULE_ZIP=${ARTIFACT}-ExtraModules-${DATE}.zip
 rm -Rf $MODULE_ZIP
-wget -O $MODULE_ZIP https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/${MODULE_DIST_NAME}/${ARTIFACT}-ExtraModules.zip
+wget -O $MODULE_ZIP https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/${MODULE_DIST_NAME}/${ARTIFACT}-{build.number}-ExtraModules.zip
 isGzOrZip $MODULE_ZIP
 
 GZ=${ARTIFACT}-${DATE}-discvr.tar.gz
 rm -Rf $GZ
-wget -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/discvr/${ARTIFACT}-discvr.tar.gz
+wget -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/discvr/${ARTIFACT}-{build.number}-discvr.tar.gz
 isGzOrZip $GZ
 
 #extract, find name
 tar -xf $GZ
-DIR=$(ls -tr | grep "^${ARTIFACT}*" | grep 'discvr$' | tail -n -1)
+DIR=$(ls -tr | grep "^${ARTIFACT}*" | grep 'discvr-bin$' | tail -n -1)
 echo "DIR: $DIR"
-BASENAME=$(echo ${DIR} | sed 's/-discvr//')
-mv $GZ ./${BASENAME}-discvr.tar.gz
+BASENAME=$(echo ${DIR} | sed 's/-discvr-bin//')
+mv $GZ ./${BASENAME}-discvr-bin.tar.gz
 mv $MODULE_ZIP ./${BASENAME}-ExtraModules.zip
-GZ=${BASENAME}-discvr.tar.gz
+GZ=${BASENAME}-discvr-bin.tar.gz
 MODULE_ZIP=${BASENAME}-ExtraModules.zip
 
 if [ -z $SKIP_INSTALL ];then
