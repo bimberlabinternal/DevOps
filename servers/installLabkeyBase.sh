@@ -95,7 +95,17 @@ isGzOrZip $GZ
 tar -xf $GZ
 DIR=$(ls -tr | grep "^${ARTIFACT}*" | grep 'discvr$' | tail -n -1)
 echo "DIR: $DIR"
+if [ -z $DIR ];then
+	echo 'There was an error parsing the output folder name'
+	exit 1
+fi
+
 BASENAME=$(echo ${DIR} | sed 's/-discvr//')
+if [ -z $BASENAME ];then
+	echo 'There was an error parsing the BASENAME'
+	exit 1
+fi
+
 mv $GZ ./${BASENAME}-discvr.tar.gz
 mv $MODULE_ZIP ./${BASENAME}-ExtraModules.zip
 GZ=${BASENAME}-discvr.tar.gz
