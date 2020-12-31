@@ -276,8 +276,8 @@ if [ ! -z "$TAG_NAME" ];then
 	date +%F" "%T
 
 	echo "Renaming artifact for release"
-	mv $DIST_DIR/discvr/*.gz $DIST_DIR/discvr/DISVCR-${BASE_VERSION}.installer.tar.gz
-	mv $DIST_DIR/discvr_modules/*.zip $DIST_DIR/discvr/DISVCR-${BASE_VERSION}.modules.zip
+	mv $DIST_DIR/discvr/*.gz $DIST_DIR/discvr/DISCVR-${BASE_VERSION}.installer.tar.gz
+	mv $DIST_DIR/discvr_modules/*.zip $DIST_DIR/discvr/DISCVR-${BASE_VERSION}.modules.zip
 fi
 
 echo $RELEASE_NAME > release.txt
