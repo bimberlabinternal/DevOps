@@ -194,7 +194,7 @@ echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODUL
 #make distribution
 DIST_DIR=/lkDist
 if [ ! -e $DIST_DIR ];then
-	mkdir -p $DIST_DIR ];
+	mkdir -p $DIST_DIR;
 fi
 
 if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then

@@ -29,6 +29,7 @@
 						<entry key="JAVA_HOME_8" value="/home/exacloud/gscratch/prime-seq/java/java8"/>
 						<entry key="JAVA_HOME_7" value="/home/exacloud/gscratch/prime-seq/java/jdk1.7.0_55"/>
 						<entry key="JAVA_HOME_6" value="/home/exacloud/gscratch/prime-seq/java/jdk1.6.0_45"/>
+						<entry key="DOCKER_EXE" value="/opt/acc/sbin/exadocker"/>
 						<entry key="SEQUENCEANALYSIS_MAX_THREADS" value="8"/>
 						<entry key="SEQUENCEANALYSIS_MAX_RAM" value="24"/>
 						<entry key="SEQUENCEANALYSIS_JAVA_OPTS" value="-Xss2m"/>
