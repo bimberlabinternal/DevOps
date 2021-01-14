@@ -189,7 +189,7 @@ echo 'Git clone complete'
 date +%F" "%T
 
 # Modify gradle config:
-echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODULES_DIR], ['ehr', 'ehr_billing', 'EHR_ComplianceDB'], true)" >> settings.gradle
+echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODULES_DIR], ['ehr_billing', 'EHR_ComplianceDB'], true)" >> settings.gradle
 
 #make distribution
 DIST_DIR=/lkDist
