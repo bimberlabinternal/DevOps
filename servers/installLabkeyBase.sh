@@ -100,11 +100,7 @@ if [ -z $DIR ];then
 	exit 1
 fi
 
-BASENAME=$(echo ${DIR} | sed 's/-discvr//')
-if [ -z $BASENAME ];then
-	echo 'There was an error parsing the BASENAME'
-	exit 1
-fi
+BASENAME=$ARTIFACT
 
 mv $GZ ./${BASENAME}-discvr.tar.gz
 mv $MODULE_ZIP ./${BASENAME}-ExtraModules.zip
