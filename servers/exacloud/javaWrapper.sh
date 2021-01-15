@@ -168,7 +168,7 @@ mkdir -p $LABKEY_HOME_LOCAL
 cd $LABKEY_HOME_LOCAL
 
 #Main server:
-GZ=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.gz$" | tail -n -1)
+GZ=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*-discvr\.tar\.gz$" | tail -n -1)
 cp ${LK_SRC_DIR}/$GZ ./
 GZ=$(basename $GZ)
 echo "TAR: $GZ"
@@ -195,7 +195,7 @@ fi
 cp $TOMCAT_HOME/lib/labkeyBootstrap.jar $LABKEY_HOME_LOCAL/labkeyBootstrap.jar
 
 #Extra modules:
-MODULE_ZIP=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.zip$" | tail -n -1)
+MODULE_ZIP=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*-ExtraModules\.zip$" | tail -n -1)
 if [ -e modules_unzip ];then
 	rm -Rf modules_unzip
 fi
