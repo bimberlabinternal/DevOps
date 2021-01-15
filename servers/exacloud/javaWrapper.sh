@@ -212,7 +212,6 @@ cp -R $LK_SRC_DIR/config $LABKEY_HOME_LOCAL
 
 cd $ORIG_WORK_DIR
 rm -Rf $DIR
-rm -Rf $TAR
 
 #edit arguments
 updatedArgs=( "$@" )
