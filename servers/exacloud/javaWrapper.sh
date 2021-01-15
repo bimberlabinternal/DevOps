@@ -171,12 +171,14 @@ cd $LABKEY_HOME_LOCAL
 GZ=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*\.gz$" | tail -n -1)
 cp ${LK_SRC_DIR}/$GZ ./
 GZ=$(basename $GZ)
-gunzip $GZ
-TAR=`echo $GZ | sed -e "s/.gz$//"`
-echo "TAR: $TAR"
-tar -xf $TAR
-DIR=`echo $TAR | sed -e "s/.tar$//"`
+echo "TAR: $GZ"
+tar -xf $GZ
+TAR_BASENAME=`echo $GZ | sed -e "s/.tar.gz$//"`
+echo "TAR_BASENAME: $TAR_BASENAME"
+
+DIR=$(find . -maxdepth 1 -type d | grep "./${TAR_BASENAME}*" | tail -n -1)
 echo "DIR: $DIR"
+
 cd $DIR
 
 export TOMCAT_HOME=${LABKEY_HOME_LOCAL}/tomcat
