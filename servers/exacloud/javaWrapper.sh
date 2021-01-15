@@ -173,10 +173,10 @@ cp ${LK_SRC_DIR}/$GZ ./
 GZ=$(basename $GZ)
 echo "TAR: $GZ"
 tar -xf $GZ
-TAR_BASENAME=`echo $GZ | sed -e "s/.tar.gz$//"`
-echo "TAR_BASENAME: $TAR_BASENAME"
 
-DIR=$(find . -maxdepth 1 -type d | grep "./${TAR_BASENAME}*" | tail -n -1)
+# NOTE: the name of the directory within this archive is not predictable based on TAR name. 
+# The rationale is to take the last (newest) directory matching this name. 
+DIR=$(find . -maxdepth 1 -type d | grep "./${GZ_PREFIX}-*" | tail -n -1)
 echo "DIR: $DIR"
 
 cd $DIR
