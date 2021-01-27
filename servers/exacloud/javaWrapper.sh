@@ -16,7 +16,7 @@ finish() {
 	EXIT_CODE=$?
 	if [ $EXIT_CODE != 0 ];then
 		echo "ERROR RUNNING JOB"
-		ps -e -T -o pid,lwp,pri,nice,start,stat,bsdtime,cmd,comm,user
+		#ps -e -T -o pid,lwp,pri,nice,start,stat,bsdtime,cmd,comm,user
 	fi
 	
 	if [ ! -z "${TEMP_DIR-}" ];then
@@ -210,7 +210,7 @@ rm -Rf $MODULE_ZIP
 #Config:
 cp -R $LK_SRC_DIR/config $LABKEY_HOME_LOCAL
 
-cd $ORIG_WORK_DIR
+cd "$ORIG_WORK_DIR"
 rm -Rf $DIR
 
 #edit arguments

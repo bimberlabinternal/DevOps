@@ -81,12 +81,12 @@ isGzOrZip() {
 
 #first download
 DATE=$(date +"%Y%m%d%H%M")
-MODULE_ZIP=${ARTIFACT}-ExtraModules-${DATE}.zip
+MODULE_ZIP=Temp-${ARTIFACT}-ExtraModules-${DATE}.zip
 rm -Rf $MODULE_ZIP
 wget -O $MODULE_ZIP https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/${MODULE_DIST_NAME}/${ARTIFACT}-{build.number}-ExtraModules.zip
 isGzOrZip $MODULE_ZIP
 
-GZ=${ARTIFACT}-${DATE}-discvr.tar.gz
+GZ=Temp-${ARTIFACT}-${DATE}-discvr.tar.gz
 rm -Rf $GZ
 wget -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/discvr/${ARTIFACT}-{build.number}-discvr.tar.gz
 isGzOrZip $GZ
