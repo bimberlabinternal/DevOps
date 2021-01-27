@@ -122,10 +122,10 @@ export PATH=${JAVA_HOME}/bin/:$TOOL_DIR:$PATH
 
 umask 0006
 
-JOB_FILE=${!#}
-JOB_FILE=${JOB_FILE//file:/}
+JOB_FILE="${!#}"
+JOB_FILE="${JOB_FILE//file:/}"
 
-BASENAME=`basename $JOB_FILE '.job.json.txt'`
+BASENAME=`basename "$JOB_FILE" '.job.json.txt'`
 
 #make new temp directory, specifically for the job's output.  i think deleting the general temp dir while this script and LK are running might be an issue
 TEMP_DIR=`mktemp -d --tmpdir=$TEMP_BASEDIR --suffix=${BASENAME}`
@@ -216,12 +216,12 @@ rm -Rf $DIR
 #edit arguments
 updatedArgs=( "$@" )
 for(( a=0; a<${#updatedArgs[@]}-1 ;a++ ));  do
-	arg=${updatedArgs[$a]}
+	arg="${updatedArgs[$a]}"
 	#echo $arg
 
 	#if matches origial dir, replace path
 	TO_SUB=$LK_SRC_DIR
-	updatedArgs[$a]=${arg//$TO_SUB/$LABKEY_HOME_LOCAL}
+	updatedArgs[$a]="${arg//$TO_SUB/$LABKEY_HOME_LOCAL}"
 done
 
 #also add /externalModules
@@ -239,6 +239,9 @@ if [ $USE_LUSTRE == 1 ];then
 	echo 'swapping gscratch for lustre1 in XML file'
 	sed -i 's/exacloud\/gscratch/exacloud\/lustre1/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
 fi
+
+# Quote the last arg, which is the file path:
+updatedArgs[$a]="\""${updatedArgs[$a]}"\""
 
 $JAVA -XX:HeapBaseMinAddress=4294967296 -Djava.io.tmpdir=${TEMP_DIR} ${updatedArgs[@]}
 
