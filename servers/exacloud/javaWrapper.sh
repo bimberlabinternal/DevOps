@@ -240,9 +240,6 @@ if [ $USE_LUSTRE == 1 ];then
 	sed -i 's/exacloud\/gscratch/exacloud\/lustre1/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
 fi
 
-# Quote the last arg, which is the file path:
-updatedArgs[$a]="\""${updatedArgs[$a]}"\""
-
 $JAVA -XX:HeapBaseMinAddress=4294967296 -Djava.io.tmpdir=${TEMP_DIR} ${updatedArgs[@]}
 
 if [ ! -z $SLURM_JOBID ];then
