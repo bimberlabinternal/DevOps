@@ -18,6 +18,17 @@ if [[ ! -v GITHUB_EVENT_NAME ]];then
 	fi
 fi
 
+DO_GENERATE_DIST=0
+if [[ ! -v GENERATE_DIST ]];then
+	if [[ $GENERATE_DIST == 1 ]];then
+		DO_GENERATE_DIST=1
+	fi
+fi
+
+if [[ ! -v TAG_NAME ]];then
+	DO_GENERATE_DIST=1
+fi
+
 GH_CREDENTIALS=
 if [[ -v GITHUB_TOKEN ]];then
 	GH_CREDENTIALS="${GITHUB_TOKEN}@"
@@ -257,7 +268,7 @@ echo 'deployApp Complete'
 date +%F" "%T
 
 #Rename artifacts if a public release:
-if [ ! -z "$TAG_NAME" ];then
+if [ $DO_GENERATE_DIST == 1 ];then
 	./gradlew \
 		-Dorg.gradle.daemon=false \
 		--parallel \
