@@ -270,6 +270,8 @@ if [ $GENERATE_DIST == 1 ];then
 	echo "Renaming artifact for release"
 	mv $DIST_DIR/discvr/*.gz $DIST_DIR/discvr/DISCVR-${BASE_VERSION}.installer.tar.gz
 	mv $DIST_DIR/discvr_modules/*.zip $DIST_DIR/discvr/DISCVR-${BASE_VERSION}.modules.zip
+	ls $DIST_DIR
+	ls $DIST_DIR/discvr*
 fi
 
 echo $RELEASE_NAME > release.txt
