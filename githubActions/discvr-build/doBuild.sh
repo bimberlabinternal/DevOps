@@ -238,7 +238,7 @@ date +%F" "%T
 
 if [ $GENERATE_DIST == 1 ];then
 	#NOTE: this is required by :server:setup
-	CATALINA_HOME=/tomcatHome
+	export CATALINA_HOME=/tomcatHome
 	if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
 		if [ -e $$CATALINA_HOME ];then
 			rm -Rf $CATALINA_HOME
