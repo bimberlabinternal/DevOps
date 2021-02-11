@@ -236,14 +236,24 @@ fi
 echo 'stageApp Complete'
 date +%F" "%T
 
-TOMCAT_HOME=/tomcatHome
-mkdir -p $TOMCAT_HOME
-
 if [ $GENERATE_DIST == 1 ];then
+	CATALINA_HOME=/tomcatHome
+	if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
+		if [ -e $$CATALINA_HOME ];then
+			rm -Rf $CATALINA_HOME
+		fi
+
+		mkdir -p $CATALINA_HOME
+		cd $CATALINA_HOME
+		curl --insecure -O https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.35/bin/apache-tomcat-9.0.35.tar.gz	
+		tar xzvf apache-tomcat-9*tar.gz -C $CATALINA_HOME --strip-components=1
+		rm apache-tomcat-9*tar.gz
+	fi
+
 	./gradlew \
 		--parallel $INCLUDE_VCS $ARTIFACTORY_SETTINGS \
 		-PlabkeyVersion=${GRADLE_RELEASE} \
-		-Dtomcat.home=$TOMCAT_HOME \
+		-Dtomcat.home=$CATALINA_HOME \
 		-PdeployMode=prod \
 		-PmoduleSet=distributions \
 		-PdistDir=$DIST_DIR \
