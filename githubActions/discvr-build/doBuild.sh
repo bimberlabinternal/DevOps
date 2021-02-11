@@ -228,9 +228,7 @@ else
 fi
 
 ./gradlew \
-	--parallel \
-	$INCLUDE_VCS \
-	$ARTIFACTORY_SETTINGS \
+	--parallel $INCLUDE_VCS $ARTIFACTORY_SETTINGS \
 	-PlabkeyVersion=${GRADLE_RELEASE} \
 	-PdeployMode=prod \
 	stageApp
@@ -241,10 +239,7 @@ date +%F" "%T
 #Rename artifacts if a public release:
 if [ $GENERATE_DIST == 1 ];then
 	./gradlew \
-		-Dorg.gradle.daemon=false \
-		--parallel \		
-		$INCLUDE_VCS \
-		$ARTIFACTORY_SETTINGS \
+		--parallel $INCLUDE_VCS $ARTIFACTORY_SETTINGS \
 		-PlabkeyVersion=${GRADLE_RELEASE} \
 		-PdeployMode=prod \
 		-PmoduleSet=distributions \
