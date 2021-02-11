@@ -208,9 +208,9 @@ echo 'Starting build'
 date +%F" "%T
 
 INCLUDE_VCS=
-if [ $GENERATE_DIST == 1 ];then
-	INCLUDE_VCS="-PincludeVcs"
-fi
+#if [ $GENERATE_DIST == 1 ];then
+#	INCLUDE_VCS="-PincludeVcs"
+#fi
 
 GRADLE_OPTS=-Xmx2048m
 
