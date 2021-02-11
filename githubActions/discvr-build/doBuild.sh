@@ -196,7 +196,7 @@ date +%F" "%T
 echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODULES_DIR], ['ehr_billing', 'EHR_ComplianceDB'], true)" >> settings.gradle
 
 #make distribution
-DIST_DIR=/lkDist
+DIST_DIR=$HOME/lkDist
 if [ -e $DIST_DIR ];then
 	rm -Rf $DIST_DIR;
 fi
