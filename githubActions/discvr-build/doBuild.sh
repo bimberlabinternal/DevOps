@@ -236,11 +236,14 @@ fi
 echo 'stageApp Complete'
 date +%F" "%T
 
-#Rename artifacts if a public release:
+TOMCAT_HOME=/tomcatHome
+mkdir -p $TOMCAT_HOME
+
 if [ $GENERATE_DIST == 1 ];then
 	./gradlew \
 		--parallel $INCLUDE_VCS $ARTIFACTORY_SETTINGS \
 		-PlabkeyVersion=${GRADLE_RELEASE} \
+		-Dtomcat.home=$TOMCAT_HOME \
 		-PdeployMode=prod \
 		-PmoduleSet=distributions \
 		-PdistDir=$DIST_DIR \
