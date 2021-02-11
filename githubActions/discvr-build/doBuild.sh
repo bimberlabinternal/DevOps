@@ -237,6 +237,7 @@ echo 'stageApp Complete'
 date +%F" "%T
 
 if [ $GENERATE_DIST == 1 ];then
+	#NOTE: this is required by :server:setup
 	CATALINA_HOME=/tomcatHome
 	if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
 		if [ -e $$CATALINA_HOME ];then
@@ -250,6 +251,8 @@ if [ $GENERATE_DIST == 1 ];then
 		rm apache-tomcat-9*tar.gz
 	fi
 
+	cd $SERVER_ROOT
+	
 	./gradlew \
 		--parallel $INCLUDE_VCS $ARTIFACTORY_SETTINGS \
 		-PlabkeyVersion=${GRADLE_RELEASE} \
