@@ -41,8 +41,8 @@ fi
 
 echo "Base version inferred from branch: "$BASE_VERSION
 echo "Short base version inferred from branch: "$BASE_VERSION_SHORT
+echo "GENERATE_DIST: $GENERATE_DIST"
 date +%F" "%T
-pwd
 
 #Determine a unique build dir, based on where we pull from:
 BASEDIR=$HOME"/labkey_build/"$BASE_VERSION
@@ -50,9 +50,6 @@ if [ ! -e $BASEDIR ];then
 	mkdir -p $BASEDIR
 fi
 cd $BASEDIR
-
-#Note: gradle's :server:stopTomcat will fail without tomcat.home set
-export CATALINA_HOME=$HOME"/tomcat9"
 
 function identifyBranch {
 	GIT_ORG=$1
@@ -118,7 +115,7 @@ function cloneGit {
 	GIT_URL=https://${GH_CREDENTIALS}github.com/${GIT_ORG}/${REPONAME}.git
 	if [ ! -e $TARGET_DIR ];then
 		cd ${SERVER_ROOT}${BASE}
-		git clone -b $BRANCH $GIT_URL
+		git clone --depth 1 -b $BRANCH $GIT_URL
 	else
 		cd $TARGET_DIR
 		git fetch origin
@@ -173,8 +170,7 @@ cloneGit Labkey platform $LK_BRANCH
 identifyBranch Labkey distributions
 cloneGit Labkey distributions $BRANCH /
 
-# Labkey/dataintegration. Note: user does not have right run ls-remote, so infer from platform
-# NOTE: this should be downloaded from the artifactory
+# Labkey/dataintegration. Note: user does not have right run ls-remote, so cannot infer the branch. This should be downloaded from the artifactory.
 # cloneGit Labkey dataintegration $LK_BRANCH /server/optionalModules/
 
 # BimberLab/DiscvrLabKeyModules
@@ -189,7 +185,7 @@ cloneGit BimberLabInternal LabDevKitModules $BRANCH
 identifyBranch BimberLabInternal BimberLabKeyModules
 cloneGit BimberLabInternal BimberLabKeyModules $BRANCH
 
-# Labkey/ehrModules.  Only retain Viral_Load_Assay
+# Labkey/ehrModules. Only retain EHR and Viral_Load_Assay
 cloneGit Labkey ehrModules $LK_BRANCH
 
 cd $SERVER_ROOT
@@ -201,21 +197,10 @@ echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODUL
 
 #make distribution
 DIST_DIR=/lkDist
-if [ ! -e $DIST_DIR ];then
-	mkdir -p $DIST_DIR;
+if [ -e $DIST_DIR ];then
+	rm -Rf $DIST_DIR;
 fi
-
-if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
-	if [ -e $$CATALINA_HOME ];then
-		rm -Rf $CATALINA_HOME
-	fi
-
-	mkdir -p $CATALINA_HOME
-	cd $CATALINA_HOME
-	curl --insecure -O https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.35/bin/apache-tomcat-9.0.35.tar.gz	
-	tar xzvf apache-tomcat-9*tar.gz -C $CATALINA_HOME --strip-components=1
-	rm apache-tomcat-9*tar.gz
-fi
+mkdir -p $DIST_DIR;
 
 cd $SERVER_ROOT
 
@@ -223,20 +208,11 @@ echo 'Starting build'
 date +%F" "%T
 
 INCLUDE_VCS=
-if [ ! -z $TAG_NAME ];then
+if [ $GENERATE_DIST == 1 ];then
 	INCLUDE_VCS="-PincludeVcs"
 fi
 
 GRADLE_OPTS=-Xmx2048m
-
-./gradlew \
-	-Dorg.gradle.daemon=false \
-	--parallel \
-	-Dtomcat.home=$CATALINA_HOME \
-	cleanNodeModules cleanBuild cleanDeploy
-	
-echo 'clean Complete'
-date +%F" "%T
 
 # This should force download of release snapshots from artifactory
 GRADLE_RELEASE=$RELEASE_NAME
@@ -252,24 +228,21 @@ else
 fi
 
 ./gradlew \
-	-Dorg.gradle.daemon=false \
 	--parallel \
-	-Dtomcat.home=$CATALINA_HOME \
 	$INCLUDE_VCS \
 	$ARTIFACTORY_SETTINGS \
 	-PlabkeyVersion=${GRADLE_RELEASE} \
 	-PdeployMode=prod \
-	deployApp
+	stageApp
 
-echo 'deployApp Complete'
+echo 'stageApp Complete'
 date +%F" "%T
 
 #Rename artifacts if a public release:
 if [ $GENERATE_DIST == 1 ];then
 	./gradlew \
 		-Dorg.gradle.daemon=false \
-		--parallel \
-		-Dtomcat.home=$CATALINA_HOME \
+		--parallel \		
 		$INCLUDE_VCS \
 		$ARTIFACTORY_SETTINGS \
 		-PlabkeyVersion=${GRADLE_RELEASE} \
@@ -289,9 +262,3 @@ if [ $GENERATE_DIST == 1 ];then
 fi
 
 echo $RELEASE_NAME > release.txt
-
-echo 'Cleaning build dir to reduce cache'
-rm -Rf ${SERVER_ROOT}/build/deploy
-
-# Double check the contents of the cache
-du -s -h  $HOME/labkey_build/*
