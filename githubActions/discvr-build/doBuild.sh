@@ -195,8 +195,9 @@ date +%F" "%T
 # Modify gradle config:
 echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODULES_DIR], ['ehr_billing', 'EHR_ComplianceDB'], true)" >> settings.gradle
 
-#make distribution
-DIST_DIR=$HOME/lkDist
+# Note: this is the location of the checked out project, set up by github actions. 
+# -v "/home/runner/work/_temp/_github_home":"/github/home"
+DIST_DIR=/github/home/lkDist
 if [ -e $DIST_DIR ];then
 	rm -Rf $DIST_DIR;
 fi
