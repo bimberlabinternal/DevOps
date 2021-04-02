@@ -38,11 +38,13 @@ RUN echo "SCRATCH_DIR="${SCRATCH_DIR} >> /usr/local/lib/R/etc/Renviron.site
 RUN Rscript -e "devtools::install_github(repo = 'bimberlabinternal/geneSetVis', dependencies = T, upgrade = 'always')" \
 	&& Rscript -e "devtools::install_github(repo = 'bimberlabinternal/ShinySDA', dependencies = T, upgrade = 'always')" \
 	&& Rscript -e "devtools::install_github(repo = 'eisascience/HISTA', dependencies = T, upgrade = 'always')" \
+	&& Rscript -e "devtools::install_github(repo = 'eisascience/PViST', dependencies = T, upgrade = 'always')" \
 	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
 RUN mkdir -p ${APP_DIR}/geneSetVis && echo 'shinyAppDir(appDir = system.file("app", package = "geneSetVis"))' > ${APP_DIR}/geneSetVis/app.R
 RUN mkdir -p ${APP_DIR}/ShinySDA && echo 'shinyAppDir(appDir = system.file("app", package = "ShinySDA"))' > ${APP_DIR}/ShinySDA/app.R
 RUN mkdir -p ${APP_DIR}/HISTA && echo 'shinyAppDir(appDir = system.file("app", package = "HISTA"))' > ${APP_DIR}/HISTA/app.R
+RUN mkdir -p ${APP_DIR}/PViST && echo 'shinyAppDir(appDir = system.file("app", package = "PViST"))' > ${APP_DIR}/PViST/app.R
 
 RUN sed -i '/run_as shiny;/a preserve_logs true;' /etc/shiny-server/shiny-server.conf \
 	&& sed -i '/run_as shiny;/a app_init_timeout 10000;' /etc/shiny-server/shiny-server.conf \
