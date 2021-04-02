@@ -1,39 +1,4 @@
-FROM bioconductor/bioconductor_docker:RELEASE_3_11
-
-# NOTE: if anything breaks the dockerhub build cache, you will probably need to build locally and push to dockerhub.
-# After the cache is in place, builds from github commits should be fast.
-RUN apt-get update -y \
-	&& apt-get upgrade -y \
-	&& apt-get install -y \
-		libhdf5-dev \
-		libpython3-dev \
-		python3-pip \
-	&& pip3 install umap-learn \
-	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists/*
-
-# Let this run for the purpose of installing/caching dependencies
-RUN Rscript -e "install.packages(c('devtools', 'BiocManager', 'remotes'), dependencies=TRUE, ask = FALSE)" \
-	&& echo "local({\noptions(repos = BiocManager::repositories())\n})\n" >> ~/.Rprofile \
-	&& echo "Sys.setenv(R_BIOC_VERSION=as.character(BiocManager::version()));" >> ~/.Rprofile \
-	# NOTE: this was added to avoid the build dying if this downloads a binary built on a later R version
-	&& echo "Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS='true');" >> ~/.Rprofile \
-    && Rscript -e "print(version)" \
-    && Rscript -e "devtools::install_github(repo = 'BimberLabInternal/CellMembrane', ref = 'master', dependencies = F)" \
-	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds
-
-# This should not be cached if the files change
-ADD . /CellMembrane
-
-ENV RETICULATE_PYTHON=/usr/bin/python3
-
-RUN cd /CellMembrane \
-	&& R CMD build . \
-	&& Rscript -e "BiocManager::install(ask = F);" \
-	&& Rscript -e "devtools::install_deps(pkg = '.', dependencies = FALSE);" \
-	&& R CMD INSTALL --build *.tar.gz \
-	&& rm -Rf /tmp/downloaded_packages/ /tmp/*.rds
-	
+FROM ghcr.io/bimberlabinternal/cellmembrane:latest
 	
 ENV SCRATCH_DIR /scratch
 ENV APP_DIR /srv/shiny-server
@@ -70,15 +35,13 @@ RUN rm ${APP_DIR}/index.html && rm -Rf ${APP_DIR}/sample-apps
 RUN echo "SCRATCH_DIR="${SCRATCH_DIR} >> /usr/local/lib/R/etc/Renviron.site
 
 # Install dependencies & packages. Also create stub app.R in the expected location
-#Rscript -e "devtools::install_github(repo = 'bimberlabinternal/geneSetVis', dependencies = T, upgrade = 'always')" \
-
-RUN Rscript -e "devtools::install_github(repo = 'bimberlabinternal/ShinySDA', dependencies = T, upgrade = 'always')" \
+RUN Rscript -e "devtools::install_github(repo = 'bimberlabinternal/geneSetVis', dependencies = T, upgrade = 'always')" \
+	&& Rscript -e "devtools::install_github(repo = 'bimberlabinternal/ShinySDA', dependencies = T, upgrade = 'always')" \
 	&& Rscript -e "devtools::install_github(repo = 'eisascience/HISTA', dependencies = T, upgrade = 'always')" \
 	&& Rscript -e "devtools::install_github(repo = 'eisascience/PViST', dependencies = T, upgrade = 'always')" \
 	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
-#RUN mkdir -p ${APP_DIR}/geneSetVis && echo 'shinyAppDir(appDir = system.file("app", package = "geneSetVis"))' > ${APP_DIR}/geneSetVis/app.R
-
+RUN mkdir -p ${APP_DIR}/geneSetVis && echo 'shinyAppDir(appDir = system.file("app", package = "geneSetVis"))' > ${APP_DIR}/geneSetVis/app.R
 RUN mkdir -p ${APP_DIR}/ShinySDA && echo 'shinyAppDir(appDir = system.file("app", package = "ShinySDA"))' > ${APP_DIR}/ShinySDA/app.R
 RUN mkdir -p ${APP_DIR}/HISTA && echo 'shinyAppDir(appDir = system.file("app", package = "HISTA"))' > ${APP_DIR}/HISTA/app.R
 RUN mkdir -p ${APP_DIR}/PViST && echo 'shinyAppDir(appDir = system.file("app", package = "PViST"))' > ${APP_DIR}/PViST/app.R
