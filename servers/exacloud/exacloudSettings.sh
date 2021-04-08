@@ -4,9 +4,9 @@ set -e
 
 #Exacloud:
 
-MAJOR=20
-MINOR_FULL="11"
-MINOR_SHORT=1
+MAJOR=21
+MINOR_FULL="3"
+MINOR_SHORT=3
 
 LABKEY_HOME=/home/exacloud/gscratch/prime-seq/src
 LABKEY_USER=labkey_submit
