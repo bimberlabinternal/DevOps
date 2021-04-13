@@ -188,12 +188,15 @@ cloneGit BimberLabInternal BimberLabKeyModules $BRANCH
 # Labkey/ehrModules. Only retain EHR and Viral_Load_Assay
 cloneGit Labkey ehrModules $LK_BRANCH
 
+# Labkey/onprcEHRModules. Only retain GeneticsCore
+cloneGit Labkey onprcEHRModules $LK_BRANCH
+
 cd $SERVER_ROOT
 echo 'Git clone complete'
 date +%F" "%T
 
 # Modify gradle config:
-echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODULES_DIR], ['ehr_billing', 'EHR_ComplianceDB'], true)" >> settings.gradle
+echo "BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODULES_DIR], ['ehr_billing', 'EHR_ComplianceDB', 'HormoneAssay', 'ONPRC_EHR_ComplianceDB', 'extscheduler', 'mergesync', 'ogasync', 'onprc_billing', 'onprc_billingpublic', 'onprc_ehr', 'onprc_reports', 'onprc_ssu', 'sla', 'treatmentETL'], true)" >> settings.gradle
 
 # Note: this is the location of the checked out project, set up by github actions. 
 # -v "/home/runner/work/_temp/_github_home":"/github/home"
