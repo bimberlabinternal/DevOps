@@ -54,17 +54,21 @@ echo $SLURM_JOBID
 #	exit 1
 #fi
 
-CHECK_51=`df -h /home/groups/prime-seq/production/Internal/ColonyData/51 | grep 51 | wc -l`
-if [ $CHECK_51 != '1' ];then
-	echo 'Improper mount for: workbook 51'
-	df /home/groups/prime-seq/production/Internal/ColonyData/51
+CHECK_COLONY=`df -h /home/groups/pgpdata/ColonyData | grep 'pgpdata' | wc -l`
+if [ $CHECK_COLONY != '1' ];then
+	echo 'Improper mount for: ColonyData'
 	exit 1
 fi
 
-CHECK_121=`df -h /home/groups/prime-seq/production/Internal/ColonyData/121 | grep 121 | wc -l`
+CHECK_51=`df -h /home/groups/pgpdata/ColonyData51 | grep 'pgpdata' | wc -l`
+if [ $CHECK_51 != '1' ];then
+	echo 'Improper mount for: workbook 51'
+	exit 1
+fi
+
+CHECK_121=`df -h /home/groups/pgpdata/ColonyData121 | grep 'pgpdata' | wc -l`
 if [ $CHECK_121 != '1' ];then
 	echo 'Improper mount for: workbook 121'
-	df /home/groups/prime-seq/production/Internal/ColonyData/121
 	exit 1
 fi
 
