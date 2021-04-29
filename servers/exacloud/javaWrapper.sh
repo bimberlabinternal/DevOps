@@ -45,33 +45,6 @@ hostname
 echo $SLURM_JOBID
 
 # Ensure NFS mounts exist:
-
-# Note: this is a separate RDS dataset mounted within the prime-seq tree:
-#CHECK_204=`df /home/groups/prime-seq/production/Internal/ColonyData/204/@files | grep -e 'MgapGenomicsDb' | wc -l`
-#if [ $CHECK_204 != '1' ];then
-#	echo 'Improper mount for: workbook 204'
-#	df /home/groups/prime-seq/production/Internal/ColonyData/204/@files
-#	exit 1
-#fi
-
-CHECK_COLONY=`df -h /home/groups/pgpdata/ColonyData | grep 'pgpdata' | wc -l`
-if [ $CHECK_COLONY != '1' ];then
-	echo 'Improper mount for: ColonyData'
-	exit 1
-fi
-
-CHECK_51=`df -h /home/groups/pgpdata/ColonyData51 | grep 'pgpdata' | wc -l`
-if [ $CHECK_51 != '1' ];then
-	echo 'Improper mount for: workbook 51'
-	exit 1
-fi
-
-CHECK_121=`df -h /home/groups/pgpdata/ColonyData121 | grep 'pgpdata' | wc -l`
-if [ $CHECK_121 != '1' ];then
-	echo 'Improper mount for: workbook 121'
-	exit 1
-fi
-
 if [ ! -w /home/groups/prime-seq/production/ ];then
 	echo '/home/groups/prime-seq/production/ not writable!'
 	ls -lah df /home/groups/prime-seq/production/
