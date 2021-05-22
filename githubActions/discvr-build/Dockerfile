@@ -1,11 +1,10 @@
-FROM adoptopenjdk/openjdk14:jdk-14.0.2_12-alpine
+FROM adoptopenjdk/openjdk14:jdk-14.0.2_12-debian
 
-# See: https://github.com/node-gfx/node-canvas-prebuilt/issues/77
-RUN apk --update add git less curl subversion bash openssh python3-dev && \
-	apk add --no-cache nodejs npm build-base g++ cairo-dev jpeg-dev pango-devbash imagemagick \
-	npm i -g node-gyp \
+RUN apt update -y && \
+	apt-get upgrade -y && \
+	apt-get install -y git less curl subversion bash openssh python3-dev && \
 	rm -rf /var/lib/apt/lists/* && \
-	rm /var/cache/apk/*
+	rm /var/cache/apt/*
 	
 ADD *.sh /
 RUN chmod +x *.sh 
