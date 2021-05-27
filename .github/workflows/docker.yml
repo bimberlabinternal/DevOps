@@ -1,4 +1,4 @@
-name: Build Docker
+name: Build Docker for Shiny
 on:
   workflow_dispatch:
   #schedule:
