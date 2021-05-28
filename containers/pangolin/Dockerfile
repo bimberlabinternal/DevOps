@@ -11,9 +11,14 @@ RUN git clone https://github.com/cov-lineages/pangolin.git \
 	&& conda env create -f environment.yml
 
 RUN conda init bash
-RUN echo "echo 'called!'" >> ~/.bashrc
 RUN echo "conda activate pangolin" >> ~/.bashrc
 
 RUN cd /pangolin && pip install . 
 
 RUN pangolin --update
+
+ADD entrypoint.sh /
+
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
