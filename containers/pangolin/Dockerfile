@@ -10,7 +10,10 @@ RUN git clone https://github.com/cov-lineages/pangolin.git \
 	&& cd pangolin \
 	&& conda env create -f environment.yml
 
-RUN echo "conda activate pangolin" > ~/.bashrc
+RUN conda init bash
+RUN echo "echo 'called!'" >> ~/.bashrc
+RUN echo "conda activate pangolin" >> ~/.bashrc
 
-RUN pip install . \
-	&& pangolin --update
+RUN cd /pangolin && pip install . 
+
+RUN pangolin --update
