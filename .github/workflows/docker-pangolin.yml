@@ -41,6 +41,7 @@ jobs:
         with:
           context: .
           file: ./containers/pangolin/Dockerfile
+          context: ./containers/pangolin
           pull: true
           push: true
           tags: ghcr.io/bimberlabinternal/pangolin:latest
