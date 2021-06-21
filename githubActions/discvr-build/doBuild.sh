@@ -167,8 +167,10 @@ LK_BRANCH=$BRANCH
 cloneGit Labkey platform $LK_BRANCH
 
 # Labkey/distributions
-identifyBranch Labkey distributions
-cloneGit Labkey distributions $BRANCH /
+if [ $GENERATE_DIST == 1 ];then
+	identifyBranch Labkey distributions
+	cloneGit Labkey distributions $BRANCH /
+fi
 
 # Labkey/dataintegration. Note: user does not have right run ls-remote, so cannot infer the branch. This should be downloaded from the artifactory.
 # cloneGit Labkey dataintegration $LK_BRANCH /server/optionalModules/
