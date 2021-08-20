@@ -33,7 +33,14 @@ if [ -z $DESTINATION_BRANCH ];then
 	DESTINATION_BRANCH=develop
 fi
 
-STAGING_BRANCH=fb_merge_${SOURCE_BRANCH}
+VERSION=`echo $SOURCE_BRANCH | sed 's/discvr-//'`
+DEST_VERSION=`echo $DESTINATION_BRANCH | sed 's/discvr-//'`
+
+if [ $DESTINATION_BRANCH != 'develop' ];then
+	STAGING_BRANCH=${DEST_VERSION}_fb_merge
+else
+	STAGING_BRANCH=${VERSION}_fb_merge
+fi
 
 echo "REPO: $REPO"
 echo "SOURCE_ORG: $SOURCE_ORG"
