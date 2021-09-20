@@ -39,7 +39,7 @@ DEST_VERSION=`echo $DESTINATION_BRANCH | sed 's/discvr-//'`
 if [ $DESTINATION_BRANCH != 'develop' ];then
 	STAGING_BRANCH=${DEST_VERSION}_fb_merge
 else
-	STAGING_BRANCH=${VERSION}_fb_merge
+	STAGING_BRANCH=fb_merge_${VERSION}_to_develop
 fi
 
 echo "REPO: $REPO"
