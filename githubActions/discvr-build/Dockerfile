@@ -2,7 +2,7 @@ FROM adoptopenjdk/openjdk14:jdk-14.0.2_12-debian
 
 RUN apt update -y && \
 	apt-get upgrade -y && \
-	apt-get install -y git less curl subversion bash openssh-server python3-dev && \
+	apt-get install -y git less curl subversion bash openssh-server python3-dev build-essential && \
 	rm -Rf /var/lib/apt/lists/* && \
 	rm -Rf /var/cache/apt/*
 	
