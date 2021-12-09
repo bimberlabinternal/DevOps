@@ -12,6 +12,12 @@ fi
 BRANCH_NAME=${GITHUB_REF##*/}
 BASE_BRANCH_NAME=${GITHUB_BASE_REF##*/}
 
+# For PRs, this refers to the target
+if [ ! -z $BASE_BRANCH_NAME ];then
+	echo 'Using base branch as branch of record: '$BASE_BRANCH_NAME
+	BRANCH_NAME=$BASE_BRANCH_NAME
+fi
+
 TAG_NAME=
 if [[ ! -v GITHUB_EVENT_NAME ]];then
   echo 'Event: '$GITHUB_EVENT_NAME
