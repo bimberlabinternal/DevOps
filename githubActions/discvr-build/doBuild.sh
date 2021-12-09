@@ -10,9 +10,11 @@ if [ -e buildSettings.sh ];then
 fi
 
 BRANCH_NAME=${GITHUB_REF##*/}
+BASE_BRANCH_NAME=${BASE_BRANCH##*/}
 
 TAG_NAME=
 if [[ ! -v GITHUB_EVENT_NAME ]];then
+	echo 'Event: '$GITHUB_EVENT_NAME
 	if [[ $GITHUB_EVENT_NAME == 'release' ]];then
 		TAG_NAME=$BRANCH_NAME	
 	fi
