@@ -19,7 +19,7 @@ runs:
   image: 'Dockerfile'
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
-    BASE_BRANCH: ${{ github.base_ref }}
-    GITHUB_EVENT_NAME: ${{ github.event_name }}
+    BASE_BRANCH: ${{ inputs.github.base_ref }}
+    GITHUB_EVENT_NAME: ${{ inputs.github.event_name }}
     ARTIFACTORY_USER: ${{ inputs.artifactory_user }}
     ARTIFACTORY_PASSWORD: ${{ inputs.artifactory_password }}    
