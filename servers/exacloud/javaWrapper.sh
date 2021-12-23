@@ -219,11 +219,15 @@ fi
 
 $JAVA -version
 
+# See here for rationale behind --add-opens arguments:
+# https://www.labkey.org/Documentation/wiki-page.view?name=supported
+# https://www.labkey.org/ONPRC/Support%20Tickets/issues-details.view?issueId=44554
 $JAVA -XX:HeapBaseMinAddress=4294967296 \
 	-Djava.io.tmpdir=${TEMP_DIR} \
 	--add-opens=java.base/java.lang=ALL-UNNAMED \
 	--add-opens=java.base/java.io=ALL-UNNAMED \
 	--add-opens=java.base/java.util=ALL-UNNAMED \
+	--add-opens=java.base/java.awt.font=ALL-UNNAMED \	
 	${updatedArgs[@]}
 
 if [ ! -z $SLURM_JOBID ];then
