@@ -226,8 +226,7 @@ $JAVA -XX:HeapBaseMinAddress=4294967296 \
 	-Djava.io.tmpdir=${TEMP_DIR} \
 	--add-opens=java.base/java.lang=ALL-UNNAMED \
 	--add-opens=java.base/java.io=ALL-UNNAMED \
-	--add-opens=java.base/java.util=ALL-UNNAMED \
-	--add-opens=java.base/java.awt.font=ALL-UNNAMED \	
+	--add-opens=java.base/java.util=ALL-UNNAMED \	
 	${updatedArgs[@]}
 
 if [ ! -z $SLURM_JOBID ];then
