@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk14:jdk-14.0.2_12-debian
+FROM adoptopenjdk/openjdk16
 
 RUN apt update -y && \
 	apt-get upgrade -y && \
