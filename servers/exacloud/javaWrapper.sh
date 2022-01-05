@@ -16,7 +16,10 @@ finish() {
 	EXIT_CODE=$?
 	if [ $EXIT_CODE != 0 ];then
 		echo "ERROR RUNNING JOB"
-		#ps -e -T -o pid,lwp,pri,nice,start,stat,bsdtime,cmd,comm,user
+		
+		if [ ! -z $SLURM_JOBID ];then
+			sacct -o reqmem,maxrss,averss,elapsed,cputime,alloccpus -j $SLURM_JOBID
+		fi
 	fi
 	
 	if [ ! -z "${TEMP_DIR-}" ];then
