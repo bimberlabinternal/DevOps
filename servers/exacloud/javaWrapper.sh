@@ -71,6 +71,8 @@ if [ ! -e $JAVA ];then
 	exit 1
 fi
 
+$JAVA -version
+
 GZ_PREFIX=LabKey${MAJOR}.${MINOR_FULL}
 TOOL_DIR=/home/exacloud/gscratch/prime-seq/bin/
 
@@ -220,7 +222,7 @@ if [ $USE_LUSTRE == 1 ];then
 	sed -i 's/exacloud\/gscratch/exacloud\/lustre1/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
 fi
 
-$JAVA -version
+
 
 # See here for rationale behind --add-opens arguments:
 # https://www.labkey.org/Documentation/wiki-page.view?name=supported
@@ -229,7 +231,9 @@ $JAVA -XX:HeapBaseMinAddress=4294967296 \
 	-Djava.io.tmpdir=${TEMP_DIR} \
 	--add-opens=java.base/java.lang=ALL-UNNAMED \
 	--add-opens=java.base/java.io=ALL-UNNAMED \
-	--add-opens=java.base/java.util=ALL-UNNAMED \	
+	--add-opens=java.base/java.util=ALL-UNNAMED \
+	--add-opens=java.base/java.text=ALL-UNNAMED \
+	--add-opens=java.desktop/java.awt.font=ALL-UNNAMED \
 	${updatedArgs[@]}
 
 if [ ! -z $SLURM_JOBID ];then
