@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk16
+FROM adoptopenjdk/openjdk17
 
 RUN apt update -y && \
 	apt-get upgrade -y && \
