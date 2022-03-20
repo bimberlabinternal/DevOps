@@ -1,10 +1,8 @@
-FROM adoptopenjdk/openjdk17
+FROM openjdk:17-alpine
 
-RUN apt update -y && \
-	apt-get upgrade -y && \
-	apt-get install -y git less curl subversion bash openssh-server python3-dev build-essential && \
-	rm -Rf /var/lib/apt/lists/* && \
-	rm -Rf /var/cache/apt/*
+RUN apk upgrade && \
+	apk add --no-cache git less curl subversion bash openssh-server python3-dev build-base && \
+	rm -rf /var/cache/apk/*
 	
 ADD *.sh /
 RUN chmod +x *.sh 
