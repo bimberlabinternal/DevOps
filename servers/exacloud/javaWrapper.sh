@@ -14,12 +14,10 @@ set -x
 
 finish() {
 	EXIT_CODE=$?
+	echo "Finalizing job, java exit code: "$EXIT_CODE
+	
 	if [ $EXIT_CODE != 0 ];then
 		echo "ERROR RUNNING JOB"
-		
-		if [ ! -z $SLURM_JOBID ];then
-			sacct -o reqmem,maxrss,averss,elapsed,cputime,alloccpus -j $SLURM_JOBID
-		fi
 	fi
 	
 	if [ ! -z "${TEMP_DIR-}" ];then
@@ -235,7 +233,3 @@ $JAVA -XX:HeapBaseMinAddress=4294967296 \
 	--add-opens=java.base/java.text=ALL-UNNAMED \
 	--add-opens=java.desktop/java.awt.font=ALL-UNNAMED \
 	${updatedArgs[@]}
-
-if [ ! -z $SLURM_JOBID ];then
-	sacct -o reqmem,maxrss,averss,elapsed,cputime,alloccpus -j $SLURM_JOBID
-fi
