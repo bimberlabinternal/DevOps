@@ -65,29 +65,43 @@ set +o allexport
 
 # This should be provided by $SETTINGS
 if [ ! -e $JAVA ];then
-	echo "java executable not found: "$JAVA	
+	echo "java executable not found: "$JAVA
 	exit 1
 fi
 
 $JAVA -version
 
 GZ_PREFIX=LabKey${MAJOR}.${MINOR_FULL}
-TOOL_DIR=/home/exacloud/gscratch/prime-seq/bin/
+
+if [[ ! -v TOOL_DIR ]];then
+	echo 'Must provide TOOL_DIR in setting file!'
+	exit 1
+fi
+
+if [ ! -e $TOOL_DIR ];then
+	echo "TOOL_DIR not found: "$TOOL_DIR
+	exit 1
+fi
 
 ORIG_WORK_DIR=$(pwd)
 
 #Allow this to be overridden in environment
 if [[ ! -v WORK_BASEDIR ]];then
-	WORK_BASEDIR=/home/exacloud/gscratch/prime-seq/workDir/
+	#WORK_BASEDIR=/home/exacloud/gscratch/prime-seq/workDir/
+	WORK_BASEDIR=/mnt/scratch/primeSeqWorkDir/
 fi
 
 if [[ ! -v USE_LUSTRE ]];then
 	USE_LUSTRE=0
 fi
 
-if [ $USE_LUSTRE == 1 ];then
-	echo 'using old lustre'
-	WORK_BASEDIR=/home/exacloud/lustre1/prime-seq/workDir/
+#if [ $USE_LUSTRE == 1 ];then
+#	echo 'using local disks for working space'
+#	WORK_BASEDIR=/mnt/scratch/primeSeqWorkDir/
+#fi
+
+if [ ! -e $WORK_BASEDIR ];then
+	mkdir -p $WORK_BASEDIR
 fi
 
 #Note: this used to use lustre space; however, now use local scratch
@@ -118,12 +132,6 @@ LOCAL_TEMP_LK=`mktemp -d --tmpdir=/tmp --suffix=$BASENAME`
 echo $LOCAL_TEMP_LK
 
 mkdir -p $TEMP_DIR
-
-#If temp directory is on lustre:
-if [[ $TEMP_DIR =~ "/home/exacloud/lustre1" ]];then
-	lfs setstripe -c 1 $TEMP_DIR
-fi
-
 mkdir -p $LOCAL_TEMP_LK
 
 export TEMP_DIR=$TEMP_DIR
@@ -215,10 +223,10 @@ sed -i 's/<!--<entry key="JAVA_TMP_DIR" value=""\/>-->/<entry key="JAVA_TMP_DIR"
 ESCAPE=$(echo $WORK_DIR | sed 's/\//\\\//g')	
 sed -i 's/WORK_DIR/'$ESCAPE'/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
 
-if [ $USE_LUSTRE == 1 ];then
-	echo 'swapping gscratch for lustre1 in XML file'
-	sed -i 's/exacloud\/gscratch/exacloud\/lustre1/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
-fi
+#if [ $USE_LUSTRE == 1 ];then
+#	echo 'swapping gscratch for local disks in XML file'
+#	sed -i 's|/home/exacloud/gscratch/prime-seq/workDir/|/mnt/scratch/primeSeqWorkDir/|g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
+#fi
 
 
 

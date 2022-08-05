@@ -15,7 +15,7 @@
 	<bean id="pipelineJobService" class="org.labkey.pipeline.api.PipelineJobServiceImpl">
 		<property name="appProperties">
 			<bean class="org.labkey.pipeline.api.properties.ApplicationPropertiesImpl">
-				<property name="toolsDirectory" value="/home/exacloud/gscratch/prime-seq/bin/" />
+				<property name="toolsDirectory" value="/home/groups/prime-seq/pipeline_tools/bin" />
 			</bean>
 		</property>
 
@@ -24,18 +24,18 @@
 				<property name="softwarePackages">
 					<map>
 						<!--If the sequence tools are not in the standard pipeline tools dir, this is required-->
-						<entry key="SEQUENCEANALYSIS_TOOLS" value="/home/exacloud/gscratch/prime-seq/bin"/>
-						<entry key="JAVA_HOME" value="/home/exacloud/gscratch/prime-seq/java/current"/>
-						<entry key="JAVA_HOME_8" value="/home/exacloud/gscratch/prime-seq/java/java8"/>
-						<entry key="JAVA_HOME_7" value="/home/exacloud/gscratch/prime-seq/java/jdk1.7.0_55"/>
-						<entry key="JAVA_HOME_6" value="/home/exacloud/gscratch/prime-seq/java/jdk1.6.0_45"/>
+						<entry key="SEQUENCEANALYSIS_TOOLS" value="/home/groups/prime-seq/pipeline_tools/bin"/>
+						<entry key="JAVA_HOME" value="/home/groups/prime-seq/exacloud/java/current"/>
+						<!--<entry key="JAVA_HOME_8" value="/home/exacloud/gscratch/prime-seq/java/java8"/>-->
+						<!--<entry key="JAVA_HOME_7" value="/home/exacloud/gscratch/prime-seq/java/jdk1.7.0_55"/>-->
+						<!--<entry key="JAVA_HOME_6" value="/home/exacloud/gscratch/prime-seq/java/jdk1.6.0_45"/>-->
 						<entry key="DOCKER_EXE" value="/opt/acc/sbin/exadocker"/>
 						<entry key="DOCKER_USER" value="bbimber"/>
 						<entry key="SEQUENCEANALYSIS_MAX_THREADS" value="8"/>
 						<entry key="SEQUENCEANALYSIS_MAX_RAM" value="24"/>
 						<entry key="SEQUENCEANALYSIS_JAVA_OPTS" value="-Xss2m"/>
-						<entry key="LOCAL_DATA_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedData" />
-						<entry key="REMOTE_GENOME_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedGenomes"/>
+						<!--<entry key="LOCAL_DATA_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedData" />-->
+						<!--<entry key="REMOTE_GENOME_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedGenomes"/>-->
 						<!--<entry key="JAVA_TMP_DIR" value=""/>-->
 					</map>
 				</property>
