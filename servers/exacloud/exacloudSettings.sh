@@ -14,6 +14,7 @@ LABKEY_USER=labkey_submit
 JAVA_HOME=/home/groups/prime-seq/exacloud/java/current
 JAVA=${JAVA_HOME}/bin/java
 LK_SRC_DIR=${LABKEY_HOME}
+TOMCAT_HOME=/home/groups/prime-seq/exacloud/tomcat
 
 TOOL_DIR=/home/groups/prime-seq/pipeline_tools/bin/
 
