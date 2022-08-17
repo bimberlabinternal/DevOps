@@ -242,7 +242,6 @@ else
 fi
 
 # Cleanup:
-npm cache clear --force
 ./gradlew cleanNodeModules
 
 ./gradlew \
