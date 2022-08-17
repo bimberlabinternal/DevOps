@@ -241,6 +241,10 @@ else
 	echo "ARTIFACTORY_USER not supplied"
 fi
 
+# Cleanup:
+npm cache clear --force
+./gradlew cleanNodeModules
+
 ./gradlew \
 	--parallel $INCLUDE_VCS $ARTIFACTORY_SETTINGS \
 	-PlabkeyVersion=${GRADLE_RELEASE} \
