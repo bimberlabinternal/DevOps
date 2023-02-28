@@ -45,8 +45,8 @@ jobs:
         with:
           context: .
           file: ./Shiny/Dockerfile
-             build-args: |
-          "GH_PAT=${{ secrets.PAT }}"
+          build-args: |
+            "GH_PAT=${{ secrets.PAT }}"
           pull: true
           push: true
           tags: ghcr.io/bimberlabinternal/shiny:latest
