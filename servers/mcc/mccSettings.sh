@@ -4,8 +4,8 @@ set -e
 
 #MCC:
 
-MAJOR=22
-MINOR_FULL="11"
+MAJOR=23
+MINOR_FULL="3"
 MINOR_SHORT=$MINOR_FULL
 
 LKENV=$(grep ^EnvironmentFile /etc/systemd/system/labkey.service | cut -d = -f2 | sed 's/ //g')
