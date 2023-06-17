@@ -36,6 +36,7 @@
 						<entry key="SEQUENCEANALYSIS_JAVA_OPTS" value="-Xss2m"/>
 						<entry key="LOCAL_DATA_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedData" />
 						<entry key="REMOTE_GENOME_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedGenomes"/>
+						<entry key="FUNCOTATOR_DATA_SOURCE" value="/home/exacloud/gscratch/prime-seq/bin/VariantAnnotation"/>						
 						<!--<entry key="JAVA_TMP_DIR" value=""/>-->
 					</map>
 				</property>
