@@ -48,7 +48,7 @@ echo $SLURM_JOBID
 # Ensure NFS mounts exist:
 if [ ! -w /home/groups/prime-seq/production/ ];then
 	echo '/home/groups/prime-seq/production/ not writable!'
-	ls -lah df /home/groups/prime-seq/production/
+	ls -lah /home/groups/prime-seq/production/
 	exit 1
 fi
 
