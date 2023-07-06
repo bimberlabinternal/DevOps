@@ -39,6 +39,11 @@ if [[ -v GITHUB_TOKEN ]];then
 	GH_CREDENTIALS="${GITHUB_TOKEN}@"
 fi
 
+DEPTH_ARG="--depth 1"
+if [[ -v NO_SHALLOW ]];then
+	DEPTH_ARG=
+fi
+
 BASE_VERSION=`echo $BRANCH_NAME | grep -E -o '[0-9\.]{4,8}' || echo 'develop'`
 
 if [ $BASE_VERSION == 'develop' ];then
@@ -123,7 +128,7 @@ function cloneGit {
 	GIT_URL=https://${GH_CREDENTIALS}github.com/${GIT_ORG}/${REPONAME}.git
 	if [ ! -e $TARGET_DIR ];then
 		cd ${SERVER_ROOT}${BASE}
-		git clone --depth 1 -b $BRANCH $GIT_URL
+		git clone $DEPTH_ARG -b $BRANCH $GIT_URL
 	else
 		cd $TARGET_DIR
 		git fetch origin
