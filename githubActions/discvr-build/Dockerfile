@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/openjdk/jdk:17-ubuntu
+FROM eclipse-temurin:17
 
 RUN apt-get update -y && \
 	apt-get install -y git less curl subversion bash openssh-server python3-dev build-essential && \
