@@ -63,6 +63,7 @@ LATEST_LOCAL=`git branch -a --list "origin/${DESTINATION_PREFIX}*" | sed 's/remo
 for BRANCH in "${REMOTES[@]}"
 do
 	LOCAL_NAME=`echo $BRANCH | sed "s/"${SOURCE_PREFIX}"/"${DESTINATION_PREFIX}"/g"`
+	VERSION_STRING=`echo $BRANCH | sed "s/"${SOURCE_PREFIX}"//g"`
 	if [ $LOCAL_NAME == $LATEST_LOCAL ];then
 		echo 'Branch already exists, will not create: '$BRANCH
 		continue
@@ -73,6 +74,9 @@ do
 		echo 'Branch will be created: '$BRANCH' -> '$LOCAL_NAME
 		git checkout -b ${LOCAL_NAME} --no-track source/${BRANCH}
 		git push -u origin ${LOCAL_NAME}
+		
+		# Also generate a release:
+		gh release create --title 'DISCVR ${VERSION_STRING}' --notes 'This is the official ${VERSION_STRING} release of DISCVR, compatible with LabKey ${VERSION_STRING}.' ${VERSION_STRING}
 	else
 		echo 'Branch version lower than highest existing, will not create: '$BRANCH
 	fi

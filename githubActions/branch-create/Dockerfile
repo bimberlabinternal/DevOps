@@ -7,7 +7,7 @@ LABEL \
 
 RUN apk add --no-cache bash
 
-RUN apk add --no-cache git openssh-client && \
+RUN apk add --no-cache git openssh-client github-cli && \
   echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
 
 ADD *.sh /
