@@ -296,4 +296,4 @@ if [ $GENERATE_DIST == 1 ];then
 	ls $DIST_DIR/discvr*
 fi
 
-echo $RELEASE_NAME > release.txt
+echo $RELEASE_NAME > ${DIST_DIR}/release.txt
