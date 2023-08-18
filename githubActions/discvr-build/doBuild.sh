@@ -288,12 +288,16 @@ if [ $GENERATE_DIST == 1 ];then
 
 	echo 'dist Complete'
 	date +%F" "%T
-
+	
 	echo "Renaming artifact for release"
 	mv $DIST_DIR/discvr/*.gz $DIST_DIR/discvr/DISCVR-${BASE_VERSION}.installer.tar.gz
 	mv $DIST_DIR/discvr_modules/*.zip $DIST_DIR/discvr/DISCVR-${BASE_VERSION}.modules.zip
 	ls $DIST_DIR
 	ls $DIST_DIR/discvr*
+	
+	# Set tag now, in case we publish a latest release downstream
+	cd $SERVER_ROOT/server/modules/DiscvrLabKeyModules
+	git tag "latest"
 fi
 
 echo $RELEASE_NAME > ${DIST_DIR}/release.txt
