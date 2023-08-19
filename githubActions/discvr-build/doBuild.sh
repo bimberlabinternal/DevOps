@@ -297,6 +297,8 @@ if [ $GENERATE_DIST == 1 ];then
 	
 	# Set tag now, in case we publish a latest release downstream
 	cd $SERVER_ROOT/server/modules/DiscvrLabKeyModules
+	
+	git config --global user.email "noreply@github.com"
 	git tag -fa "latest"
 fi
 
