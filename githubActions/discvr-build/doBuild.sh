@@ -299,7 +299,7 @@ if [ $GENERATE_DIST == 1 ];then
 	cd $SERVER_ROOT/server/modules/DiscvrLabKeyModules
 	
 	git config --global user.email "noreply@github.com"
-	git tag -fa "latest"
+	git tag -fa "latest" -m "Create latest tag"
 fi
 
 echo $RELEASE_NAME > ${DIST_DIR}/release.txt
