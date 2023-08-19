@@ -297,7 +297,7 @@ if [ $GENERATE_DIST == 1 ];then
 	
 	# Set tag now, in case we publish a latest release downstream
 	cd $SERVER_ROOT/server/modules/DiscvrLabKeyModules
-	git tag "latest"
+	git tag -fa "latest"
 fi
 
 echo $RELEASE_NAME > ${DIST_DIR}/release.txt
