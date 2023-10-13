@@ -12,7 +12,7 @@ fi
 cd $DIRNAME
 
 HOST=128.120.88.245
-wget -r -c --http-password=${PW} --reject-regex="_I1_|_I2_|Undetermined_" ftp://${DIRNAME}@${HOST}:21/
+wget -r -c --password=${PW} --reject-regex="_I1_|_I2_|Undetermined_" ftp://${DIRNAME}@${HOST}:21/
 touch download.${DIRNAME}.done
 find . -name '*.gz' -exec mv {} ./ \;
 
