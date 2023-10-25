@@ -36,6 +36,7 @@ if [ ! -e $CONFIG_DIR ];then
 	wget -O ${CONFIG_DIR}/pipelineConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/pipelineConfig.xml
 	wget -O ${CONFIG_DIR}/blastConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/blastConfig.xml
 	wget -O ${CONFIG_DIR}/ehrConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/ehrConfig.xml
+	wget -O ${CONFIG_DIR}/jbrowseConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/jbrowseConfig.xml
 fi
 
 JAVA_WRAPPER=${LK_SRC_DIR}/javaWrapper.sh
