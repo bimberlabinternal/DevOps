@@ -57,7 +57,7 @@ cd `basename "$DESTINATION_REPO" .git`
 git remote add source "$SOURCE_REPO"
 git fetch source
 
-REMOTES=( $(git branch -r --list "*${SOURCE_PREFIX}*" | grep -v SNAPSHOT | sed 's/source\///g') )
+REMOTES=( $(git branch -r --list "${SOURCE_PREFIX}*" | grep -v SNAPSHOT | sed 's/source\///g') )
 LATEST_LOCAL=`git branch -a --list "origin/${DESTINATION_PREFIX}*" | sed 's/remotes\/origin\///g' | sort -V -r | head -n 1 | awk '{ sub(/^[ ]+/, ""); print }' | awk '{ sub(/[ ]+$/, ""); print }'`
 
 for BRANCH in "${REMOTES[@]}"
