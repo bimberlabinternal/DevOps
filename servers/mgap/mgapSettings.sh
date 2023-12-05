@@ -5,7 +5,7 @@ set -e
 #mGAP:
 
 MAJOR=23
-MINOR_FULL="7"
+MINOR_FULL="11"
 MINOR_SHORT=$MINOR_FULL
 
 LKENV=$(grep ^EnvironmentFile /etc/systemd/system/labkey.service | cut -d = -f2 | sed 's/ //g')
