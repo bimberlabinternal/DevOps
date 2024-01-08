@@ -76,7 +76,7 @@ do
 		git push -u origin ${LOCAL_NAME}
 		
 		# Also generate a release:
-		gh release create --title 'DISCVR ${VERSION_STRING}' --notes "This is the official ${VERSION_STRING} release of DISCVR, compatible with LabKey ${VERSION_STRING}." ${VERSION_STRING}
+		gh release create --title "DISCVR ${VERSION_STRING}" --notes "This is the official ${VERSION_STRING} release of DISCVR, compatible with LabKey ${VERSION_STRING}." ${VERSION_STRING}
 	else
 		echo 'Branch version lower than highest existing, will not create: '$BRANCH
 	fi
