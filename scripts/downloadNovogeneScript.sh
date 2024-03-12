@@ -4,6 +4,7 @@ set -e
 
 DIRNAME=$1
 PW=$2
+EXPT=$3
 
 if [ ! -e $DIRNAME ];then
 	mkdir $DIRNAME
@@ -27,5 +28,8 @@ fi
 if ls *_I2_* 1> /dev/null 2>&1; then
 	rm *_I2_*
 fi
+
+cd ../
+mv $DIRNAME /home/groups/BimberLab/primeseq/${EXPT}/@files/
 
 echo 'done: '$DIRNAME
