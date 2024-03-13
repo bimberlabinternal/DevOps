@@ -3,9 +3,25 @@
 set -e
 
 if [[ -z $1 ]];then
-	echo "Must provide novogene project"
-	exit 1
+	echo 'Must provide novogene project'
+ 	exit 1
 fi
+
+if [[ -z $2 ]];then
+	echo 'Must provide password'
+ 	exit 1
+fi
+
+if [[ -z $3 ]];then
+	echo 'Must provide expt'
+ 	exit 1
+fi
+
+if [ ! -e $DIRNAME ];then
+	mkdir $DIRNAME
+fi
+
+cd $DIRNAME
 
 SCRIPT=${1}.sh
 PWD=`pwd`
@@ -21,3 +37,4 @@ sbatch \
 	--partition=exacloud \
 	--time=0-36 \
 	--chdir=$PWD
+	~/bin/downloadNovogeneScript.sh $1 $2 $3
