@@ -17,6 +17,7 @@ if [[ -z $3 ]];then
  	exit 1
 fi
 
+DIRNAME=$1
 if [ ! -e $DIRNAME ];then
 	mkdir $DIRNAME
 fi
