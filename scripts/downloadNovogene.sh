@@ -26,8 +26,9 @@ cd $DIRNAME
 
 PWD=`pwd`
 
-#SCRIPT=${1}.sh
-#wget -O $SCRIPT https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/downloadNovogeneScript.sh
+SCRIPT=${1}.sh
+wget -O $SCRIPT https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/downloadNovogeneScript.sh
+chmod +x $SCRIPT
 
 sbatch \
 	--job-name=$1 \
@@ -38,4 +39,4 @@ sbatch \
 	--partition=exacloud \
 	--time=0-36 \
 	--chdir=$PWD \
-	~/bin/downloadNovogeneScript.sh $1 $2 $3
+	./$SCRIPT $1 $2 $3
