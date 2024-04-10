@@ -4,7 +4,6 @@ set -e
 
 DIRNAME=$1
 PW=$2
-EXPT=$3
 
 if [[ -z $1 ]];then
 	echo 'Must provide novogene project'
@@ -16,9 +15,8 @@ if [[ -z $2 ]];then
  	exit 1
 fi
 
-if [[ -z $3 ]];then
-	echo 'Must provide expt'
- 	exit 1
+if [[ ! -z $3 ]];then
+	EXPT=$3
 fi
 
 if [ ! -e $DIRNAME ];then
@@ -44,7 +42,9 @@ if ls *_I2_* 1> /dev/null 2>&1; then
 	rm *_I2_*
 fi
 
-cd ../
-mv $DIRNAME /home/groups/BimberLab/primeseq/${EXPT}/@files/
+if [[ -z $3 ]];then
+	cd ../
+	mv $DIRNAME /home/groups/BimberLab/primeseq/${EXPT}/@files/
+fi
 
 echo 'done: '$DIRNAME
