@@ -17,6 +17,7 @@ fi
 
 if [[ ! -z $3 ]];then
 	EXPT=$3
+	echo "Expt: "$EXPT
 fi
 
 if [ ! -e $DIRNAME ];then
@@ -43,8 +44,11 @@ if ls *_I2_* 1> /dev/null 2>&1; then
 fi
 
 if [[ -z $3 ]];then
+	echo "Copying data"
 	cd ../
 	mv $DIRNAME /home/groups/BimberLab/primeseq/${EXPT}/@files/
+else
+	echo "Experiment not provided, will not move"
 fi
 
 echo 'done: '$DIRNAME
