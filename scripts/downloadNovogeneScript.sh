@@ -43,7 +43,7 @@ if ls *_I2_* 1> /dev/null 2>&1; then
 	rm *_I2_*
 fi
 
-if [[ -z $3 ]];then
+if [[ ! -z $3 ]];then
 	echo "Copying data"
 	cd ../
 	mv $DIRNAME /home/groups/BimberLab/primeseq/${EXPT}/@files/
