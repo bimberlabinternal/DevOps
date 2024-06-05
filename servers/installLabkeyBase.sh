@@ -88,7 +88,7 @@ isGzOrZip $MODULE_ZIP
 
 GZ=Temp-${ARTIFACT}-${DATE}-discvr.tar.gz
 rm -Rf $GZ
-wget --no-check-certificate -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/discvr/${ARTIFACT}-{build.number}-discvr.tar.gz
+wget --no-check-certificate -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/discvr/${ARTIFACT}-{build.number}-discvr.embedded.tar.gz
 isGzOrZip $GZ
 
 #extract, find name
