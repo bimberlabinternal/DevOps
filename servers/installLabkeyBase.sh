@@ -80,15 +80,9 @@ isGzOrZip() {
 }
 
 #first download
-DATE=$(date +"%Y%m%d%H%M")
-MODULE_ZIP=Temp-${ARTIFACT}-ExtraModules-${DATE}.zip
-rm -Rf $MODULE_ZIP
-wget --no-check-certificate -O $MODULE_ZIP https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/${MODULE_DIST_NAME}/${ARTIFACT}-{build.number}-ExtraModules.zip
-isGzOrZip $MODULE_ZIP
-
 GZ=Temp-${ARTIFACT}-${DATE}-discvr.tar.gz
 rm -Rf $GZ
-wget --no-check-certificate -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/discvr/${ARTIFACT}-{build.number}-discvr.embedded.tar.gz
+wget --no-check-certificate -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/prime-seq/${ARTIFACT}-{build.number}-prime-seq.embedded.tar.gz
 isGzOrZip $GZ
 
 #extract, find name
@@ -103,32 +97,19 @@ fi
 BASENAME=$ARTIFACT
 
 mv $GZ ./${BASENAME}-discvr.tar.gz
-mv $MODULE_ZIP ./${BASENAME}-ExtraModules.zip
 GZ=${BASENAME}-discvr.tar.gz
-MODULE_ZIP=${BASENAME}-ExtraModules.zip
 
 if [ -z $SKIP_INSTALL ];then
 	echo "Begin install"
 
 	systemctl stop labkey.service
 
-	if [ -e ${LABKEY_HOME}/externalModules ];then
-		rm -Rf ${LABKEY_HOME}/externalModules
-	fi
-	
 	#main server
 	echo "Installing LabKey using: $GZ"
 	cd $DIR
 	./manual-upgrade.sh -u $LABKEY_USER -c $TOMCAT_HOME -l $LABKEY_HOME --noPrompt
 	cd ../
-	
-	rm -Rf modules_unzip
-	unzip $MODULE_ZIP -d ./modules_unzip
-	MODULE_DIR=$(ls ./modules_unzip | tail -n -1)
-	echo $MODULE_DIR
-	cp ./modules_unzip/${MODULE_DIR}/modules/*.module ${LABKEY_HOME}/modules
-	rm -Rf ./modules_unzip
-	
+		
 	systemctl start labkey.service
 else
 	echo 'Skipping install'
