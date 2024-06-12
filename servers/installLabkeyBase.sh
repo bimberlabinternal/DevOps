@@ -12,9 +12,6 @@ set -e
 #MINOR_FULL="7"
 #MINOR_SHORT=7
 
-TC_PROJECT=LabKey_${MAJOR}${MINOR_FULL}Release_External_Discvr_Installers
-ARTIFACT=LabKey${MAJOR}.${MINOR_FULL}-SNAPSHOT
-
 SKIP_INSTALL=
 TEAMCITY_USERNAME=bbimber
 MODULE_DIST_NAME=prime-seq-modules
@@ -28,6 +25,9 @@ fi
 set -o allexport
 source $SETTINGS_FILE
 set +o allexport
+
+TC_PROJECT=LabKey_${MAJOR}${MINOR_FULL}Release_External_Discvr_Installers
+ARTIFACT=LabKey${MAJOR}.${MINOR_FULL}-SNAPSHOT
 
 if [ -z $MAJOR ];then
 	echo 'Need to set environment variable MAJOR'
@@ -81,7 +81,7 @@ isGzOrZip $GZ
 
 #extract, find name
 tar -xf $GZ
-DIR=$(ls -tr | grep "^${ARTIFACT}*" | grep 'prime-seq/$' | tail -n -1)
+DIR=$(ls -tr -d */ | grep "^${ARTIFACT}*" | tail -n -1)
 echo "DIR: $DIR"
 if [ -z $DIR ];then
 	echo 'There was an error parsing the output folder name'
