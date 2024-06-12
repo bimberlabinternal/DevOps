@@ -16,6 +16,18 @@ set -o allexport
 source $SETTINGS
 set +o allexport
 
+# Only populate from github when missing.  This allows one-off local edits
+# Note: this needs to run before the actual server install below to take effect
+CONFIG_DIR=${LABKEY_HOME}/configs
+if [ ! -e $CONFIG_DIR ];then
+	mkdir -p $CONFIG_DIR
+	
+	wget -O ${CONFIG_DIR}/application.properties https://github.com/bimberlabinternal/DevOps/raw/master/servers/mgap/config/application.properties
+	
+	# Append private values:
+	cat ~/mgap.application.properties >> ${CONFIG_DIR}/application.properties
+fi
+
 INSTALL=installLabkeyBase.sh
 if [ -e $INSTALL ];then
 	rm $INSTALL

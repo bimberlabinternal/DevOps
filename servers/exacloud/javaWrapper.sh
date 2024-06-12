@@ -83,16 +83,7 @@ if [[ ! -v WORK_BASEDIR ]];then
 	WORK_BASEDIR=/home/exacloud/gscratch/prime-seq/workDir/
 fi
 
-if [[ ! -v USE_LUSTRE ]];then
-	USE_LUSTRE=0
-fi
-
-if [ $USE_LUSTRE == 1 ];then
-	echo 'using old lustre'
-	WORK_BASEDIR=/home/exacloud/lustre1/prime-seq/workDir/
-fi
-
-#Note: this used to use lustre space; however, now use local scratch
+# Note: Use local scratch rather than lustre:
 TEMP_BASEDIR=/mnt/scratch
 
 TEMP_BASEDIR=$TEMP_BASEDIR/prime-seq
@@ -120,12 +111,6 @@ LOCAL_TEMP_LK=`mktemp -d --tmpdir=/tmp --suffix=$BASENAME`
 echo $LOCAL_TEMP_LK
 
 mkdir -p $TEMP_DIR
-
-#If temp directory is on lustre:
-if [[ $TEMP_DIR =~ "/home/exacloud/lustre1" ]];then
-	lfs setstripe -c 1 $TEMP_DIR
-fi
-
 mkdir -p $LOCAL_TEMP_LK
 
 export TEMP_DIR=$TEMP_DIR
@@ -144,56 +129,20 @@ if [ ! -e $LK_SRC_DIR/config ];then
 	exit 1
 fi
 
-mkdir -p $LABKEY_HOME_LOCAL
-
-#copy relevant code locally
-cd $LABKEY_HOME_LOCAL
-
 #Main server:
-GZ=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*-discvr\.tar\.gz$" | tail -n -1)
-cp ${LK_SRC_DIR}/$GZ ./
-GZ=$(basename $GZ)
-echo "TAR: $GZ"
-tar -xf $GZ
-
-# NOTE: the name of the directory within this archive is not predictable based on TAR name. 
-# The rationale is to take the last (newest) directory matching this name. 
-DIR=$(find . -maxdepth 1 -type d | grep "./${GZ_PREFIX}-*" | tail -n -1)
-echo "DIR: $DIR"
-
-cd $DIR
-
-export TOMCAT_HOME=${LABKEY_HOME_LOCAL}/tomcat
-
-mkdir -p $TOMCAT_HOME
-mkdir -p $TOMCAT_HOME/lib
-
-./manual-upgrade.sh -u $LABKEY_USER -c $TOMCAT_HOME -l $LABKEY_HOME_LOCAL --noPrompt --skip_tomcat
-
-if [ ! -e $TOMCAT_HOME/lib/labkeyBootstrap.jar ];then
-	echo "Unable to find $TOMCAT_HOME/lib/labkeyBootstrap.jar"
+SERVER_JAR=${LK_SRC_DIR}/labkeyServer.jar
+if [ ! -e $SERVER_JAR ];then
+	echo "Server JAR not found: $SERVER_JAR"
 	exit 1
 fi
-cp $TOMCAT_HOME/lib/labkeyBootstrap.jar $LABKEY_HOME_LOCAL/labkeyBootstrap.jar
 
-#Extra modules:
-MODULE_ZIP=$(ls -tr $LK_SRC_DIR | grep "^${GZ_PREFIX}.*-ExtraModules\.zip$" | tail -n -1)
-if [ -e modules_unzip ];then
-	rm -Rf modules_unzip
-fi
-cp ${LK_SRC_DIR}/$MODULE_ZIP ./
-MODULE_ZIP=$(basename $MODULE_ZIP)
-unzip $MODULE_ZIP -d ./modules_unzip
-MODULE_DIR=$(ls ./modules_unzip | tail -n -1)
-cp ./modules_unzip/${MODULE_DIR}/modules/*.module ${LABKEY_HOME_LOCAL}/modules
-rm -Rf ./modules_unzip
-rm -Rf $MODULE_ZIP
-
-#Config:
-cp -R $LK_SRC_DIR/config $LABKEY_HOME_LOCAL
-
-cd "$ORIG_WORK_DIR"
-rm -Rf $DIR
+#copy relevant code locally
+mkdir -p $LABKEY_HOME_LOCAL
+cd $LABKEY_HOME_LOCAL
+cp $SERVER_JAR ./
+$JAVA -jar labkeyServer.jar -extract
+cp -R $LK_SRC_DIR/config ./
+cd $TEMP_BASEDIR
 
 #edit arguments
 updatedArgs=( "$@" )
@@ -206,32 +155,22 @@ for(( a=0; a<${#updatedArgs[@]}-1 ;a++ ));  do
 	updatedArgs[$a]="${arg//$TO_SUB/$LABKEY_HOME_LOCAL}"
 done
 
-#also add /externalModules
-#lastArg=${updatedArgs[${#updatedArgs[@]} - 1]}
-#updatedArgs[${#updatedArgs[@]} - 1]="-Dlabkey.externalModulesDir="${LABKEY_HOME_LOCAL}"/externalModules"
-#updatedArgs[${#updatedArgs[@]}]=$lastArg
-
 #add -Djava.io.tmpdir
 ESCAPE=$(echo $TEMP_DIR | sed 's/\//\\\//g')
 sed -i 's/<!--<entry key="JAVA_TMP_DIR" value=""\/>-->/<entry key="JAVA_TMP_DIR" value="'$ESCAPE'"\/>/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
-ESCAPE=$(echo $WORK_DIR | sed 's/\//\\\//g')	
+
+ESCAPE=$(echo $WORK_DIR | sed 's/\//\\\//g')
 sed -i 's/WORK_DIR/'$ESCAPE'/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
-
-if [ $USE_LUSTRE == 1 ];then
-	echo 'swapping gscratch for lustre1 in XML file'
-	sed -i 's/exacloud\/gscratch/exacloud\/lustre1/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
-fi
-
-
 
 # See here for rationale behind --add-opens arguments:
 # https://www.labkey.org/Documentation/wiki-page.view?name=supported
-# https://www.labkey.org/ONPRC/Support%20Tickets/issues-details.view?issueId=44554
 $JAVA -XX:HeapBaseMinAddress=4294967296 \
 	-Djava.io.tmpdir=${TEMP_DIR} \
 	--add-opens=java.base/java.lang=ALL-UNNAMED \
 	--add-opens=java.base/java.io=ALL-UNNAMED \
 	--add-opens=java.base/java.util=ALL-UNNAMED \
+	--add-opens=java.base/java.util.concurrent=ALL-UNNAMED \
+	--add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED \
 	--add-opens=java.base/java.text=ALL-UNNAMED \
 	--add-opens=java.desktop/java.awt.font=ALL-UNNAMED \
 	${updatedArgs[@]}

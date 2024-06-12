@@ -13,3 +13,4 @@ TOMCAT_HOME=$(grep ^CATALINA_HOME $LKENV | cut -d= -f2 | sed 's/ //g')
 
 LABKEY_HOME=/usr/local/labkey
 LABKEY_USER=mcclabkey
+SERVICE_NAME=labkey_server

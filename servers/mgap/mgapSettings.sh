@@ -12,3 +12,4 @@ TOMCAT_HOME=$(grep CATALINA_BASE /etc/systemd/system/labkey_server.service | cut
 
 LABKEY_HOME=/usr/local/labkey
 LABKEY_USER=mgaplabkey
+SERVICE_NAME=labkey_server

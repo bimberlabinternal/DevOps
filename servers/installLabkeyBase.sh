@@ -102,15 +102,18 @@ GZ=${BASENAME}-discvr.tar.gz
 if [ -z $SKIP_INSTALL ];then
 	echo "Begin install"
 
-	systemctl stop labkey.service
+	if [ ! -z $SERVICE_NAME ];then
+		systemctl stop ${SERVICE_NAME}.service
+	fi
 
 	#main server
 	echo "Installing LabKey using: $GZ"
-	cd $DIR
-	./manual-upgrade.sh -u $LABKEY_USER -c $TOMCAT_HOME -l $LABKEY_HOME --noPrompt
-	cd ../
-		
-	systemctl start labkey.service
+	cp ${DIR}/labkeyServer.jar $LABKEY_HOME
+
+	if [ ! -z $SERVICE_NAME ];then
+		systemctl start ${SERVICE_NAME}.service
+	fi
+
 else
 	echo 'Skipping install'
 fi
