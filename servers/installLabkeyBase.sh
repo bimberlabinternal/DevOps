@@ -11,7 +11,6 @@ set -e
 #MAJOR=20
 #MINOR_FULL="7"
 #MINOR_SHORT=7
-#TOMCAT_HOME=XXXX
 
 TC_PROJECT=LabKey_${MAJOR}${MINOR_FULL}Release_External_Discvr_Installers
 ARTIFACT=LabKey${MAJOR}.${MINOR_FULL}-SNAPSHOT
@@ -50,11 +49,6 @@ if [ -z $ARTIFACT ];then
 	exit 1
 fi
 
-if [ -z $TOMCAT_HOME ];then
-	echo 'Need to set environment variable TOMCAT_HOME'
-	exit 1
-fi
-
 #Note: use .netrc to set password
 if [ -z $TEAMCITY_USERNAME ];then
 	echo 'Need to set environment variable TEAMCITY_USERNAME'
@@ -87,7 +81,7 @@ isGzOrZip $GZ
 
 #extract, find name
 tar -xf $GZ
-DIR=$(ls -tr | grep "^${ARTIFACT}*" | grep 'discvr$' | tail -n -1)
+DIR=$(ls -tr | grep "^${ARTIFACT}*" | grep 'prime-seq/$' | tail -n -1)
 echo "DIR: $DIR"
 if [ -z $DIR ];then
 	echo 'There was an error parsing the output folder name'
