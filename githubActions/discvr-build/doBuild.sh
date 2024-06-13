@@ -282,7 +282,7 @@ if [ $GENERATE_DIST == 1 ];then
 		-PdeployMode=prod \
 		-PmoduleSet=distributions \
 		-PdistDir=$DIST_DIR \
-		:distributions:discvr:dist :distributions:discvr_modules:dist :distributions:prime-seq-modules:dist
+		:distributions:discvr:dist :distributions:prime-seq:dist
 
 	mv ./dist/* $DIST_DIR
 
@@ -291,7 +291,6 @@ if [ $GENERATE_DIST == 1 ];then
 	
 	echo "Renaming artifact for release"
 	mv $DIST_DIR/discvr/*.gz $DIST_DIR/discvr/DISCVR-${BASE_VERSION}.installer.tar.gz
-	mv $DIST_DIR/discvr_modules/*.zip $DIST_DIR/discvr/DISCVR-${BASE_VERSION}.modules.zip
 	ls $DIST_DIR
 	ls $DIST_DIR/discvr*
 	
