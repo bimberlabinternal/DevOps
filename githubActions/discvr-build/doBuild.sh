@@ -284,7 +284,7 @@ if [ $GENERATE_DIST == 1 ];then
 		-PdistDir=$DIST_DIR \
 		:distributions:discvr:dist :distributions:prime-seq:dist
 
-	mv ./dist/* $DIST_DIR
+	mv ./dist/discvr/* $DIST_DIR
 
 	echo 'dist Complete'
 	date +%F" "%T
