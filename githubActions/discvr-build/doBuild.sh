@@ -226,11 +226,6 @@ cd $SERVER_ROOT
 echo 'Starting build'
 date +%F" "%T
 
-INCLUDE_VCS=
-#if [ $GENERATE_DIST == 1 ];then
-#	INCLUDE_VCS="-PincludeVcs"
-#fi
-
 GRADLE_OPTS=-Xmx2048m
 
 # This should force download of release snapshots from artifactory
@@ -250,7 +245,7 @@ fi
 ./gradlew cleanNodeModules
 
 ./gradlew \
-	--parallel $INCLUDE_VCS $ARTIFACTORY_SETTINGS \
+	--parallel $ARTIFACTORY_SETTINGS \
 	-PlabkeyVersion=${GRADLE_RELEASE} \
 	-PdeployMode=prod \
 	stageApp
@@ -276,12 +271,10 @@ if [ $GENERATE_DIST == 1 ];then
 	cd $SERVER_ROOT
 	
 	./gradlew \
-		--parallel $INCLUDE_VCS $ARTIFACTORY_SETTINGS \
-		-PlabkeyVersion=${GRADLE_RELEASE} \
-		-Dtomcat.home=$CATALINA_HOME \
+		--parallel $ARTIFACTORY_SETTINGS \
+		-PlabkeyVersion="${GRADLE_RELEASE}" \
 		-PdeployMode=prod \
 		-PmoduleSet=distributions \
-		-PdistDir=$DIST_DIR \
 		:distributions:discvr:dist :distributions:prime-seq:dist
 
 	ls -lah ./dist/discvr
