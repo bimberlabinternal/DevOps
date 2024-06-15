@@ -9,6 +9,9 @@
 				<bean class="org.labkey.ehr.pipeline.GeneticCalculationsRTask$Factory">
 					<property name="location" value="slurm" />
 				</bean>
+				<bean class="org.labkey.ehr.pipeline.GeneticCalculationsImportTask$Factory">
+					<property name="location" value="webserver-fasta-check" />
+				</bean>
 			</list>
 		</property>
 	</bean>

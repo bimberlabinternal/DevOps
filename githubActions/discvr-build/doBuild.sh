@@ -143,33 +143,11 @@ function cloneGit {
 
 cd $BASEDIR
 
-# Labkey/server. Note: for 20.11 and lower, use SVN. Otherwise git:
-LOWEST_GIT=20.11
-LOWER_VERSION=`echo -e "${BASE_VERSION_SHORT}\n${LOWEST_GIT}" | sort -V | head -n1`
-if [[ $BASE_VERSION == 'develop' || $LOWER_VERSION == $LOWEST_GIT ]] ;then
-	SERVER_ROOT=${BASEDIR}
-	identifyBranch Labkey server
-	LK_BRANCH=$BRANCH
-	cloneGit Labkey server $LK_BRANCH /
-	SERVER_ROOT=${BASEDIR}/server
-else
-	SVN_URL=https://svn.mgt.labkey.host/stedi/branches/release${BASE_VERSION_SHORT}-SNAPSHOT
-	SERVER_ROOT=${BASEDIR}/release${BASE_VERSION_SHORT}-SNAPSHOT
-	
-	SVN_EXISTS=`svn list $SVN_URL 2>&1 >/dev/null | grep -e 'non-existent' | wc -l`
-	if [ "$SVN_EXISTS" != "0" ];then
-		echo 'SVN branch not found, using trunk'
-		SVN_URL=https://svn.mgt.labkey.host/stedi/trunk
-		SERVER_ROOT=${BASEDIR}/trunk
-	fi
-	
-	if [ -e $SERVER_ROOT ];then
-		rm -Rf $SERVER_ROOT
-	fi
-
-	mkdir -p $SERVER_ROOT
-	svn co $SVN_URL
-fi
+SERVER_ROOT=${BASEDIR}
+identifyBranch Labkey server
+LK_BRANCH=$BRANCH
+cloneGit Labkey server $LK_BRANCH /
+SERVER_ROOT=${BASEDIR}/server
 
 export RELEASE_NAME=`grep -e 'labkeyVersion=' ${SERVER_ROOT}/gradle.properties | sed 's/labkeyVersion=//'`
 echo "Release name: "$RELEASE_NAME
@@ -184,9 +162,6 @@ if [ $GENERATE_DIST == 1 ];then
 	identifyBranch Labkey distributions
 	cloneGit Labkey distributions $BRANCH /
 fi
-
-# Labkey/dataintegration. Note: user does not have right run ls-remote, so cannot infer the branch. This should be downloaded from the artifactory.
-# cloneGit Labkey dataintegration $LK_BRANCH /server/optionalModules/
 
 # BimberLab/DiscvrLabKeyModules
 identifyBranch BimberLab DiscvrLabKeyModules
@@ -254,20 +229,6 @@ echo 'stageApp Complete'
 date +%F" "%T
 
 if [ $GENERATE_DIST == 1 ];then
-	#NOTE: this is required by :server:setup
-	export CATALINA_HOME=/tomcatHome
-	if [ ! -e ${CATALINA_HOME}/bin/bootstrap.jar ];then
-		if [ -e $$CATALINA_HOME ];then
-			rm -Rf $CATALINA_HOME
-		fi
-
-		mkdir -p $CATALINA_HOME
-		cd $CATALINA_HOME
-		curl --insecure -O https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.35/bin/apache-tomcat-9.0.35.tar.gz	
-		tar xzvf apache-tomcat-9*tar.gz -C $CATALINA_HOME --strip-components=1
-		rm apache-tomcat-9*tar.gz
-	fi
-
 	cd $SERVER_ROOT
 	
 	./gradlew \
