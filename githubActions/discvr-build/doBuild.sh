@@ -221,7 +221,7 @@ fi
 
 ./gradlew \
 	--parallel $ARTIFACTORY_SETTINGS \
-	-PlabkeyVersion=${GRADLE_RELEASE} \
+	-PuseEmbeddedTomcat \
 	-PdeployMode=prod \
 	stageApp
 
