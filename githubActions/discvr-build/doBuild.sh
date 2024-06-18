@@ -233,15 +233,11 @@ if [ $GENERATE_DIST == 1 ];then
 	
 	./gradlew \
 		--parallel $ARTIFACTORY_SETTINGS \
-		-PlabkeyVersion="${GRADLE_RELEASE}" \
 		-PdeployMode=prod \
 		-PuseEmbeddedTomcat \
 		-PmoduleSet=distributions \
 		:distributions:discvr:dist :distributions:prime-seq:dist
 
-	ls -lah ./dist/discvr
-	ls -lah $DIST_DIR
-	
 	mv ./dist/discvr $DIST_DIR
 
 	echo 'dist Complete'
@@ -249,8 +245,6 @@ if [ $GENERATE_DIST == 1 ];then
 	
 	echo "Renaming artifact for release"
 	mv $DIST_DIR/discvr/*.gz $DIST_DIR/discvr/DISCVR-${BASE_VERSION}.installer.tar.gz
-	ls $DIST_DIR
-	ls $DIST_DIR/discvr*
 	
 	# Set tag now, in case we publish a latest release downstream
 	cd $SERVER_ROOT/server/modules/DiscvrLabKeyModules
