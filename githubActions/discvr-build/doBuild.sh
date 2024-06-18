@@ -235,6 +235,7 @@ if [ $GENERATE_DIST == 1 ];then
 		--parallel $ARTIFACTORY_SETTINGS \
 		-PlabkeyVersion="${GRADLE_RELEASE}" \
 		-PdeployMode=prod \
+		-PuseEmbeddedTomcat \
 		-PmoduleSet=distributions \
 		:distributions:discvr:dist :distributions:prime-seq:dist
 
