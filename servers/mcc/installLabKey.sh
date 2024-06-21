@@ -37,6 +37,14 @@ if [ ! -e $CONFIGURATION_DIR ];then
 	chmod +x $CONFIGURATION_DIR/startup.sh
 fi
 
+CONFIG_DIR=${LABKEY_HOME}/config
+if [ ! -e $CONFIG_DIR ];then
+	mkdir -p $CONFIG_DIR
+
+	echo 'Creating application.properties'
+	cp ${CONFIGURATION_DIR}/application.properties ${CONFIG_DIR}/application.properties
+fi
+
 INSTALL=installLabkeyBase.sh
 if [ -e $INSTALL ];then
 	rm $INSTALL

@@ -18,17 +18,6 @@ set +o allexport
 
 # Only populate from github when missing.  This allows one-off local edits
 # Note: this needs to run before the actual server install below to take effect
-CONFIG_DIR=${LABKEY_HOME}/config
-if [ ! -e $CONFIG_DIR ];then
-	mkdir -p $CONFIG_DIR
-	
-	wget -O ${CONFIG_DIR}/sequenceanalysisConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/config/sequenceanalysisConfig.xml
-	wget -O ${CONFIG_DIR}/pipelineConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/config/pipelineConfig.xml
-	wget -O ${CONFIG_DIR}/blastConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/config/blastConfig.xml
-	wget -O ${CONFIG_DIR}/ehrConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/ehrConfig.xml
-	wget -O ${CONFIG_DIR}/jbrowseConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/jbrowseConfig.xml
-fi
-
 CONFIGURATION_DIR=${LABKEY_HOME}/configuration
 if [ ! -e $CONFIGURATION_DIR ];then
 	mkdir -p $CONFIGURATION_DIR
@@ -41,6 +30,20 @@ if [ ! -e $CONFIGURATION_DIR ];then
 	wget -O $CONFIGURATION_DIR/labkey_server.env https://github.com/bimberlabinternal/DevOps/raw/master/servers/mgap/config/labkey_server.env
 	wget -O $CONFIGURATION_DIR/startup.sh https://github.com/bimberlabinternal/DevOps/raw/master/servers/mgap/config/startup.sh
 	chmod +x $CONFIGURATION_DIR/startup.sh
+fi
+
+CONFIG_DIR=${LABKEY_HOME}/config
+if [ ! -e $CONFIG_DIR ];then
+	mkdir -p $CONFIG_DIR
+	
+	wget -O ${CONFIG_DIR}/sequenceanalysisConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/config/sequenceanalysisConfig.xml
+	wget -O ${CONFIG_DIR}/pipelineConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/config/pipelineConfig.xml
+	wget -O ${CONFIG_DIR}/blastConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/config/blastConfig.xml
+	wget -O ${CONFIG_DIR}/ehrConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/ehrConfig.xml
+	wget -O ${CONFIG_DIR}/jbrowseConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/jbrowseConfig.xml
+	
+	echo 'Creating application.properties'
+	cp ${CONFIGURATION_DIR}/application.properties ${CONFIG_DIR}/application.properties
 fi
 
 INSTALL=installLabkeyBase.sh
