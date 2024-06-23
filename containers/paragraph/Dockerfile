@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -12,9 +12,8 @@ RUN apt-get -qq update && apt-get install -yq \
 	libfreetype6-dev \
 	liblzma-dev \
 	libpng-dev \
-	libtool
-	
-RUN apt-get -qq update && apt-get install -yq \
+	libtool \
+	libboost-all-dev \
 	m4 \
 	python3-pip \
 	#software-properties-common \
@@ -31,7 +30,9 @@ RUN mkdir -p /opt/ \
 	&& mkdir /opt/paragraph-build
 
 WORKDIR /opt/paragraph-build
-RUN cmake /opt/paragraph-source -DCMAKE_INSTALL_PREFIX=/opt/paragraph && make && make install
+RUN cmake /opt/paragraph-source -DCMAKE_INSTALL_PREFIX=/opt/paragraph -DBoost_NO_BOOST_CMAKE=ON \
+	&& make \
+	&& make install
 RUN rm -rf /opt/paragraph-source
 
 ENTRYPOINT ["/usr/bin/python3"]
