@@ -6,6 +6,7 @@ After=syslog.target network.target
 
 [Service]
 Type=simple
+AmbientCapabilities=CAP_NET_BIND_SERVICE
 EnvironmentFile=/usr/local/labkey/configuration/labkey_server.env
 WorkingDirectory=/usr/local/labkey
 OOMScoreAdjust=-500
