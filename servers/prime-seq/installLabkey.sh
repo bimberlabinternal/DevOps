@@ -18,18 +18,15 @@ set +o allexport
 
 # Only populate from github when missing.  This allows one-off local edits
 # Note: this needs to run before the actual server install below to take effect
-CONFIGURATION_DIR=${LABKEY_HOME}/configuration
-if [ ! -e $CONFIGURATION_DIR ];then
-	mkdir -p $CONFIGURATION_DIR
+LK_CONFIG=/usr/local/etc/labkey
+if [ ! -e $LK_CONFIG ];then
+	mkdir -p $LK_CONFIG
 
-	wget -O ${CONFIGURATION_DIR}/application.properties https://github.com/bimberlabinternal/DevOps/raw/master/servers/mgap/config/application.properties
+	wget -O ${LK_CONFIG}/base.application.properties https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/config/application.properties
 
-	# Append private values:
-	cat $CONFIGURATION_DIR/mgap.application.properties >> ${CONFIGURATION_DIR}/application.properties
-	
-	wget -O $CONFIGURATION_DIR/labkey_server.env https://github.com/bimberlabinternal/DevOps/raw/master/servers/mgap/config/labkey_server.env
-	wget -O $CONFIGURATION_DIR/startup.sh https://github.com/bimberlabinternal/DevOps/raw/master/servers/mgap/config/startup.sh
-	chmod +x $CONFIGURATION_DIR/startup.sh
+	wget -O $LK_CONFIG/labkey_server.env https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/config/labkey_server.env
+	wget -O $LK_CONFIG/labkeyServerStartup.sh https://github.com/bimberlabinternal/DevOps/raw/master/servers/prime-seq/config/labkeyServerStartup.sh
+	chmod +x $LK_CONFIG/labkeyServerStartup.sh
 fi
 
 CONFIG_DIR=${LABKEY_HOME}/config
@@ -43,7 +40,7 @@ if [ ! -e $CONFIG_DIR ];then
 	wget -O ${CONFIG_DIR}/jbrowseConfig.xml https://github.com/bimberlabinternal/DevOps/raw/master/servers/exacloud/config/jbrowseConfig.xml
 	
 	echo 'Creating application.properties'
-	cp ${CONFIGURATION_DIR}/application.properties ${CONFIG_DIR}/application.properties
+	cat ${LK_CONFIG}/base.application.properties ${LK_CONFIG}/prime-seq.application.properties > ${CONFIG_DIR}/application.properties
 fi
 
 INSTALL=installLabkeyBase.sh

@@ -1,0 +1,45 @@
+## Logging:
+
+set logfile /var/log/monit
+
+## LabKey:
+
+# this will send an alert is the main LabKey page cannot be reached.  it does not check the content of the page
+check host prime-seq.ohsu.edu with address prime-seq.ohsu.edu
+        if failed port 80 proto http for 3 cycles then alert
+        if failed port 443 type TCPSSL for 3 cycles then alert
+        if failed url https://prime-seq/project/home/begin.view for 3 cycles then alert
+
+check host mgap.ohsu.edu with address mgap.ohsu.edu
+        if failed port 80 proto http for 3 cycles then alert
+        if failed port 443 type TCPSSL for 3 cycles then alert
+        if failed url https://mgap/project/home/begin.view for 3 cycles then alert
+
+# this check will send an alert if the contents of labkey-errors.log change
+check file labkey-errors with path /usr/local/labkey/logs/labkey-errors.log
+        noalert bimber@ohsu.edu
+        if changed checksum then exec /usr/local/tools/labkey-error-email.sh
+
+## Server:
+
+check system server
+        alert bimber@ohsu.edu not {instance}
+        group system
+        if loadavg (5min) > 4 then alert
+        if memory usage > 95% then alert
+        if cpu usage (user) > 75% then alert
+        if cpu usage (system) > 60% then alert
+        if cpu usage (wait) > 60% then alert
+
+## Filesystems:
+
+# Monitor root(/) filesystem
+check device local_filesystem with path /
+        alert bimber@ohsu.edu not {instance}
+        if space usage > 90 % then alert
+        group system
+
+check device mGAP_RDS with path /home/groups/mgap
+        alert bimber@ohsu.edu not {instance}
+        if space usage > 80 % then alert
+        group system

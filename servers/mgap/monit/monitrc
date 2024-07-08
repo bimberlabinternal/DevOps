@@ -1,0 +1,20 @@
+set daemon  120 # check services at 2-minute intervals
+     with start delay 120 # delay the first check by 2-minutes 
+ 
+set mailserver smtpout.ohsu.edu
+
+set mail-format { from: monit-mgap@ohsu.edu }
+
+set alert bimber@ohsu.edu
+
+set httpd port 2812 and
+     use address localhost
+     allow 137.53.5.0/24
+     allow 137.53.221.0/24
+     allow 10.77.35.0/24
+     allow 137.53.15.0/24
+     allow 137.53.18.04
+     allow localhost
+     allow admin:<@@PASSWORD@@>
+
+include /etc/monit.d/*

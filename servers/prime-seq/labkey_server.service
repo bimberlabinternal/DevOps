@@ -7,11 +7,11 @@ After=syslog.target network.target
 [Service]
 Type=simple
 AmbientCapabilities=CAP_NET_BIND_SERVICE
-EnvironmentFile=/usr/local/labkey/configuration/labkey_server.env
+EnvironmentFile=/usr/local/etc/labkey/labkey_server.env
 WorkingDirectory=/usr/local/labkey
 OOMScoreAdjust=-500
 
-ExecStart=/usr/local/labkey/configuration/startup.sh
+ExecStart=/usr/local/etc/labkey/labkeyServerStartup.sh
 
 SuccessExitStatus=0 143
 Restart=no

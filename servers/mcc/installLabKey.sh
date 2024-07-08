@@ -23,18 +23,15 @@ fi
 
 # Only populate from github when missing.  This allows one-off local edits
 # Note: this needs to run before the actual server install below to take effect
-CONFIGURATION_DIR=${LABKEY_HOME}/configuration
-if [ ! -e $CONFIGURATION_DIR ];then
-	mkdir -p $CONFIGURATION_DIR
+LK_CONFIG=/usr/local/etc/labkey
+if [ ! -e $LK_CONFIG ];then
+	mkdir -p $LK_CONFIG
 
-	wget -O ${CONFIGURATION_DIR}/application.properties https://github.com/bimberlabinternal/DevOps/raw/master/servers/mcc/config/application.properties
+	wget -O ${LK_CONFIG}/base.application.properties https://github.com/bimberlabinternal/DevOps/raw/master/servers/mcc/config/application.properties
 
-	# Append private values:
-	cat $CONFIGURATION_DIR/mcc.application.properties >> ${CONFIGURATION_DIR}/application.properties
-	
-	wget -O $CONFIGURATION_DIR/labkey_server.env https://github.com/bimberlabinternal/DevOps/raw/master/servers/mcc/config/labkey_server.env
-	wget -O $CONFIGURATION_DIR/startup.sh https://github.com/bimberlabinternal/DevOps/raw/master/servers/mcc/config/startup.sh
-	chmod +x $CONFIGURATION_DIR/startup.sh
+	wget -O $LK_CONFIG/labkey_server.env https://github.com/bimberlabinternal/DevOps/raw/master/servers/mcc/config/labkey_server.env
+	wget -O $LK_CONFIG/labkeyServerStartup.sh https://github.com/bimberlabinternal/DevOps/raw/master/servers/mcc/config/labkeyServerStartup.sh
+	chmod +x $LK_CONFIG/labkeyServerStartup.sh
 fi
 
 CONFIG_DIR=${LABKEY_HOME}/config
@@ -42,7 +39,7 @@ if [ ! -e $CONFIG_DIR ];then
 	mkdir -p $CONFIG_DIR
 
 	echo 'Creating application.properties'
-	cp ${CONFIGURATION_DIR}/application.properties ${CONFIG_DIR}/application.properties
+	cat ${LK_CONFIG}/base.application.properties ${LK_CONFIG}/mcc.application.properties > ${CONFIG_DIR}/application.properties
 fi
 
 INSTALL=installLabkeyBase.sh
