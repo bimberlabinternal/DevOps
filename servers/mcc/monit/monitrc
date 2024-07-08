@@ -1,9 +1,9 @@
 set daemon  120 # check services at 2-minute intervals
-     with start delay 120 
+     with start delay 120
  
 set mailserver smtpout.ohsu.edu
 
-set mail-format { from: monit-primeseq@ohsu.edu }
+set mail-format { from: monit-mcc@ohsu.edu }
 
 set alert bimber@ohsu.edu
 
