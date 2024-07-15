@@ -17,7 +17,7 @@ check host mgap.ohsu.edu with address mgap.ohsu.edu
         if failed url https://mgap/project/home/begin.view for 3 cycles then alert
 
 # this check will send an alert if the contents of labkey-errors.log change
-check file labkey-errors with path /var/log/tomcat9/labkey-errors.log
+check file labkey-errors with path /usr/local/labkey/logs/labkey-errors.log
         noalert bimber@ohsu.edu
         if changed checksum then exec /usr/local/tools/labkey-error-email.sh
 
@@ -32,6 +32,13 @@ check process activemq with pidfile /run/activemq/activemq.pid
         alert bimber@ohsu.edu not {instance}
         if failed host 127.0.0.1 port 61616 then alert
         group system
+
+check program ActiveMQ-Test
+       alert bimber@ohsu.edu not {instance}
+       with path /usr/local/tools/activeMQ-monit.pl
+       # Every hour, at 15 past:
+       every "15 * * * *"
+
 
 ## Server:
 
@@ -56,24 +63,24 @@ check device local_filesystem with path /
 check device pgpdata_root with path /home/groups/prime-seq/production
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
-        if failed perm octalnumber 2770 alert
+        if failed perm 2770 then alert
         group system
 
 check device Bimber with path /home/groups/BimberLab/primeseq
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
-        if failed perm octalnumber 2770 alert
+        if failed perm 2770 then alert
         group system
 
 check device ColonyData with path /home/groups/pgpdata/ColonyData
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
-        if failed perm octalnumber 2770 alert
+        if failed perm 2770 then alert
         group system
 
 check device MHC_Typing with path /home/groups/pgpdata/MHC_Typing
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
-        if failed perm octalnumber 2770 alert
+        if failed perm 2770 then alert
         group system
 

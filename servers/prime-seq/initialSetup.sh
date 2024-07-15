@@ -3,6 +3,11 @@
 set -e
 set -x
 
+# Yum:
+yum install net-tools wget perl-CPAN
+cpan install Sys::HostIP
+cpan install Text::Trim
+
 # Monit
 yum install monit
 wget -O /etc/monitrc https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/prime-seq/monit/monitrc
@@ -46,4 +51,5 @@ cd /usr/local/src
 wget https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/prime-seq/installLabkey.sh
 chmod +x installLabkey.sh
 ./installLabkey.sh
-chown -R labkey:labkey /usr/local/labkey/
+mkdir /usr/local/labkey/labkey-tmp
+chown -R labkey:labkey /usr/local/labkey
