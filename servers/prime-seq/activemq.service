@@ -3,6 +3,8 @@ Description=Apache ActiveMQ Message Broker
 After=network-online.target
 
 [Service]
+Environment="JAVA_HOME=/usr/local/java"
+Environment="ACTIVEMQ_OPTS_MEMORY=-Xms1G -Xmx2G"
 Type=forking
 
 User=activemq

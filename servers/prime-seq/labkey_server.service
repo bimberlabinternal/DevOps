@@ -11,7 +11,7 @@ EnvironmentFile=/usr/local/etc/labkey/labkey_server.env
 WorkingDirectory=/usr/local/labkey
 OOMScoreAdjust=-500
 
-ExecStart=/usr/local/etc/labkey/labkeyServerStartup.sh
+ExecStart=/bin/bash /usr/local/etc/labkey/labkeyServerStartup.sh
 
 SuccessExitStatus=0 143
 Restart=no
