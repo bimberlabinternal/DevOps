@@ -25,7 +25,6 @@ check file labkey-errors with path /var/log/tomcat9/labkey-errors.log
 
 set logfile /var/log/monit
 
-
 ## ActiveMQ:
 
 # this checks the proces itself and port 61616
@@ -39,12 +38,11 @@ check process activemq with pidfile /run/activemq/activemq.pid
 check system server
         alert bimber@ohsu.edu not {instance}
         group system
-        if loadavg (1min) > 4 then alert
         if loadavg (5min) > 4 then alert
-        if memory usage > 95% then alert
-        if cpu usage (user) > 75% then alert
-        if cpu usage (system) > 60% then alert
-        if cpu usage (wait) > 60% then alert
+        if memory usage > 95% for 2 cycles then alert
+        if cpu usage (user) > 75% for 2 cycles then alert
+        if cpu usage (system) > 60% for 2 cycles then alert
+        if cpu usage (wait) > 60% for 2 cycles then alert
 
 
 ## Filesystems:
@@ -58,25 +56,24 @@ check device local_filesystem with path /
 check device pgpdata_root with path /home/groups/prime-seq/production
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
-        group system
-
-check file prime-seq-backup-success with path /var/log/prime-seq-backup-success
-        alert bimber@ohsu.edu not {instance}
-        if timestamp > 27 hours then alert
+        if failed perm octalnumber 2770 alert
         group system
 
 check device Bimber with path /home/groups/BimberLab/primeseq
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
+        if failed perm octalnumber 2770 alert
         group system
 
 check device ColonyData with path /home/groups/pgpdata/ColonyData
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
+        if failed perm octalnumber 2770 alert
         group system
 
 check device MHC_Typing with path /home/groups/pgpdata/MHC_Typing
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
+        if failed perm octalnumber 2770 alert
         group system
 

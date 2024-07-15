@@ -26,10 +26,10 @@ check system server
         alert bimber@ohsu.edu not {instance}
         group system
         if loadavg (5min) > 4 then alert
-        if memory usage > 95% then alert
-        if cpu usage (user) > 75% then alert
-        if cpu usage (system) > 60% then alert
-        if cpu usage (wait) > 60% then alert
+        if memory usage > 95% for 2 cycles then alert
+        if cpu usage (user) > 75% for 2 cycles then alert
+        if cpu usage (system) > 60% for 2 cycles then alert
+        if cpu usage (wait) > 60% for 2 cycles then alert
 
 ## Filesystems:
 
@@ -41,5 +41,11 @@ check device local_filesystem with path /
 
 check device mGAP_RDS with path /home/groups/mgap
         alert bimber@ohsu.edu not {instance}
+        if failed perm 2770 then alert
         if space usage > 80 % then alert
+        group system
+
+check device OnprcColonyData with path /home/groups/OnprcColonyData
+        alert bimber@ohsu.edu not {instance}
+        if failed perm 2775 then alert
         group system

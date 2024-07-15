@@ -8,7 +8,6 @@ set mail-format { from: monit-mcc@ohsu.edu }
 set alert bimber@ohsu.edu
 
 set httpd port 2812 and
-     use address localhost
      allow 137.53.5.0/24
      allow 137.53.221.0/24
      allow 10.77.35.0/24

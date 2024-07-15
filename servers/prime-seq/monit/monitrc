@@ -1,4 +1,4 @@
-set daemon  120 # check services at 2-minute intervals
+set daemon  120
      with start delay 120 
  
 set mailserver smtpout.ohsu.edu
@@ -8,7 +8,6 @@ set mail-format { from: monit-primeseq@ohsu.edu }
 set alert bimber@ohsu.edu
 
 set httpd port 2812 and
-     use address localhost
      allow 137.53.5.0/24
      allow 137.53.221.0/24
      allow 10.77.35.0/24

@@ -26,10 +26,10 @@ check system server
         alert bimber@ohsu.edu not {instance}
         group system
         if loadavg (5min) > 4 then alert
-        if memory usage > 95% then alert
-        if cpu usage (user) > 75% then alert
-        if cpu usage (system) > 60% then alert
-        if cpu usage (wait) > 60% then alert
+        if memory usage > 95% for 2 cycles then alert
+        if cpu usage (user) > 75% for 2 cycles then alert
+        if cpu usage (system) > 60% for 2 cycles then alert
+        if cpu usage (wait) > 60% for 2 cycles then alert
 
 ## Filesystems:
 
@@ -42,4 +42,5 @@ check device local_filesystem with path /
 check device MCC_RDS with path /home/groups/mcc
         alert bimber@ohsu.edu not {instance}
         if space usage > 80 % then alert
+        if failed perm octalnumber 2770 alert
         group system
