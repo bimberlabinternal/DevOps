@@ -33,6 +33,9 @@ cd ../
 useradd activemq
 chown -R activemq:activemq ./apache-activemq-5.18.4
 # Edit jetty-realm.properties manually
+# Edit log4j properties to change log file location
+mkdir /var/log/activemq
+chown -R activemq:activemq /var/log/activemq
 
 # Services:
 wget -O /etc/systemd/system/labkey_server.service https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/prime-seq/labkey_server.service

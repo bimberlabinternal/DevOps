@@ -28,14 +28,15 @@ set logfile /var/log/monit
 ## ActiveMQ:
 
 # this checks the proces itself and port 61616
-check process activemq with pidfile /run/activemq/activemq.pid
+check process activemq with pidfile /usr/local/apache-activemq-5.18.4/data/activemq.pid
         alert bimber@ohsu.edu not {instance}
         if failed host 127.0.0.1 port 61616 then alert
         group system
 
-check program ActiveMQ-Test
-       alert bimber@ohsu.edu not {instance}
+CHECK PROGRAM ActiveMQ-Test
        with path /usr/local/tools/activeMQ-monit.pl
+       if status != 0 then alert
+       alert bimber@ohsu.edu not {instance}
        # Every hour, at 15 past:
        every "15 * * * *"
 
@@ -60,27 +61,27 @@ check device local_filesystem with path /
         if space usage > 90 % then alert
         group system
 
-check device pgpdata_root with path /home/groups/prime-seq/production
+check device pgpdata_root with path /home/groups/prime-seq
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
-        if failed perm 2770 then alert
+        if failed perm 2771 then alert
         group system
 
-check device Bimber with path /home/groups/BimberLab/primeseq
+check device Bimber with path /home/groups/BimberLab
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
-        if failed perm 2770 then alert
+        if failed perm 0775 then alert
         group system
 
 check device ColonyData with path /home/groups/pgpdata/ColonyData
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
-        if failed perm 2770 then alert
+        if failed perm 2775 then alert
         group system
 
 check device MHC_Typing with path /home/groups/pgpdata/MHC_Typing
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
-        if failed perm 2770 then alert
+        if failed perm 2771 then alert
         group system
 
