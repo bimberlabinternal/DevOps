@@ -32,7 +32,7 @@ chmod +x /usr/local/tools/labkey-error-email.sh
 # LabKey
 cd /usr/local/src
 mkdir -p /usr/local/labkey/labkey-tmp
-chown -R labkey:labkey /usr/local/labkey
+chown -R mcclabkey:mcclabkey /usr/local/labkey
 wget https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mcc/installLabkey.sh
 chmod +x installLabkey.sh
 ./installLabkey.sh
