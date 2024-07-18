@@ -3,8 +3,9 @@
 set -e
 set -x
 
+yum install monit fontconfig
+
 # Monit
-yum install monit
 wget -O /etc/monitrc https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mcc/monit/monitrc
 wget -O /etc/monit.d/server https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mcc/monit/monit.d/server
 service monit restart

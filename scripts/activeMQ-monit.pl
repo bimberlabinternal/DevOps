@@ -75,7 +75,7 @@ if (!$success){
 sub logError(){
     my $msg = shift;
 
-    open (ERRFILE, ">> $errorFile");
+    open (ERRFILE, "> $errorFile");
     print ERRFILE time."\tWARNING: $msg\n";
     close (ERRFILE);
 

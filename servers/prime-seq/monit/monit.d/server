@@ -85,3 +85,8 @@ check device MHC_Typing with path /home/groups/pgpdata/MHC_Typing
         if failed perm 2771 then alert
         group system
 
+check device PrimeSeqTomcatTemp with path /home/groups/primeSeqTomcatTemp
+        alert bimber@ohsu.edu not {instance}
+        if space usage > 90 % then alert
+        if failed perm 2771 then alert
+        group system

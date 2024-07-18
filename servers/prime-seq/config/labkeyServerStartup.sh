@@ -2,8 +2,8 @@ $JAVA_HOME/bin/java \
 	-Xms2G \
 	-Xmx8G \
 	-XX:+HeapDumpOnOutOfMemoryError \
-	-XX:HeapDumpPath=$LABKEY_HOME/labkey-tmp \
-	-Djava.io.tmpdir=$LABKEY_HOME/labkey-tmp \
+	-XX:HeapDumpPath=/home/groups/primeSeqTomcatTemp \
+	-Djava.io.tmpdir=/home/groups/primeSeqTomcatTemp \
 	-DsequencePipelineEnabled=true \
 	$JAVA_FLAGS_JAR_OPS \
 	$JAVA_REFLECTION_JAR_OPS \
