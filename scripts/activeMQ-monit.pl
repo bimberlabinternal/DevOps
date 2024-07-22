@@ -79,6 +79,8 @@ sub logError(){
     print ERRFILE time."\tWARNING: $msg\n";
     close (ERRFILE);
 
+    print("ERROR: $msg");
+
     exit(1);
 }
 

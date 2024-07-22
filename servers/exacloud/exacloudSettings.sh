@@ -4,8 +4,8 @@ set -e
 
 #Exacloud:
 
-MAJOR=23
-MINOR_FULL="11"
+MAJOR=24
+MINOR_FULL="7"
 MINOR_SHORT=$MINOR_FULL
 
 LABKEY_HOME=/home/exacloud/gscratch/prime-seq/src
