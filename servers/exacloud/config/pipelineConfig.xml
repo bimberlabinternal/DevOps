@@ -4,7 +4,7 @@
 		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
 	<bean id="activeMqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-		<constructor-arg value="tcp://137.53.221.85:61616"/>
+		<constructor-arg value="tcp://137.53.221.83:61616"/>
 		<property name="redeliveryPolicy" ref="redeliveryPolicy"/>
 	</bean>
 
@@ -29,13 +29,12 @@
 						<entry key="JAVA_HOME_8" value="/home/exacloud/gscratch/prime-seq/java/java8"/>
 						<entry key="JAVA_HOME_7" value="/home/exacloud/gscratch/prime-seq/java/jdk1.7.0_55"/>
 						<entry key="DOCKER_EXE" value="/opt/acc/sbin/exadocker"/>
-						<entry key="DOCKER_USER" value="bbimber"/>
 						<entry key="SEQUENCEANALYSIS_MAX_THREADS" value="8"/>
 						<entry key="SEQUENCEANALYSIS_MAX_RAM" value="24"/>
 						<entry key="SEQUENCEANALYSIS_JAVA_OPTS" value="-Xss2m"/>
 						<entry key="LOCAL_DATA_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedData" />
 						<entry key="REMOTE_GENOME_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedGenomes"/>
-						<entry key="FUNCOTATOR_DATA_SOURCE" value="/home/exacloud/gscratch/prime-seq/bin/VariantAnnotation"/>						
+						<entry key="FUNCOTATOR_DATA_SOURCE" value="/home/exacloud/gscratch/prime-seq/bin/VariantAnnotation"/>
 						<!--<entry key="JAVA_TMP_DIR" value=""/>-->
 					</map>
 				</property>
