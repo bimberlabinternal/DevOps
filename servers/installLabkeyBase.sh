@@ -14,7 +14,6 @@ set -e
 
 SKIP_INSTALL=
 TEAMCITY_USERNAME=bbimber
-MODULE_DIST_NAME=prime-seq-modules
 
 SETTINGS_FILE=$1
 if [ ! -e $SETTINGS_FILE ];then
@@ -110,6 +109,11 @@ if [ -z $SKIP_INSTALL ];then
 
 else
 	echo 'Skipping install'
+fi
+
+if [ -z $KEEP_JAR ];then
+	echo 'Extracting JAR'
+	mv ${DIR}/labkeyServer.jar ./
 fi
 
 # clean up
