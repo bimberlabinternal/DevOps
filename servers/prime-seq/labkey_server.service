@@ -18,6 +18,7 @@ RestartSec=15
 
 User=labkey
 Group=labkey
+Umask=0006
 
 [Install]
 WantedBy=multi-user.target

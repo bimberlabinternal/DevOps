@@ -111,8 +111,12 @@ else
 	echo 'Skipping install'
 fi
 
-if [ -z $KEEP_JAR ];then
+if [ ! -z $KEEP_JAR ];then
 	echo 'Extracting JAR'
+	if [ -e labkeyServer.jar ];then
+		rm labkeyServer.jar
+	fi
+	
 	mv ${DIR}/labkeyServer.jar ./
 fi
 
