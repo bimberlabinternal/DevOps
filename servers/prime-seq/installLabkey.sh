@@ -48,7 +48,7 @@ if [ -e $INSTALL ];then
 	rm $INSTALL
 fi
 
-wget -O $INSTALL https://github.com/bimberlabinternal/DevOps/raw/master/servers/installLabkeyBase.sh
+wget --no-cache -O $INSTALL https://github.com/bimberlabinternal/DevOps/raw/master/servers/installLabkeyBase.sh
 
 bash $INSTALL $SETTINGS
 

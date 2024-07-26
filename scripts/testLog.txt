@@ -1,0 +1,46 @@
+ERROR AdminController          2024-07-25T19:24:31,701 io-127.0.0.1-8080-exec-4 : Client exception detected:
+https://mgap.ohsu.edu/login/login.view?returnUrl=%2FmGAP%2FrequestLogin.view
+https://mgap.ohsu.edu/login/login.view?returnUrl=%2FmGAP%2FrequestLogin.view
+Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.182 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html) guest Uncaught TypeError: LABKEY.Utils.isFunction is not a function
+  impl.onReady (https://mgap.ohsu.edu/clientapi.min.js:19:5199)
+  new <anonymous> (https://mgap.ohsu.edu/clientapi.min.js:57:5254)
+  https://mgap.ohsu.edu/clientapi.min.js:57:63
+  https://mgap.ohsu.edu/clientapi.min.js:57:5465
+ERROR AdminController          2024-07-25T19:24:37,108 io-127.0.0.1-8080-exec-6 : Client exception detected:
+https://mgap.ohsu.edu/login/login.view?returnUrl=%2FmGAP%2FrequestLogin.view
+https://mgap.ohsu.edu/login/login.view?returnUrl=%2FmGAP%2FrequestLogin.view
+Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.182 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html) guest Uncaught TypeError: LABKEY.Utils.getCookie is not a function
+  init (https://mgap.ohsu.edu/login.js:272:31)
+  HTMLDocument.onReady (https://mgap.ohsu.edu/login.js:16:9)
+  e (https://mgap.ohsu.edu/internal/jQuery/jquery-3.5.1.min.js:2:30005)
+  t (https://mgap.ohsu.edu/internal/jQuery/jquery-3.5.1.min.js:2:30307)
+ERROR AdminController          2024-07-25T19:24:38,926 io-127.0.0.1-8080-exec-1 : Client exception detected:
+https://mgap.ohsu.edu/login/login.view?returnUrl=%2FmGAP%2FrequestLogin.view
+https://mgap.ohsu.edu/login/login.view?returnUrl=%2FmGAP%2FrequestLogin.view
+Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.182 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html) guest Uncaught TypeError: Cannot read properties of undefined (reading 'currentUser')
+  HTMLDocument.<anonymous> (https://mgap.ohsu.edu/login/login.view?returnUrl=%2FmGAP%2FrequestLogin.view:163:34)
+  e (https://mgap.ohsu.edu/internal/jQuery/jquery-3.5.1.min.js:2:30005)
+  t (https://mgap.ohsu.edu/internal/jQuery/jquery-3.5.1.min.js:2:30307)
+ERROR ExceptionUtil            2024-07-25T13:08:20,054 io-127.0.0.1-8080-exec-4 : Client exception detected and logged to mothership with error code: 
+https://prime-seq.ohsu.edu/project/home/begin.view
+https://prime-seq.ohsu.edu/project/home/begin.view
+Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15 Ddg/17.5
+Error: feature named `clickToLoad` was not found
+ERROR ExceptionUtil            2024-07-25T13:08:24,677 io-127.0.0.1-8080-exec-3 : Client exception detected and logged to mothership with error code: 
+https://prime-seq.ohsu.edu/project/Labs/Bimber/begin.view?pageId=overview
+https://prime-seq.ohsu.edu/project/Labs/Bimber/begin.view?pageId=overview
+Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15 Ddg/17.5
+Error: feature named `clickToLoad` was not found
+ERROR ExceptionUtil            2024-07-25T13:08:28,178 o-127.0.0.1-8080-exec-10 : Client exception detected and logged to mothership with error code: 
+https://prime-seq.ohsu.edu/project/Labs/Bimber/begin.view?pageId=workbooks
+https://prime-seq.ohsu.edu/project/Labs/Bimber/begin.view?pageId=workbooks
+Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15 Ddg/17.5
+Error: feature named `clickToLoad` was not found
+ERROR AdminController          2024-07-26T02:01:28,790 io-127.0.0.1-8080-exec-9 : Client exception detected:
+https://mgap.ohsu.edu/login/login.view?returnUrl=%2F
+https://mgap.ohsu.edu/login/login.view?returnUrl=%2F
+Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Chrome/126.0.6478.182 Safari/537.36 guest Uncaught TypeError: LABKEY.Utils.getCookie is not a function
+  init (https://mgap.ohsu.edu/login.js:272:31)
+  HTMLDocument.onReady (https://mgap.ohsu.edu/login.js:16:9)
+  e (https://mgap.ohsu.edu/internal/jQuery/jquery-3.5.1.min.js:2:30005)
+  t (https://mgap.ohsu.edu/internal/jQuery/jquery-3.5.1.min.js:2:30307)

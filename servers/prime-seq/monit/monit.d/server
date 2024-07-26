@@ -34,7 +34,7 @@ check process activemq with pidfile /usr/local/apache-activemq-5.18.4/data/activ
         group system
 
 CHECK PROGRAM ActiveMQ-Test
-       with path /usr/local/tools/activeMQ-monit.pl
+       with path /usr/local/tools/activeMQ-monit.py
        if status != 0 then alert
        alert bimber@ohsu.edu not {instance}
        # Every hour, at 15 past:
