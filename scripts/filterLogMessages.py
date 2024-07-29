@@ -20,12 +20,17 @@ def processMessage(msgLines):
     if any("Password reset attempted" in s for s in msgLines):
         currentError.clear()
         return
+
+    # False alarms, such as security bots trying to reset passwords:
+    if any("duplicate submission attempt, skipping" in s for s in msgLines):
+        currentError.clear()
+        return
         
     delim = ''
     for line in msgLines:
         print(delim + line)
         delim = '\t'
-    print('\n')
+    print('-----------------------\n')
 
     currentError.clear()
 

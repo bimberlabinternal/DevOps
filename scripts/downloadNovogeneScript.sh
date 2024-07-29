@@ -47,6 +47,7 @@ if [[ ! -z $3 ]];then
 	echo "Copying data"
 	cd ../
 	mv $DIRNAME /home/groups/BimberLab/primeseq/${EXPT}/@files/
+	touch /home/groups/BimberLab/primeseq/${EXPT}/@files/${DIRNAME}/move.${DIRNAME}.done
 else
 	echo "Experiment not provided, will not move"
 fi

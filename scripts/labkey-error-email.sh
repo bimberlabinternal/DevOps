@@ -12,7 +12,7 @@ fi
 cp ${LABKEY_HOME}/logs/labkey-errors.log $LAST_LOG
 
 TEMP_FILE=`mktemp`
-/usr/bin/tail -n +${OFFSET} $LAST_LOG | grep -v 'Password reset attempted' | /usr/local/tools/filterLogMessages.py > $TEMP_FILE
+/usr/bin/tail -n +${OFFSET} $LAST_LOG | /usr/local/tools/filterLogMessages.py > $TEMP_FILE
 
 LC=`cat $TEMP_FILE | wc -l`
 if [[ $LC > 0 ]];then
