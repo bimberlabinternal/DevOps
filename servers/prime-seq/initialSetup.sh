@@ -48,6 +48,9 @@ fi
 wget -O /usr/local/tools/labkey-error-email.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/labkey-error-email.sh
 chmod +x /usr/local/tools/labkey-error-email.sh
 
+wget -O /usr/local/tools/labkey-error-email.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/filter-log-messages.sh
+chmod +x /usr/local/tools/filter-log-messages.sh
+
 wget -O /usr/local/tools/activeMQ-monit.py https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/activeMQ-monit.py
 chmod +x /usr/local/tools/activeMQ-monit.py
 

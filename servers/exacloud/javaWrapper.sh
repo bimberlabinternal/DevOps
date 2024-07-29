@@ -12,7 +12,7 @@ set -e
 set -u
 set -x
 
-BCFTOOLS_PLUGINS=/home/exacloud/gscratch/prime-seq/bin/bcftools_plugins
+export BCFTOOLS_PLUGINS=/home/exacloud/gscratch/prime-seq/bin/bcftools_plugins
 
 finish() {
 	EXIT_CODE=$?
