@@ -1,3 +1,4 @@
 local/**
 servers/mcc/config/mcc.properties
 servers/prime-seq/config/prime-seq.application.properties
+servers/mgap/config/mgap.application.properties
