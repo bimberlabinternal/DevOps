@@ -30,6 +30,9 @@ fi
 wget -O /usr/local/tools/labkey-error-email.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/labkey-error-email.sh
 chmod +x /usr/local/tools/labkey-error-email.sh
 
+wget -O /usr/local/tools/filterLogMessages.py https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/filterLogMessages.py
+chmod +x /usr/local/tools/filterLogMessages.py
+
 # LabKey
 cd /usr/local/src
 mkdir -p /usr/local/labkey/labkey-tmp
