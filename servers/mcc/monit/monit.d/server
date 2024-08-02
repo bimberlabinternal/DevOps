@@ -39,8 +39,8 @@ check device local_filesystem with path /
         if space usage > 90 % then alert
         group system
 
-check device MCC_RDS with path /home/groups/mcc
+check device MCC_RDS with path /home/groups/ConradLab
         alert bimber@ohsu.edu not {instance}
         if space usage > 80 % then alert
-        if failed perm octalnumber 2770 alert
+        if failed perm 2771 then alert
         group system

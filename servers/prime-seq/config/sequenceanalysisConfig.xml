@@ -42,6 +42,9 @@
 				<bean class="org.labkey.sequenceanalysis.pipeline.CacheGenomePipelineJob.CacheGenomesTask$Factory">
 					<property name="location" value="slurm" />
 				</bean>
+				<bean class="org.labkey.sequenceanalysis.pipeline.SequenceDownloadTask$Factory">
+					<property name="location" value="slurm" />
+				</bean>
 			</list>
 		</property>
 	</bean>
