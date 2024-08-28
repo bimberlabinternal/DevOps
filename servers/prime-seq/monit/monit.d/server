@@ -73,16 +73,10 @@ check device Bimber with path /home/groups/BimberLab
         if failed perm 0775 then alert
         group system
 
-check device ColonyData with path /home/groups/OnprcColonyData/ColonyData
+check device OnprcColonyData with path /home/groups/OnprcColonyData
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
         if failed perm 2775 then alert
-        group system
-
-check device MHC_Typing with path /home/groups/OnprcColonyData/MHC_Typing
-        alert bimber@ohsu.edu not {instance}
-        if space usage > 90 % then alert
-        if failed perm 2771 then alert
         group system
 
 check device PrimeSeqTomcatTemp with path /home/groups/primeSeqTomcatTemp
