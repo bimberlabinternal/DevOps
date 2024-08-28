@@ -61,3 +61,12 @@ chmod +x installLabkey.sh
 ./installLabkey.sh
 mkdir /usr/local/labkey/labkey-tmp
 chown -R labkey:labkey /usr/local/labkey
+
+mkdir -p /usr/local/labkey/tools
+yum install libnsl
+cd /usr/local/src
+wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.2.31/ncbi-blast-2.2.31+-x64-linux.tar.gz
+gunzip ncbi-blast-2.2.31+-x64-linux.tar.gz
+tar -xf ncbi-blast-2.2.31+-x64-linux.tar
+rm ncbi-blast-2.2.31+-x64-linux.tar
+mv ncbi-blast-2.2.31+ /usr/local/labkey/tools/

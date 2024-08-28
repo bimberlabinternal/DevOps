@@ -61,7 +61,7 @@ check device local_filesystem with path /
         if space usage > 90 % then alert
         group system
 
-check device pgpdata_root with path /home/groups/prime-seq
+check device prime-seq-root with path /home/groups/prime-seq
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
         if failed perm 2771 then alert
@@ -73,13 +73,13 @@ check device Bimber with path /home/groups/BimberLab
         if failed perm 0775 then alert
         group system
 
-check device ColonyData with path /home/groups/pgpdata/ColonyData
+check device ColonyData with path /home/groups/OnprcColonyData/ColonyData
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
         if failed perm 2775 then alert
         group system
 
-check device MHC_Typing with path /home/groups/pgpdata/MHC_Typing
+check device MHC_Typing with path /home/groups/OnprcColonyData/MHC_Typing
         alert bimber@ohsu.edu not {instance}
         if space usage > 90 % then alert
         if failed perm 2771 then alert
@@ -87,6 +87,6 @@ check device MHC_Typing with path /home/groups/pgpdata/MHC_Typing
 
 check device PrimeSeqTomcatTemp with path /home/groups/primeSeqTomcatTemp
         alert bimber@ohsu.edu not {instance}
-        if space usage > 90 % then alert
+        if space usage > 80 % then alert
         if failed perm 2771 then alert
         group system
