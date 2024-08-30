@@ -14,6 +14,9 @@ set -x
 
 export BCFTOOLS_PLUGINS=/home/exacloud/gscratch/prime-seq/bin/bcftools_plugins
 
+# Added for GATK tools:
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
 finish() {
 	EXIT_CODE=$?
 	echo "Finalizing job, java exit code: "$EXIT_CODE
