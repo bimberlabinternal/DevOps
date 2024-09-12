@@ -4,7 +4,7 @@ set -e
 set -x
 
 # Yum:
-yum install net-tools wget python-pip
+yum install -y monit fontconfig gcc gcc-c++ ncurses-devel zlib-devel xz-devel net-tools wget python-pip
 pip install Stomp
 
 # Monit

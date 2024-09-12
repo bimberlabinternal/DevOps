@@ -39,12 +39,6 @@ check device local_filesystem with path /
         if space usage > 90 % then alert
         group system
 
-check device mGAP_RDS with path /home/groups/mgap
-        alert bimber@ohsu.edu not {instance}
-        if failed perm 2770 then alert
-        if space usage > 80 % then alert
-        group system
-
 check device OnprcColonyData with path /home/groups/OnprcColonyData
         alert bimber@ohsu.edu not {instance}
         if failed perm 2775 then alert

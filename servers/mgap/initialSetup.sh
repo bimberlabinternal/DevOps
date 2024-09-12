@@ -3,7 +3,7 @@
 set -e
 set -x
 
-yum install monit fontconfig
+yum install -y monit fontconfig gcc gcc-c++ ncurses-devel zlib-devel xz-devel
 
 # Monit
 wget -O /etc/monitrc https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mgap/monit/monitrc
