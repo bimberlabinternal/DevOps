@@ -169,6 +169,7 @@ sed -i 's/WORK_DIR/'$ESCAPE'/g' ${LABKEY_HOME_LOCAL}/config/pipelineConfig.xml
 # https://www.labkey.org/Documentation/wiki-page.view?name=supported
 $JAVA -XX:HeapBaseMinAddress=4294967296 \
 	-Djava.io.tmpdir=${TEMP_DIR} \
+ 	-XX:HeapDumpPath=${TEMP_DIR} \
 	--add-opens=java.base/java.lang=ALL-UNNAMED \
 	--add-opens=java.base/java.io=ALL-UNNAMED \
 	--add-opens=java.base/java.util=ALL-UNNAMED \
