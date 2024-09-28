@@ -44,7 +44,7 @@ if ls *_I2_* 1> /dev/null 2>&1; then
 fi
 
 echo 'File size:'
-du -s -h $DIRNAME
+du -s -h ../$DIRNAME
 
 if [[ ! -z $3 ]];then
 	echo "Copying data"
