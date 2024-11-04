@@ -211,7 +211,7 @@ fi
 
 # In 24.11 the name of the distribution was updated to use underscore rather than hyphen:
 LOWEST_UPDATED_BRANCH=24.11
-LOWER_VERSION=`echo -e "${BASE_VERSION_SHORT}\n${LOWEST_BRANCH}" | sort -V | head -n1`
+LOWER_VERSION=`echo -e "${BASE_VERSION_SHORT}\n${LOWEST_UPDATED_BRANCH}" | sort -V | head -n1`
 if [[ $BASE_VERSION == 'develop' || $LOWER_VERSION == $LOWEST_UPDATED_BRANCH ]] ;then
 	PRIME_SEQ_DIST=prime_seq
 else
