@@ -209,6 +209,15 @@ if [ $BASE_VERSION_SHORT != 'develop' ];then
 	GRADLE_RELEASE=${BASE_VERSION_SHORT}-SNAPSHOT
 fi
 
+# In 24.11 the name of the distribution was updated to use underscore rather than hyphen:
+LOWEST_UPDATED_BRANCH=24.11
+LOWER_VERSION=`echo -e "${BASE_VERSION_SHORT}\n${LOWEST_BRANCH}" | sort -V | head -n1`
+if [[ $BASE_VERSION == 'develop' || $LOWER_VERSION == $LOWEST_UPDATED_BRANCH ]] ;then
+	PRIME_SEQ_DIST=prime_seq
+else
+	PRIME_SEQ_DIST=prime-seq
+fi
+
 ARTIFACTORY_SETTINGS=
 if [[ -v ARTIFACTORY_USER ]];then
 	ARTIFACTORY_SETTINGS="-Partifactory_user=${ARTIFACTORY_USER} -Partifactory_password=${ARTIFACTORY_PASSWORD}"
@@ -236,7 +245,7 @@ if [ $GENERATE_DIST == 1 ];then
 		-PdeployMode=prod \
 		-PuseEmbeddedTomcat \
 		-PmoduleSet=distributions \
-		:distributions:discvr:dist :distributions:prime-seq:dist
+		:distributions:discvr:dist :distributions:${PRIME_SEQ_DIST}:dist
 
 	mv ./dist/discvr $DIST_DIR
 
