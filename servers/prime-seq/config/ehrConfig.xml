@@ -7,7 +7,7 @@
 		<property name="factoryImpls">
 			<list>
 				<bean class="org.labkey.ehr.pipeline.GeneticCalculationsRTask$Factory">
-					<property name="location" value="slurm" />
+					<property name="location" value="arc" />
 				</bean>
 				<bean class="org.labkey.ehr.pipeline.GeneticCalculationsImportTask$Factory">
 					<property name="location" value="webserver-fasta-check" />

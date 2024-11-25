@@ -51,4 +51,31 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="slurmSSHProperties" class="org.labkey.cluster.pipeline.SlurmExecutionEngineConfig">
+		<property name="location" value="arc" />
+		<property name="submitCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/sbatch -A ${clusterUser} '${submitScript}'"/>
+		<property name="statusCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/squeue --all -u labkey_submit -O JobId,State,Reason,NodeList"/>
+		<property name="removeCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/scancel ${clusterId}"/>
+		<property name="historyCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/sacct --allusers --jobs=${clusterId} -o JobId,State,NodeList,MaxRSS"/>
+
+		<property name="labKeyDir" value="/home/exacloud/gscratch/prime-seq/src_arc/" />
+		<property name="remoteExecutable" value="/home/exacloud/gscratch/prime-seq/src_arc/javaWrapper.sh" />
+
+		<property name="requestMemory" value="36" />
+		<property name="requestCpus" value="8" />
+		<property name="javaHome" value="/home/exacloud/gscratch/java/current"/>
+			<property name="javaOpts">
+			<list>
+				<value>-Xmx8g</value>
+			</list>
+		</property>
+		<property name="extraSubmitScriptLines">
+			<list>
+				<value>#SBATCH --partition=batch</value>
+				<value>#SBATCH --time=2160</value>
+				<value>#SBATCH --gres=disk:1024</value>
+			</list>
+		</property>
+	</bean>
 </beans>

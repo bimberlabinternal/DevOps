@@ -7,10 +7,10 @@
         <property name="factoryImpls">
             <list>
                 <bean class="org.labkey.blast.pipeline.BlastWorkTask$Factory">
-                    <property name="location" value="slurm" />
+                    <property name="location" value="arc" />
                 </bean> 
                 <bean class="org.labkey.blast.pipeline.BlastDatabaseTask$Factory">
-                    <property name="location" value="slurm" />
+                    <property name="location" value="arc" />
                 </bean>
             </list>
         </property>

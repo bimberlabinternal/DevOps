@@ -15,7 +15,7 @@
 	<bean id="pipelineJobService" class="org.labkey.pipeline.api.PipelineJobServiceImpl">
 		<property name="appProperties">
 			<bean class="org.labkey.pipeline.api.properties.ApplicationPropertiesImpl">
-				<property name="toolsDirectory" value="/home/exacloud/gscratch/prime-seq/bin/" />
+				<property name="toolsDirectory" value="/home/exacloud/gscratch/prime-seq/bin_arc/" />
 			</bean>
 		</property>
 
@@ -24,11 +24,11 @@
 				<property name="softwarePackages">
 					<map>
 						<!--If the sequence tools are not in the standard pipeline tools dir, this is required-->
-						<entry key="SEQUENCEANALYSIS_TOOLS" value="/home/exacloud/gscratch/prime-seq/bin"/>
+						<entry key="SEQUENCEANALYSIS_TOOLS" value="/home/exacloud/gscratch/prime-seq/bin_arc"/>
 						<entry key="JAVA_HOME" value="/home/exacloud/gscratch/prime-seq/java/current"/>
 						<entry key="JAVA_HOME_8" value="/home/exacloud/gscratch/prime-seq/java/java8"/>
 						<entry key="JAVA_HOME_7" value="/home/exacloud/gscratch/prime-seq/java/jdk1.7.0_55"/>
-						<entry key="DOCKER_EXE" value="/opt/acc/sbin/exadocker"/>
+						<entry key="DOCKER_EXE" value="/usr/local/bin/docker"/>
 						<entry key="SEQUENCEANALYSIS_MAX_THREADS" value="8"/>
 						<entry key="SEQUENCEANALYSIS_MAX_RAM" value="24"/>
 						<entry key="SEQUENCEANALYSIS_JAVA_OPTS" value="-Xss2m"/>
@@ -36,6 +36,7 @@
 						<entry key="REMOTE_GENOME_CACHE_DIR" value="/home/exacloud/gscratch/prime-seq/cachedGenomes"/>
 						<entry key="FUNCOTATOR_DATA_SOURCE" value="/home/exacloud/gscratch/prime-seq/bin/VariantAnnotation"/>
 						<!--<entry key="JAVA_TMP_DIR" value=""/>-->
+						<entry key="DOCKER_VOLUMES" value="/home/groups/BimberLab"/>
 					</map>
 				</property>
 			</bean>

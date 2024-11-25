@@ -12,7 +12,7 @@ set -e
 set -u
 set -x
 
-export BCFTOOLS_PLUGINS=/home/exacloud/gscratch/prime-seq/bin/bcftools_plugins
+export BCFTOOLS_PLUGINS=/home/exacloud/gscratch/prime-seq/bin_arc/bcftools_plugins
 
 # Added for GATK tools:
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
@@ -77,7 +77,7 @@ fi
 $JAVA -version
 
 GZ_PREFIX=LabKey${MAJOR}.${MINOR_FULL}
-TOOL_DIR=/home/exacloud/gscratch/prime-seq/bin/
+TOOL_DIR=/home/exacloud/gscratch/prime-seq/bin_arc/
 
 ORIG_WORK_DIR=$(pwd)
 
