@@ -8,7 +8,7 @@ MAJOR=24
 MINOR_FULL="7"
 MINOR_SHORT=$MINOR_FULL
 
-LABKEY_HOME=/home/exacloud/gscratch/prime-seq/src
+LABKEY_HOME=/home/exacloud/gscratch/prime-seq/src_arc
 LABKEY_USER=labkey_submit
 
 JAVA_HOME=/home/exacloud/gscratch/prime-seq/java/current
