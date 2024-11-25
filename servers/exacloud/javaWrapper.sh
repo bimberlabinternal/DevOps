@@ -12,6 +12,9 @@ set -e
 set -u
 set -x
 
+module load python/3.11.7
+module load R/4.4.0
+
 export BCFTOOLS_PLUGINS=/home/exacloud/gscratch/prime-seq/bin_arc/bcftools_plugins
 
 # Added for GATK tools:
