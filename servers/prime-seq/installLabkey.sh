@@ -29,7 +29,7 @@ if [ ! -e $LK_CONFIG ];then
 	chmod +x $LK_CONFIG/labkeyServerStartup.sh
 fi
 
-CONFIG_DIR=/usr/local/labkey/config
+CONFIG_DIR=${LABKEY_HOME}/config
 if [ ! -e $CONFIG_DIR ];then
 	mkdir -p $CONFIG_DIR
 	
