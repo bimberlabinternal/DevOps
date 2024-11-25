@@ -9,6 +9,9 @@
 				<bean id="slurmSSHEngine" class="org.labkey.cluster.pipeline.SlurmExecutionEngine">
 					<constructor-arg type="org.labkey.cluster.pipeline.SlurmExecutionEngineConfig" ref="slurmSSHProperties"/>
 				</bean>
+				<bean id="arcSSHEngine" class="org.labkey.cluster.pipeline.SlurmExecutionEngine">
+					<constructor-arg type="org.labkey.cluster.pipeline.SlurmExecutionEngineConfig" ref="arcSSHProperties"/>
+				</bean>
 			</list>
 		</property>
 		<property name="configProperties">
@@ -52,7 +55,7 @@
 		</property>
 	</bean>
 	
-	<bean id="slurmSSHProperties" class="org.labkey.cluster.pipeline.SlurmExecutionEngineConfig">
+	<bean id="arcSSHProperties" class="org.labkey.cluster.pipeline.SlurmExecutionEngineConfig">
 		<property name="location" value="arc" />
 		<property name="submitCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/sbatch -A ${clusterUser} '${submitScript}'"/>
 		<property name="statusCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/squeue --all -u labkey_submit -O JobId,State,Reason,NodeList"/>
