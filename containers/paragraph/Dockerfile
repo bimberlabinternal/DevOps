@@ -16,12 +16,12 @@ RUN apt-get -qq update && apt-get install -yq \
 	libboost-all-dev \
 	m4 \
     python3-full \
-	python3-pip \
-	#software-properties-common \
 	zlib1g-dev \
 	libbz2-dev &&  \
 	apt-get clean -y && \
-	rm -rf /var/lib/apt/lists/*
+    # This avoids the 'error: externally-managed-environment' issue
+    rm -Rf /usr/lib/python3.12/EXTERNALLY-MANAGED \
+	rm -Rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/ \
 	&& cd /opt \

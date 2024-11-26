@@ -1,3 +1,4 @@
+.idea/*
 local/**
 servers/mcc/config/mcc.properties
 servers/prime-seq/config/prime-seq.application.properties
