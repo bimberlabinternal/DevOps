@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get -qq update && apt-get install -yq \
 	autoconf \
@@ -15,6 +15,7 @@ RUN apt-get -qq update && apt-get install -yq \
 	libtool \
 	libboost-all-dev \
 	m4 \
+    python3-full \
 	python3-pip \
 	#software-properties-common \
 	zlib1g-dev \
