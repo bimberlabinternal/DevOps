@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -16,6 +16,7 @@ RUN apt-get -qq update && apt-get install -yq \
 	libboost-all-dev \
 	m4 \
     python3-full \
+    python3-pip \
 	zlib1g-dev \
 	libbz2-dev &&  \
 	apt-get clean -y && \
@@ -27,7 +28,7 @@ RUN mkdir -p /opt/ \
 	&& cd /opt \
 	&& git clone https://github.com/Illumina/paragraph.git \
 	&& mv paragraph paragraph-source \
-	&& pip3 install -r /opt/paragraph-source/requirements.txt \
+	&& pip3 install --user -r /opt/paragraph-source/requirements.txt \
 	&& mkdir /opt/paragraph-build
 
 WORKDIR /opt/paragraph-build
