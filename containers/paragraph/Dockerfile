@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -33,7 +33,7 @@ RUN mkdir -p /opt/ \
 
 WORKDIR /opt/paragraph-build
 RUN cmake /opt/paragraph-source -DCMAKE_INSTALL_PREFIX=/opt/paragraph -DBoost_NO_BOOST_CMAKE=ON \
-	&& make \
+    && make \
 	&& make install
 RUN rm -rf /opt/paragraph-source
 
