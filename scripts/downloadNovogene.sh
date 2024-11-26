@@ -36,7 +36,7 @@ sbatch \
 	--cpus-per-task=8 \
 	--output=${1}.log \
 	--error=${1}.log \
-	--partition=exacloud \
+	--partition=batch \
 	--time=0-36 \
 	--chdir=$PWD \
 	./$SCRIPT $1 $2 $3
