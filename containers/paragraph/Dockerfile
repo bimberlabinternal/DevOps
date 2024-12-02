@@ -35,5 +35,4 @@ RUN cmake /opt/paragraph-source -DCMAKE_INSTALL_PREFIX=/opt/paragraph -DBoost_NO
 	&& make install
 RUN rm -rf /opt/paragraph-source
 
-ENTRYPOINT ["/usr/bin/python3"]
-CMD ["/opt/paragraph/bin/multigrmpy.py", "-h"]
+ENTRYPOINT ["/bin/bash"]
