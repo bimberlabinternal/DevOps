@@ -35,4 +35,4 @@ RUN cmake /opt/paragraph-source -DCMAKE_INSTALL_PREFIX=/opt/paragraph -DBoost_NO
 	&& make install
 RUN rm -rf /opt/paragraph-source
 
-ENTRYPOINT ["/bin/bash", "-c"]
+ENTRYPOINT ["/bin/bash"]
