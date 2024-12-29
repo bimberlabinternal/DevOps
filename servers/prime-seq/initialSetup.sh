@@ -58,7 +58,10 @@ chmod +x /usr/local/tools/activeMQ-monit.py
 # skopeo login --compat-auth-file=/usr/local/etc/labkey/.dockerRegistry
 wget -O /usr/local/tools/syncDockerRegistries.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/syncDockerRegistries.sh
 chmod +x /usr/local/tools/syncDockerRegistries.sh
-
+echo "*/5 * * * * labkey_submit /usr/local/tools/syncDockerRegistries.sh > /var/log/dockerSync.log 2>&1" >> /etc/cron.d/syncDockerRegistries
+touch /var/log/dockerSync.log
+chmod o+w /var/log/dockerSync.log
+chmod 0644 /etc/cron.d/syncDockerRegistries
 
 # LabKey
 cd /usr/local/src
