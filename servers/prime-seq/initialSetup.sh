@@ -4,7 +4,7 @@ set -e
 set -x
 
 # Yum:
-yum install -y monit fontconfig gcc gcc-c++ ncurses-devel zlib-devel xz-devel net-tools wget python-pip
+yum install -y monit fontconfig gcc gcc-c++ ncurses-devel zlib-devel xz-devel net-tools wget python-pip skopeo
 pip install Stomp
 
 # Monit
@@ -53,6 +53,12 @@ chmod +x /usr/local/tools/filterLogMessages.py
 
 wget -O /usr/local/tools/activeMQ-monit.py https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/activeMQ-monit.py
 chmod +x /usr/local/tools/activeMQ-monit.py
+
+# NOTE: you must also create the file: /usr/local/etc/labkey/.dockerRegistry. This can be created using: 
+# skopeo login --compat-auth-file=/usr/local/etc/labkey/.dockerRegistry
+wget -O /usr/local/tools/syncDockerRegistries.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/syncDockerRegistries.sh
+chmod +x /usr/local/tools/syncDockerRegistries.sh
+
 
 # LabKey
 cd /usr/local/src
