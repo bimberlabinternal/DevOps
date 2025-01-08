@@ -27,8 +27,7 @@ fi
 cd $DIRNAME
 
 HOST=portal-us.medgenome.com
-PORT=2424
-wget -nv -r -c --password=${PW} --reject-regex="_I1_|_I2_|Undetermined_" ftp://${DIRNAME}@${HOST}:${PORT}/FASTQ
+wget -nv -r -c --no-check-certificate --user= --password=${PW} --cut-dirs=1 --reject "index.html*" --reject-regex="_I1_|_I2_|Undetermined_" https://${HOST}/${USER}/FASTQ
 touch download.${DIRNAME}.done
 find . -name '*.gz' -exec mv {} ./ \;
 
