@@ -48,12 +48,16 @@ runs:
         cat requirements.txt      
       shell: bash
 
-    - uses: actions/setup-python@v5
+    - name: Cache pip
+      uses: actions/cache@v4
+      id: cache-pip
       with:
-        python-version: '3.12'
-        cache-dependency-path: 'requirements.txt'
+        path: .cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
 
-    - run: python3 -m pip install -r requirements.txt
+    - run: python3 -m pip install --user -r requirements.txt
       shell: bash
 
     # Note: the environment variable R_BIOC_VERSION is set to force remotes::install_bioc to follow the proper version
@@ -74,9 +78,9 @@ runs:
 
     - uses: r-lib/actions/setup-r-dependencies@v2
       with:
-        cache: 'always'
+        cache: '"always"'
         cache-version: ${{ inputs.cache_version || 1 }}
-        upgrade: 'always'
+        upgrade: '"always"'
         extra-packages: |
           any::pkgdown
           any::rcmdcheck
