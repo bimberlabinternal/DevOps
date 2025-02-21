@@ -38,7 +38,7 @@ runs:
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
         packages: |
-          libharfbuzz-dev libfribidi-dev python3 python3-pip libsodium-dev libcurl4-openssl-dev libglpk-dev libhdf5-dev libmagick++-dev libharfbuzz-dev libfribidi-dev libsodium-dev libcurl4-openssl-dev python3 python3-pip
+          libharfbuzz-dev libfribidi-dev libsodium-dev libcurl4-openssl-dev libglpk-dev libhdf5-dev libmagick++-dev libharfbuzz-dev libfribidi-dev libsodium-dev libcurl4-openssl-dev
           texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
         version: ${{ inputs.cache_version || 1 }}
 
@@ -52,6 +52,9 @@ runs:
       with:
         python-version: '3.x'
         cache-dependency-path: 'requirements.txt'
+
+    - run: pip3 install -r requirements.txt
+      shell: bash
 
     # Note: the environment variable R_BIOC_VERSION is set to force remotes::install_bioc to follow the proper version
     - name: Setup Bioconductor
