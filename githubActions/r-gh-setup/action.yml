@@ -45,7 +45,8 @@ runs:
     - name: Prepare python packages
       run: |
         echo -e "wheel\nsetuptools\nnumpy<2.0.0\nscanpy\numap-learn\nphate\nsctour\ntcrdist3\nscikit-misc\nleidenalg" > requirements.txt
-        cat requirements.txt
+        cat requirements.txt      
+      shell: bash
 
     - uses: actions/setup-python@v5
       with:
@@ -88,6 +89,7 @@ runs:
         cd ../../
         pip3 install -e conga
         cd $WD
+      shell: bash
 
     - name: Setup SDA
       run: |
@@ -96,6 +98,7 @@ runs:
         wget -q -O $SDA_PATH/sda_static_linux https://www.dropbox.com/sh/chek4jkr28qnbrj/AADPy1qQlm3jsHPmPdNsjSx2a/bin/sda_static_linux?dl=1
         chmod +x $SDA_PATH/sda_static_linux          
         echo /home/runner/work/sda >> $GITHUB_PATH
+      shell: bash
 
     - name: Session info
       run: |
@@ -107,3 +110,4 @@ runs:
     - name: Verify SDA
       run: |
         which sda_static_linux
+      shell: bash
