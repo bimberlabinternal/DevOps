@@ -26,8 +26,9 @@ fi
 
 cd $DIRNAME
 
-HOST=128.120.88.245
-wget -nv -r -c --password=${PW} --reject-regex="_I1_|_I2_|Undetermined_" ftp://${DIRNAME}@${HOST}:21/
+HOST=usftp22.novogene.com
+PORT=3022
+wget -nv -r -c --password=${PW} --reject-regex="_I1_|_I2_|Undetermined_" ftp://${DIRNAME}@${HOST}:${PORT}/
 touch download.${DIRNAME}.done
 find . -name '*.gz' -exec mv {} ./ \;
 
