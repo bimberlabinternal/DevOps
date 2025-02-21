@@ -71,8 +71,9 @@ runs:
 
     - uses: r-lib/actions/setup-r-dependencies@v2
       with:
+        cache: 'always'
         cache-version: ${{ inputs.cache_version || 1 }}
-        upgrade: 'TRUE'
+        upgrade: 'always'
         extra-packages: |
           any::pkgdown
           any::rcmdcheck
@@ -106,8 +107,3 @@ runs:
         pkgs <- installed.packages()[, "Package"]
         sessioninfo::session_info(pkgs, include_base = TRUE)
       shell: Rscript {0}
-
-    - name: Verify SDA
-      run: |
-        which sda_static_linux
-      shell: bash
