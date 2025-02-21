@@ -1,0 +1,109 @@
+  
+name: R / github actions Setup
+author: Ben Bimber
+description: Performs R and python setup, as well as dependency installation for R/scRNA-seq repos
+branding:
+  icon: 'git-branch'
+  color: 'black'
+inputs:
+  r_version:
+    description: The R version to use
+    required: true
+    default: '4.4'
+  bioc_version:
+    description: The bioconductor version
+    required: true
+    default: '3.20'
+  cache_version:
+    description: The version string for the cache
+    required: true
+    default: '1'
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: ${{ inputs.r_version }}
+        use-public-rspm: true
+
+    - uses: r-lib/actions/setup-pandoc@v2
+
+    # libharfbuzz-dev libfribidi-dev are added to fix textshaping install error
+    # libhdf5-dev added for cellmembrane/SeuratDisk
+    # libglpk-dev added due to igraph / bluster /scran error
+    # NOTE: added numpy<2 to side-step a numpy version issue. This should be removed eventually. See: https://github.com/numpy/numpy/issues/26710
+    # NOTE: libsodium-dev installed for VISION
+    - name: Install apt packages
+      uses: awalsh128/cache-apt-pkgs-action@latest
+      with:
+        packages: |
+          libharfbuzz-dev libfribidi-dev python3 python3-pip libsodium-dev libcurl4-openssl-dev libglpk-dev libhdf5-dev libmagick++-dev libharfbuzz-dev libfribidi-dev libsodium-dev libcurl4-openssl-dev python3 python3-pip
+          texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+        version: ${{ inputs.cache_version || 1 }}
+
+    - name: Prepare python packages
+      run: |
+        echo -e "wheel\nsetuptools\nnumpy<2.0.0\nscanpy\numap-learn\nphate\nsctour\ntcrdist3\nscikit-misc\nleidenalg" > requirements.txt
+        cat requirements.txt
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.14'
+        cache-dependency-path: 'requirements.txt'
+
+    # Note: the environment variable R_BIOC_VERSION is set to force remotes::install_bioc to follow the proper version
+    - name: Setup Bioconductor
+      run: |
+        if (!requireNamespace("BiocManager", quietly=TRUE))  install.packages("BiocManager");
+        BiocManager::install(version = "${{ inputs.bioc_version }}", ask = FALSE);
+        cat(append = TRUE, file = "~/.Rprofile", "options(repos = BiocManager::repositories());")
+        cat(append = TRUE, file = "~/.Rprofile", "Sys.setenv(R_BIOC_VERSION=as.character(BiocManager::version()));");
+      shell: Rscript {0}
+
+    - name: Perform custom installs
+      run: |
+        install.packages('remotes')
+        # NOTE: fgsea added to avoid BH issue: https://github.com/ctlab/fgsea/issues/165
+        remotes::install_github("ctlab/fgsea")
+      shell: Rscript {0}
+
+    - uses: r-lib/actions/setup-r-dependencies@v2
+      with:
+        cache-version: ${{ inputs.cache_version || 1 }}
+        upgrade: 'TRUE'
+        extra-packages: |
+          any::pkgdown
+          any::rcmdcheck
+          any::remotes
+          any::devtools
+
+    - name: Setup CoNGA
+      run: |
+        WD=`pwd`
+        cd ../
+        git clone https://github.com/phbradley/conga.git conga
+        cd conga/tcrdist_cpp  
+        make
+        cd ../../
+        pip3 install -e conga
+        cd $WD
+
+    - name: Setup SDA
+      run: |
+        SDA_PATH=/home/runner/work/sda
+        mkdir $SDA_PATH
+        wget -q -O $SDA_PATH/sda_static_linux https://www.dropbox.com/sh/chek4jkr28qnbrj/AADPy1qQlm3jsHPmPdNsjSx2a/bin/sda_static_linux?dl=1
+        chmod +x $SDA_PATH/sda_static_linux          
+        echo /home/runner/work/sda >> $GITHUB_PATH
+
+    - name: Session info
+      run: |
+        options(width = 100)
+        pkgs <- installed.packages()[, "Package"]
+        sessioninfo::session_info(pkgs, include_base = TRUE)
+      shell: Rscript {0}
+
+    - name: Verify SDA
+      run: |
+        which sda_static_linux
