@@ -50,10 +50,10 @@ runs:
 
     - uses: actions/setup-python@v5
       with:
-        python-version: '3.x'
+        python-version: '3.12'
         cache-dependency-path: 'requirements.txt'
 
-    - run: pip3 install -r requirements.txt
+    - run: python3 -m install -r requirements.txt
       shell: bash
 
     # Note: the environment variable R_BIOC_VERSION is set to force remotes::install_bioc to follow the proper version
