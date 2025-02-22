@@ -50,10 +50,9 @@ runs:
 
     - name: Cache pip
       uses: actions/cache@v4
-      id: cache-pip
+      id: pip-cache
       with:
         path: ~/.cache/pip
-        save-always: 'true'
         key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
@@ -62,6 +61,7 @@ runs:
       shell: bash
 
     - name: Save Pip cache
+      id: pip-cache-save
       uses: actions/cache/save@v4
       with:
         path: ~/.cache/pip
