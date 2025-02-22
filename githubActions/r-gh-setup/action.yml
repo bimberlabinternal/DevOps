@@ -60,6 +60,12 @@ runs:
     - run: python3 -m pip install --user -r requirements.txt
       shell: bash
 
+    - name: Save Pip cache
+      uses: actions/cache/save@v4
+      with:
+        path: .cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+
     # Note: the environment variable R_BIOC_VERSION is set to force remotes::install_bioc to follow the proper version
     - name: Setup Bioconductor
       run: |
@@ -80,7 +86,7 @@ runs:
       with:
         cache: '"always"'
         cache-version: ${{ inputs.cache_version || 1 }}
-        upgrade: '"always"'
+        upgrade: 'TRUE'
         extra-packages: |
           any::pkgdown
           any::rcmdcheck
