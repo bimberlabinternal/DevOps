@@ -70,6 +70,8 @@ runs:
         echo -e "leidenalg" >> requirements.txt
         echo -e "scikit-misc" >> requirements.txt
         echo -e "tcrdist3" >> requirements.txt
+        echo -e "zarr>=2.16.0,<3.0.0a0" >> requirements.txt
+        echo -e "demuxEM" >> requirements.txt
       shell: bash
 
     - name: Cache pip
@@ -77,11 +79,13 @@ runs:
       id: pip-cache
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        key: ${{ runner.os }}-pip-${{ inputs.cache_version || 1 }}-${{ hashFiles('requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - run: python3 -m pip install --user -r requirements.txt
+    - run: |
+        python3 -m pip install --user -r requirements.txt
+        python3 -m pip install --user git+https://github.com/bbimber/GMM-Demux.git
       shell: bash
 
     - name: Save Pip cache
@@ -89,7 +93,7 @@ runs:
       uses: actions/cache/save@v4
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        key: ${{ runner.os }}-pip-${{ inputs.cache_version || 1 }}-${{ hashFiles('requirements.txt') }}
 
     # Note: the environment variable R_BIOC_VERSION is set to force remotes::install_bioc to follow the proper version
     - name: Setup Bioconductor
@@ -105,6 +109,8 @@ runs:
         install.packages('remotes')
         # NOTE: fgsea added to avoid BH issue: https://github.com/ctlab/fgsea/issues/165
         remotes::install_github("ctlab/fgsea")
+        # NOTE: To avoid pthread_create() error. See: https://github.com/bmbolstad/preprocessCore/issues/1 and https://github.com/bmbolstad/preprocessCore/issues/12
+        remotes::install_github("bmbolstad/preprocessCore", dependencies = T, upgrade = "always", force = TRUE, configure.args = "--disable-threading")
       shell: Rscript {0}
 
     - uses: r-lib/actions/setup-r-dependencies@v2
