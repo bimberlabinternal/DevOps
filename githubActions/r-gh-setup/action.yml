@@ -32,8 +32,11 @@ runs:
     # libharfbuzz-dev libfribidi-dev are added to fix textshaping install error
     # libhdf5-dev added for cellmembrane/SeuratDisk
     # libglpk-dev added due to igraph / bluster /scran error
+    # libsodium-dev installed for VISION
+    # libpoppler-cpp-dev added for pdftools, which is part of cellhashR
+    # libudunits2-dev added due to units / ggpattern error
+    # libgdal-dev added for ggpattern / sf / gdal-config missing error
     # NOTE: added numpy<2 to side-step a numpy version issue. This should be removed eventually. See: https://github.com/numpy/numpy/issues/26710
-    # NOTE: libsodium-dev installed for VISION
     - name: Install apt packages
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
@@ -49,6 +52,9 @@ runs:
           texlive-fonts-recommended 
           texlive-fonts-extra 
           texlive-latex-extra
+          libpoppler-cpp-dev 
+          libudunits2-dev
+          libgdal-dev
         version: ${{ inputs.cache_version || 1 }}
 
     - name: Prepare python packages
