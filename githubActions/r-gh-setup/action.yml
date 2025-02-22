@@ -52,7 +52,8 @@ runs:
       uses: actions/cache@v4
       id: cache-pip
       with:
-        path: .cache/pip
+        path: ~/.cache/pip
+        save-always: 'true'
         key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
@@ -63,7 +64,7 @@ runs:
     - name: Save Pip cache
       uses: actions/cache/save@v4
       with:
-        path: .cache/pip
+        path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
 
     # Note: the environment variable R_BIOC_VERSION is set to force remotes::install_bioc to follow the proper version
@@ -84,7 +85,7 @@ runs:
 
     - uses: r-lib/actions/setup-r-dependencies@v2
       with:
-        cache: '"always"'
+        cache: 'always'
         cache-version: ${{ inputs.cache_version || 1 }}
         upgrade: 'TRUE'
         extra-packages: |
