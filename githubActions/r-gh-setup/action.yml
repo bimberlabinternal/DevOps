@@ -38,14 +38,32 @@ runs:
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
         packages: |
-          libharfbuzz-dev libfribidi-dev libsodium-dev libcurl4-openssl-dev libglpk-dev libhdf5-dev libmagick++-dev libharfbuzz-dev libfribidi-dev libsodium-dev libcurl4-openssl-dev
-          texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+          libharfbuzz-dev 
+          libfribidi-dev 
+          libsodium-dev 
+          libcurl4-openssl-dev 
+          libglpk-dev 
+          libhdf5-dev 
+          libmagick++-dev
+          texlive-latex-base 
+          texlive-fonts-recommended 
+          texlive-fonts-extra 
+          texlive-latex-extra
         version: ${{ inputs.cache_version || 1 }}
 
     - name: Prepare python packages
       run: |
-        echo -e "wheel\nsetuptools\nnumpy<2.0.0\nscanpy\numap-learn\nphate\nsctour\ntcrdist3\nscikit-misc\nleidenalg" > requirements.txt
-        cat requirements.txt      
+        echo -e "wheel" > requirements.txt
+        echo -e "setuptools" >> requirements.txt
+        echo -e "numpy<2.0.0" >> requirements.txt
+        echo -e "scanpy" >> requirements.txt
+        echo -e "umap-learn" >> requirements.txt
+        echo -e "phate" >> requirements.txt
+        echo -e "sctour" >> requirements.txt
+        echo -e "celltypist" >> requirements.txt
+        echo -e "leidenalg" >> requirements.txt
+        echo -e "scikit-misc" >> requirements.txt
+        echo -e "tcrdist3" >> requirements.txt
       shell: bash
 
     - name: Cache pip
