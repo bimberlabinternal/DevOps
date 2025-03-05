@@ -82,14 +82,10 @@ runs:
     - run: |
         python3 -m pip install --user -r requirements.txt
         python3 -m pip install --user git+https://github.com/bbimber/GMM-Demux.git
+        RP=$(which python3)
+        echo "Sys.setenv(RETICULATE_PYTHON=$RP);" >> ~/.Rprofile
+        cat ~/.Rprofile
       shell: bash
-
-    - name: Save Pip cache
-      id: pip-cache-save
-      uses: actions/cache/save@v4
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ inputs.cache_version || 1 }}-${{ hashFiles('requirements.txt') }}
 
     # Note: the environment variable R_BIOC_VERSION is set to force remotes::install_bioc to follow the proper version
     - name: Setup Bioconductor
