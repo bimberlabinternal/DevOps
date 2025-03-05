@@ -83,7 +83,7 @@ runs:
         python3 -m pip install --user -r requirements.txt
         python3 -m pip install --user git+https://github.com/bbimber/GMM-Demux.git
         RP=$(which python3)
-        echo "Sys.setenv(RETICULATE_PYTHON=$RP);" >> ~/.Rprofile
+        echo "Sys.setenv(\"RETICULATE_PYTHON\" = \"$RP\");" >> ~/.Rprofile
         cat ~/.Rprofile
       shell: bash
 
