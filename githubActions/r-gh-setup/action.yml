@@ -57,11 +57,6 @@ runs:
           libgdal-dev
         version: ${{ inputs.cache_version || 1 }}
 
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.x'
-        cache: 'pip'
-
     - name: Prepare python packages
       run: |
         echo -e "wheel" > requirements.txt
@@ -78,6 +73,11 @@ runs:
         echo -e "zarr>=2.16.0,<3.0.0a0" >> requirements.txt
         echo -e "demuxEM" >> requirements.txt
       shell: bash
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+        cache: 'pip'
 
     - run: |
         python3 -m pip install --user -r requirements.txt
