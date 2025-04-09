@@ -4,8 +4,8 @@ set -e
 
 #MCC:
 
-MAJOR=24
-MINOR_FULL="11"
+MAJOR=25
+MINOR_FULL="3"
 MINOR_SHORT=$MINOR_FULL
 
 LABKEY_HOME=/usr/local/labkey
