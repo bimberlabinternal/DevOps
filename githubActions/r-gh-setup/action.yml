@@ -57,11 +57,13 @@ runs:
           libgdal-dev
         version: ${{ inputs.cache_version || 1 }}
 
+    # TODO: eventually drop numpy<2.0.0
     - name: Prepare python packages
       run: |
         echo -e "wheel" > requirements.txt
         echo -e "setuptools" >> requirements.txt
         echo -e "numpy<2.0.0" >> requirements.txt
+        echo -e "numcodecs==0.15.1" >> requirements.txt
         echo -e "scanpy" >> requirements.txt
         echo -e "umap-learn" >> requirements.txt
         echo -e "phate" >> requirements.txt
@@ -70,7 +72,6 @@ runs:
         echo -e "leidenalg" >> requirements.txt
         echo -e "scikit-misc" >> requirements.txt
         echo -e "tcrdist3" >> requirements.txt
-        echo -e "zarr>=2.16.0,<3.0.0a0" >> requirements.txt
         echo -e "demuxEM" >> requirements.txt
       shell: bash
 
