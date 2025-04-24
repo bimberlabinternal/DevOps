@@ -37,6 +37,8 @@ chmod +x /usr/local/tools/filterLogMessages.py
 cd /usr/local/src
 mkdir -p /usr/local/labkey/labkey-tmp
 chown -R mcclabkey:mcclabkey /usr/local/labkey
+
+# Note: edit /etc/hosts to include SNPRC server
 wget -O installLabKey.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mcc/installLabKey.sh
 chmod +x installLabKey.sh
 ./installLabKey.sh
