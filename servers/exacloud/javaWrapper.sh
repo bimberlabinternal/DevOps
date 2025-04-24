@@ -8,12 +8,20 @@
 # 3) if  an incoming job uses the WEEK_LONG_JOB flag, we also make an alternate TEMP directory on lustre (the default is the node's local disk)
 # and change the stripe
 
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
 set -e
 set -u
 set -x
 
-module load python/3.11.7
-module load R/4.4.0
+# User specific aliases and functions
+umask 0002
+
+module load python/3.11
+module load r/4.4
 
 export BCFTOOLS_PLUGINS=/home/exacloud/gscratch/prime-seq/bin_arc/bcftools_plugins
 
@@ -98,8 +106,6 @@ if [ ! -e $TEMP_BASEDIR ];then
 fi
 
 export PATH=${JAVA_HOME}/bin/:$TOOL_DIR:$PATH
-
-umask 0006
 
 JOB_FILE="${!#}"
 JOB_FILE="${JOB_FILE//file:/}"
