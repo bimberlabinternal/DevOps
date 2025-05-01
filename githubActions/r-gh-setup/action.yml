@@ -126,7 +126,7 @@ runs:
         cd conga/tcrdist_cpp  
         make
         cd ../../
-        pip3 install -e conga
+        pip3 install --use-pep517 -e conga
         cd $WD
       shell: bash
 
