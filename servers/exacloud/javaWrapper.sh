@@ -105,7 +105,7 @@ if [ ! -e $TEMP_BASEDIR ];then
 	mkdir -p $TEMP_BASEDIR
 fi
 
-export PATH=${JAVA_HOME}/bin/:$TOOL_DIR:$PATH
+export PATH=${JAVA_HOME}/bin/:$TOOL_DIR:~/.local/bin/:$PATH
 
 JOB_FILE="${!#}"
 JOB_FILE="${JOB_FILE//file:/}"
