@@ -19,7 +19,7 @@ inputs:
     required: true
     default: '1'
   extra-repositories:
-    https://cloud.r-project.org
+    'https://cloud.r-project.org'
 
 runs:
   using: 'composite'
