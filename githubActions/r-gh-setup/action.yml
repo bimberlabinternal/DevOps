@@ -18,7 +18,7 @@ inputs:
     description: The version string for the cache
     required: true
     default: '1'
-  extra-repositories: 'https://cloud.r-project.org'
+  extra-repositories: https://cloud.r-project.org
 runs:
   using: 'composite'
   steps:
