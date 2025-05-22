@@ -59,6 +59,7 @@ runs:
         version: ${{ inputs.cache_version || 1 }}
 
     # TODO: eventually drop numpy<2.0.0
+    # TODO: patsy added due to scanpy / python2 issue. Should eventually drop
     - name: Prepare python packages
       run: |
         echo -e "wheel" > requirements.txt
@@ -66,6 +67,7 @@ runs:
         echo -e "numpy<2.0.0" >> requirements.txt
         echo -e "zarr<3.0.0" >> requirements.txt
         echo -e "numcodecs==0.15.1" >> requirements.txt
+        echo -e "patsy>1.0.0" >> requirements.txt
         echo -e "scanpy" >> requirements.txt
         echo -e "umap-learn" >> requirements.txt
         echo -e "phate" >> requirements.txt
