@@ -1,0 +1,53 @@
+import org.labkey.gradle.plugin.Distribution
+import org.labkey.gradle.task.ModuleDistribution
+import org.labkey.gradle.util.BuildUtils
+
+plugins {
+    id 'org.labkey.build.distribution'
+}
+
+// Base:
+BuildUtils.addModuleDistributionDependencies(project, [BuildUtils.getApiProjectPath(project.gradle),
+                                                       BuildUtils.getPlatformModuleProjectPath(project.gradle, "audit"),
+                                                       BuildUtils.getPlatformModuleProjectPath(project.gradle, "core"),
+                                                       BuildUtils.getPlatformModuleProjectPath(project.gradle, "experiment"),
+                                                       BuildUtils.getPlatformModuleProjectPath(project.gradle, "filecontent"),
+                                                       BuildUtils.getPlatformModuleProjectPath(project.gradle, "pipeline"),
+                                                       BuildUtils.getPlatformModuleProjectPath(project.gradle, "query")])
+
+
+// Community:
+BuildUtils.addModuleDistributionDependencies(project, [
+        BuildUtils.getPlatformModuleProjectPath(project.gradle, "announcements"),
+        BuildUtils.getPlatformModuleProjectPath(project.gradle, "assay"),
+        BuildUtils.getPlatformModuleProjectPath(project.gradle, "issues"),
+        BuildUtils.getPlatformModuleProjectPath(project.gradle, "list"),
+        BuildUtils.getPlatformModuleProjectPath(project.gradle, "search"),
+        BuildUtils.getPlatformModuleProjectPath(project.gradle, "study"),
+        BuildUtils.getPlatformModuleProjectPath(project.gradle, "survey"),
+        BuildUtils.getPlatformModuleProjectPath(project.gradle, "visualization"),
+        BuildUtils.getPlatformModuleProjectPath(project.gradle, "wiki")])
+
+// DISCVR:
+BuildUtils.addModuleDistributionDependencies(project, [":server:modules:LabDevKitModules:laboratory",
+                                                       ":server:modules:LabDevKitModules:LDK",
+                                                       ":server:modules:DiscvrLabKeyModules:discvrcore",
+                                                       ":server:modules:DiscvrLabKeyModules:SequenceAnalysis",
+                                                       ":server:modules:DiscvrLabKeyModules:singlecell",
+                                                       ":server:modules:DiscvrLabKeyModules:jbrowse",
+                                                       ":server:modules:DiscvrLabKeyModules:blast",
+                                                       ":server:modules:DiscvrLabKeyModules:cluster",
+                                                       ":server:modules:DiscvrLabKeyModules:OpenLdapSync"])
+
+
+if (project.findProject(":server:modules:DiscvrLabKeyModules:Studies"))
+{
+  BuildUtils.addModuleDistributionDependencies(project, [":server:modules:DiscvrLabKeyModules:Studies"])
+}
+
+if (project.findProject(":server:modules:DiscvrLabKeyModules:QueryExtensions"))
+{
+    BuildUtils.addModuleDistributionDependencies(project, [":server:modules:DiscvrLabKeyModules:QueryExtensions"])
+}
+
+project.tasks.register("distribution", ModuleDistribution)
