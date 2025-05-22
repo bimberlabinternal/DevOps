@@ -159,9 +159,9 @@ cloneGit Labkey platform $LK_BRANCH
 
 # Labkey/distributions
 if [ $GENERATE_DIST == 1 ];then
-	mkdir -p ${SERVER_ROOT}${BASE}distributions/discvr
-	wget -O ${SERVER_ROOT}${BASE}distributions/discvr/build.gradle https://raw.githubusercontent.com/bimberlabinternal/DevOps/refs/heads/master/githubActions/discvr-build/distributions/discvr/build.gradle
-	wget -O ${SERVER_ROOT}${BASE}distributions/discvr/gradle.properties https://raw.githubusercontent.com/bimberlabinternal/DevOps/refs/heads/master/githubActions/discvr-build/distributions/discvr/gradle.properties
+	mkdir -p ${SERVER_ROOT}/distributions/discvr
+	wget -O ${SERVER_ROOT}/distributions/discvr/build.gradle https://raw.githubusercontent.com/bimberlabinternal/DevOps/refs/heads/master/githubActions/discvr-build/distributions/discvr/build.gradle
+	wget -O ${SERVER_ROOT}/distributions/discvr/gradle.properties https://raw.githubusercontent.com/bimberlabinternal/DevOps/refs/heads/master/githubActions/discvr-build/distributions/discvr/gradle.properties
 fi
 
 # BimberLab/DiscvrLabKeyModules
