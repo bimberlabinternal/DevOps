@@ -64,7 +64,6 @@ runs:
       run: |
         echo -e "wheel" > requirements.txt
         echo -e "setuptools" >> requirements.txt
-        echo -e "numpy<2.0.0" >> requirements.txt
         echo -e "zarr<3.0.0" >> requirements.txt
         echo -e "numcodecs==0.15.1" >> requirements.txt
         echo -e "patsy>1.0.0" >> requirements.txt
