@@ -58,8 +58,10 @@ runs:
           libgdal-dev
         version: ${{ inputs.cache_version || 1 }}
 
-    # TODO: eventually drop numpy<2.0.0
     # TODO: patsy added due to scanpy / python2 issue. Should eventually drop
+    # TODO: anndata-compat 0.11.4 does not support zarr>3:https://github.com/scverse/anndata/blob/0.11.4/src/anndata/compat/__init__.py
+    # TODO: numcodecs related to zarr<3: https://github.com/zarr-developers/zarr-python/issues/2963
+    # NOTE: pandas>=2.2.3 used to force compatibility with numpy>2
     - name: Prepare python packages
       run: |
         echo -e "wheel" > requirements.txt
@@ -67,6 +69,7 @@ runs:
         echo -e "zarr<3.0.0" >> requirements.txt
         echo -e "numcodecs==0.15.1" >> requirements.txt
         echo -e "patsy>1.0.0" >> requirements.txt
+        echo -e "pandas>=2.2.3" >> requirements.txt
         echo -e "scanpy" >> requirements.txt
         echo -e "umap-learn" >> requirements.txt
         echo -e "phate" >> requirements.txt
