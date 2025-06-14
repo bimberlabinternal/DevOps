@@ -28,7 +28,7 @@
 	<bean id="arcSSHProperties" class="org.labkey.cluster.pipeline.SlurmExecutionEngineConfig">
 		<property name="location" value="arc" />
 		<property name="submitCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/sbatch -A ${clusterUser} '${submitScript}'"/>
-		<property name="statusCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/squeue --all -u labkey_submit -O JobId,State,Reason,NodeList,ElapsedRaw%11,AllocTRES%80"/>
+		<property name="statusCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/squeue --all -u labkey_submit -O JobId,State,Reason,NodeList"/>
 		<property name="removeCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/scancel ${clusterId}"/>
 		<property name="historyCommand" value="ssh -q labkey_submit@arc.ohsu.edu /usr/bin/sacct --allusers --jobs=${clusterId} -o JobId,State,NodeList,MaxRSS,ReqMem,ElapsedRaw%11,AllocTRES%80"/>
 
