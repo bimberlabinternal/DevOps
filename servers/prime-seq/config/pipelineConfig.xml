@@ -36,7 +36,7 @@
 		<property name="remoteExecutable" value="/home/exacloud/gscratch/prime-seq/src_arc/javaWrapper.sh" />
 
 		<property name="requestMemory" value="36" />
-		<property name="requestCpus" value="8" />
+		<property name="requestCpus" value="1" />
 		<property name="javaHome" value="/home/exacloud/gscratch/java/current"/>
 			<property name="javaOpts">
 			<list>
