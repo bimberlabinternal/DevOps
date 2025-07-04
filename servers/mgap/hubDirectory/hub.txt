@@ -1,0 +1,6 @@
+hub mGAP_Rhesus_Macaque
+shortLabel mGAP Rhesus Macaque Variants
+longLabel Rhesus macaque reference SNP and short indels from the Macaque Genotype and Phenotype Resource (mGAP)
+genomesFile genomes.txt
+email  mgap@ohsu.edu
+descriptionUrl mgapHub.html

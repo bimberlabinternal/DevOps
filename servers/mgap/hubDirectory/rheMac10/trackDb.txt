@@ -1,0 +1,7 @@
+track vcf1
+bigDataUrl https://mgapdownload.ohsu.edu/latest/mGAP.Rhesus_macaque.vcf.gz
+#Note: there is a corresponding fileName.vcf.gz.tbi in the same above directory
+shortLabel mGAP VCF
+longLabel This is the VCF from mgap.ohsu.edu containing the SNPs and short indels for 4115 individual Rhesus Macaques
+type vcfTabix
+visibility dense

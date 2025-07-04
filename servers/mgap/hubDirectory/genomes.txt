@@ -1,0 +1,2 @@
+genome rheMac10
+trackDb rheMac10/trackDb.txt
