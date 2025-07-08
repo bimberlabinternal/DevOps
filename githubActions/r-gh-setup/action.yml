@@ -41,6 +41,7 @@ runs:
     - name: Install apt packages
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
+        if-empty-packages: 'warn'
         packages: |
           libharfbuzz-dev 
           libfribidi-dev 
