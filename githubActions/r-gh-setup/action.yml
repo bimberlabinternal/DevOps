@@ -59,17 +59,15 @@ runs:
           libgdal-dev
         version: ${{ inputs.cache_version || 1 }}
 
-    # TODO: patsy added due to scanpy / python2 issue. Should eventually drop
-    # TODO: anndata-compat 0.11.4 does not support zarr>3:https://github.com/scverse/anndata/blob/0.11.4/src/anndata/compat/__init__.py
-    # TODO: numcodecs related to zarr<3: https://github.com/zarr-developers/zarr-python/issues/2963
+    # NOTE: patsy added due to scanpy / python2 issue. Should eventually drop
     # NOTE: pandas>=2.2.3 used to force compatibility with numpy>2
+    # NOTE: anndata>=0.12.0 used to force compatibility with zarr>=3
     - name: Prepare python packages
       run: |
         echo -e "wheel" > requirements.txt
         echo -e "setuptools" >> requirements.txt
-        echo -e "zarr<3.0.0" >> requirements.txt
-        echo -e "numcodecs==0.15.1" >> requirements.txt
         echo -e "patsy>1.0.0" >> requirements.txt
+        echo -e "anndata>=0.12.0" >> requirements.txt
         echo -e "pandas>=2.2.3" >> requirements.txt
         echo -e "scanpy" >> requirements.txt
         echo -e "umap-learn" >> requirements.txt
@@ -109,8 +107,6 @@ runs:
         install.packages('remotes')
         # NOTE: fgsea added to avoid BH issue: https://github.com/ctlab/fgsea/issues/165
         remotes::install_github("ctlab/fgsea")
-        # NOTE: To avoid pthread_create() error. See: https://github.com/bmbolstad/preprocessCore/issues/1 and https://github.com/bmbolstad/preprocessCore/issues/12
-        remotes::install_github("bmbolstad/preprocessCore", dependencies = T, upgrade = "always", force = TRUE, configure.args = "--disable-threading")
       shell: Rscript {0}
 
     - uses: r-lib/actions/setup-r-dependencies@v2
