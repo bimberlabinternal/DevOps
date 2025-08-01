@@ -4,6 +4,7 @@ $JAVA_HOME/bin/java \
 	-XX:+HeapDumpOnOutOfMemoryError \
 	-XX:HeapDumpPath=/home/groups/primeSeqTomcatTemp \
 	-Djava.io.tmpdir=/home/groups/primeSeqTomcatTemp \
+	-Dsamjdk.optimistic_vcf_4_4=true \
 	-DsequencePipelineEnabled=true \
 	$JAVA_FLAGS_JAR_OPS \
 	$JAVA_REFLECTION_JAR_OPS \
