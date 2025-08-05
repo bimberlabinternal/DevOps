@@ -75,7 +75,7 @@ isGzOrZip() {
 #first download
 GZ=Temp-${ARTIFACT}-${DATE}-discvr.tar.gz
 rm -Rf $GZ
-wget --no-check-certificate -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/prime_seq/${ARTIFACT}-{build.number}-prime_seq.tar.gz
+wget --no-check-certificate -q -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${TC_PROJECT}/.lastSuccessful/prime_seq/${ARTIFACT}-{build.number}-prime_seq.tar.gz
 isGzOrZip $GZ
 
 #extract, find name
