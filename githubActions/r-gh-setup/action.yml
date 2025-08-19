@@ -39,7 +39,7 @@ runs:
     # libgdal-dev added for ggpattern / sf / gdal-config missing error
     # NOTE: added numpy<2 to side-step a numpy version issue. This should be removed eventually. See: https://github.com/numpy/numpy/issues/26710
     - name: Install apt packages
-      uses: awalsh128/cache-apt-pkgs-action
+      uses: awalsh128/cache-apt-pkgs-action@latest
       with:
         packages: |
           libharfbuzz-dev 
