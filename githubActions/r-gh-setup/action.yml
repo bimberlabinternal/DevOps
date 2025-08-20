@@ -57,6 +57,7 @@ runs:
           libpoppler-cpp-dev 
           libudunits2-dev
           libgdal-dev
+          unzip
         version: ${{ inputs.cache_version || 1 }}
 
 
