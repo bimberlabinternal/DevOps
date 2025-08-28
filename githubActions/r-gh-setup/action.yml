@@ -9,11 +9,11 @@ inputs:
   r_version:
     description: The R version to use
     required: true
-    default: '4.4'
+    default: '4.5'
   bioc_version:
     description: The bioconductor version
     required: true
-    default: '3.20'
+    default: '3.21'
   cache_version:
     description: The version string for the cache
     required: true
