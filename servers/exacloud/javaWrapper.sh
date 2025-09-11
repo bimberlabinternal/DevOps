@@ -28,9 +28,12 @@ export BCFTOOLS_PLUGINS=/home/exacloud/gscratch/prime-seq/bin_arc/bcftools_plugi
 # Added for GATK tools:
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
+ORIG_WORK_DIR=$(pwd)
+
 finish() {
 	EXIT_CODE=$?
 	echo "Finalizing job, java exit code: "$EXIT_CODE
+	cd $ORIG_WORK_DIR
 	
 	if [ $EXIT_CODE != 0 ];then
 		echo "ERROR RUNNING JOB"
@@ -40,9 +43,9 @@ finish() {
 		rm -Rf $TEMP_DIR
 	fi
 	
-	if [ ! -z "${LOCAL_TEMP_LK-}" ];then
-		if [ -e $LOCAL_TEMP_LK ];then
-			rm -Rf $LOCAL_TEMP_LK
+	if [ ! -z "${LK_SOFTWARE_DIR-}" ];then
+		if [ -e $LK_SOFTWARE_DIR ];then
+			rm -Rf $LK_SOFTWARE_DIR
 		fi
 	fi
 	
@@ -90,8 +93,6 @@ $JAVA -version
 GZ_PREFIX=LabKey${MAJOR}.${MINOR_FULL}
 TOOL_DIR=/home/exacloud/gscratch/prime-seq/bin_arc/
 
-ORIG_WORK_DIR=$(pwd)
-
 #Allow this to be overridden in environment
 if [[ ! -v WORK_BASEDIR ]];then
 	WORK_BASEDIR=/home/exacloud/gscratch/prime-seq/workDir/
@@ -113,17 +114,17 @@ JOB_FILE="${JOB_FILE//file:/}"
 BASENAME=`basename "$JOB_FILE" '.job.json.txt'`
 
 #make new temp directory, specifically for the job's output.  i think deleting the general temp dir while this script and LK are running might be an issue
-TEMP_DIR=`mktemp -d --tmpdir=$TEMP_BASEDIR --suffix=${BASENAME}`
+TEMP_DIR=`mktemp -d --tmpdir=$TEMP_BASEDIR --suffix=${BASENAME}.${SLURM_JOBID}`
 echo $TEMP_DIR
 
 WORK_DIR=$WORK_BASEDIR
 echo $WORK_DIR
 
-LOCAL_TEMP_LK=`mktemp -d --tmpdir=/tmp --suffix=$BASENAME`
-echo $LOCAL_TEMP_LK
+LK_SOFTWARE_DIR=`mktemp -d --tmpdir=$TEMP_BASEDIR --suffix=${BASENAME}.${SLURM_JOBID}`
+echo $LK_SOFTWARE_DIR
 
 mkdir -p $TEMP_DIR
-mkdir -p $LOCAL_TEMP_LK
+mkdir -p $LK_SOFTWARE_DIR
 
 export TEMP_DIR=$TEMP_DIR
 export TMPDIR=$TEMP_DIR
@@ -131,7 +132,7 @@ export TMP=$TEMP_DIR
 export TEMP=$TEMP_DIR
 
 #this should let us verify the above worked
-LABKEY_HOME_LOCAL=${LOCAL_TEMP_LK}/labkey
+LABKEY_HOME_LOCAL=${LK_SOFTWARE_DIR}/labkey
 if [ -e $LABKEY_HOME_LOCAL ];then
 	rm -Rf $LABKEY_HOME_LOCAL
 fi
