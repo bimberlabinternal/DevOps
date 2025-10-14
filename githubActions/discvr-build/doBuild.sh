@@ -182,6 +182,9 @@ cloneGit Labkey ehrModules $LK_BRANCH
 # Labkey/onprcEHRModules. Only retain GeneticsCore
 cloneGit Labkey onprcEHRModules $LK_BRANCH
 
+# Labkey/testAutomation. Only retain GeneticsCore
+cloneGit Labkey testAutomation $LK_BRANCH /server/
+
 cd $SERVER_ROOT
 echo 'Git clone complete'
 date +%F" "%T
@@ -200,7 +203,9 @@ mkdir -p $DIST_DIR;
 cd $SERVER_ROOT
 
 # This is required to exist as of gradle 9:
-mkdir -p ./server/testAutomation/distributions
+if [ ! -e ./server/testAutomation/distributions ];then
+  mkdir -p ./server/testAutomation/distributions
+fi
 
 echo 'Starting build'
 date +%F" "%T
