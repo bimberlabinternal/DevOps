@@ -94,6 +94,11 @@ runs:
         cat ~/.Rprofile
       shell: bash
 
+    # This was added to avoid pak timeouts, which manifest as a 'sudo command failed' error: https://github.com/r-lib/pak/issues/755#issuecomment-2728590490
+    - name: Set pak options
+      shell: bash
+      run: echo 'options(pkg.sysreqs_db_update_timeout = as.difftime(59, units = "secs"))' >> ~/.Rprofile
+
     # Note: the environment variable R_BIOC_VERSION is set to force remotes::install_bioc to follow the proper version
     - name: Setup Bioconductor
       run: |
