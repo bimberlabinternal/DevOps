@@ -30,6 +30,11 @@ runs:
 
     - uses: r-lib/actions/setup-pandoc@v2
 
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        cache: 'pip'
+
     # libharfbuzz-dev libfribidi-dev are added to fix textshaping install error
     # libhdf5-dev added for cellmembrane/SeuratDisk
     # libglpk-dev added due to igraph / bluster /scran error
@@ -80,10 +85,6 @@ runs:
         echo -e "tcrdist3" >> requirements.txt
         echo -e "demuxEM" >> requirements.txt
       shell: bash
-
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
 
     - run: |
         python3 -m pip install --user -r requirements.txt
