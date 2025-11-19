@@ -30,6 +30,27 @@ runs:
 
     - uses: r-lib/actions/setup-pandoc@v2
 
+    # NOTE: patsy added due to scanpy / python2 issue. Should eventually drop
+    # NOTE: pandas>=2.2.3 used to force compatibility with numpy>2
+    # NOTE: anndata>=0.12.0 used to force compatibility with zarr>=3
+    - name: Prepare python packages
+      run: |
+        echo -e "wheel" > requirements.txt
+        echo -e "setuptools" >> requirements.txt
+        echo -e "patsy>1.0.0" >> requirements.txt
+        echo -e "anndata>=0.12.0" >> requirements.txt
+        echo -e "pandas>=2.2.3" >> requirements.txt
+        echo -e "scanpy" >> requirements.txt
+        echo -e "umap-learn" >> requirements.txt
+        echo -e "phate" >> requirements.txt
+        echo -e "sctour" >> requirements.txt
+        echo -e "celltypist" >> requirements.txt
+        echo -e "leidenalg" >> requirements.txt
+        echo -e "scikit-misc" >> requirements.txt
+        echo -e "tcrdist3" >> requirements.txt
+        echo -e "demuxEM" >> requirements.txt
+      shell: bash
+
     - uses: actions/setup-python@v5
       with:
         python-version: '3.12'
@@ -63,28 +84,6 @@ runs:
           libudunits2-dev
           libgdal-dev
         version: ${{ inputs.cache_version || 1 }}
-
-
-    # NOTE: patsy added due to scanpy / python2 issue. Should eventually drop
-    # NOTE: pandas>=2.2.3 used to force compatibility with numpy>2
-    # NOTE: anndata>=0.12.0 used to force compatibility with zarr>=3
-    - name: Prepare python packages
-      run: |
-        echo -e "wheel" > requirements.txt
-        echo -e "setuptools" >> requirements.txt
-        echo -e "patsy>1.0.0" >> requirements.txt
-        echo -e "anndata>=0.12.0" >> requirements.txt
-        echo -e "pandas>=2.2.3" >> requirements.txt
-        echo -e "scanpy" >> requirements.txt
-        echo -e "umap-learn" >> requirements.txt
-        echo -e "phate" >> requirements.txt
-        echo -e "sctour" >> requirements.txt
-        echo -e "celltypist" >> requirements.txt
-        echo -e "leidenalg" >> requirements.txt
-        echo -e "scikit-misc" >> requirements.txt
-        echo -e "tcrdist3" >> requirements.txt
-        echo -e "demuxEM" >> requirements.txt
-      shell: bash
 
     - run: |
         python3 -m pip install --user -r requirements.txt
