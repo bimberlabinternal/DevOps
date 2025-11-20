@@ -58,6 +58,7 @@ runs:
         echo -e "scikit-misc" >> requirements.txt
         echo -e "tcrdist3" >> requirements.txt
         echo -e "demuxEM" >> requirements.txt
+        echo -e "rpy2" >> requirements.txt
       shell: bash
 
     - uses: actions/setup-python@v5
