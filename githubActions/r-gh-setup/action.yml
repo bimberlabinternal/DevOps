@@ -35,6 +35,7 @@ runs:
         sudo apt-get remove --purge tex-common texlive-* -y || true
         sudo rm -rf /etc/texmf/updmap.d/*.dpkg-dist /etc/texmf/updmap.d/*.ucf-dist || true
         sudo apt-get update
+      shell: bash
 
     - uses: r-lib/actions/setup-pandoc@v2
 
