@@ -28,6 +28,14 @@ runs:
         use-public-rspm: true
         extra-repositories: 'https://cloud.r-project.org'
 
+    - name: Fix broken installs
+      run: |
+        sudo dpkg --configure -a || true
+        sudo find /etc/texmf/updmap.d -name '*.dpkg-dist' -delete || true
+        sudo apt-get remove --purge tex-common texlive-* -y || true
+        sudo rm -rf /etc/texmf/updmap.d/*.dpkg-dist /etc/texmf/updmap.d/*.ucf-dist || true
+        sudo apt-get update
+
     - uses: r-lib/actions/setup-pandoc@v2
 
     # NOTE: patsy added due to scanpy / python2 issue. Should eventually drop
@@ -80,6 +88,7 @@ runs:
           texlive-fonts-recommended 
           texlive-fonts-extra 
           texlive-latex-extra
+          texlive-latex-recommended
           libpoppler-cpp-dev 
           libudunits2-dev
           libgdal-dev
