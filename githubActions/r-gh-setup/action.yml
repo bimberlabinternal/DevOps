@@ -37,8 +37,6 @@ runs:
         sudo apt-get update
       shell: bash
 
-    - uses: r-lib/actions/setup-pandoc@v2
-
     # NOTE: patsy added due to scanpy / python2 issue. Should eventually drop
     # NOTE: pandas>=2.2.3 used to force compatibility with numpy>2
     # NOTE: anndata>=0.12.0 used to force compatibility with zarr>=3
@@ -90,7 +88,7 @@ runs:
           texlive-fonts-recommended 
           texlive-fonts-extra 
           texlive-latex-extra
-          texlive-latex-recommended
+          texlive-latex-recommended          
           libpoppler-cpp-dev 
           libudunits2-dev
           libgdal-dev
@@ -112,6 +110,8 @@ runs:
         cat(append = TRUE, file = "~/.Rprofile", "options(repos = BiocManager::repositories());")
         cat(append = TRUE, file = "~/.Rprofile", "Sys.setenv(R_BIOC_VERSION=as.character(BiocManager::version()));");
       shell: Rscript {0}
+
+    - uses: r-lib/actions/setup-pandoc@v2
 
     - name: Perform custom installs
       run: |
