@@ -81,7 +81,7 @@ runs:
 
     - name: Fix updmap
       run: |
-        sudo updmap-sys --syncwithtrees
+        sudo updmap-sys --syncwithtrees || echo 'updmap-sys not found'
       shell: bash
 
     - uses: actions/setup-python@v5
