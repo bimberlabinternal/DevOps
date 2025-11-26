@@ -26,9 +26,9 @@ runs:
       run: |
         sudo apt-get update
         sudo apt-get remove tex-common --purge
-        sudo apt-get install --reinstall python3-dev tex-common        
-        sudo updmap-sys --syncwithtrees
+        sudo apt-get install --reinstall python3-dev texlive-base tex-common        
         ls -lah /etc/texmf
+        sudo updmap-sys --syncwithtrees
         cat /etc/texmf/updmap.d
 
       shell: bash
