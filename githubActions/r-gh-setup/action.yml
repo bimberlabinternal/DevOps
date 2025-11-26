@@ -22,12 +22,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: r-lib/actions/setup-r@v2
-      with:
-        r-version: ${{ inputs.r_version }}
-        use-public-rspm: true
-        extra-repositories: 'https://cloud.r-project.org'
-
     - name: Fix broken installs
       run: |
         sudo dpkg --configure -a || true
@@ -63,6 +57,12 @@ runs:
       with:
         python-version: '3.12'
         cache: 'pip'
+
+    - uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: ${{ inputs.r_version }}
+        use-public-rspm: true
+        extra-repositories: 'https://cloud.r-project.org'
 
     # libharfbuzz-dev libfribidi-dev are added to fix textshaping install error
     # libhdf5-dev added for cellmembrane/SeuratDisk
