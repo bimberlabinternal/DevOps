@@ -26,7 +26,11 @@ runs:
       run: |
         sudo apt-get update
         sudo apt-get remove tex-common --purge
-        sudo apt-get install --reinstall python3-dev tex-common
+        sudo apt-get install --reinstall python3-dev tex-common        
+        sudo updmap-sys --syncwithtrees
+        ls -lah /etc/texmf
+        cat /etc/texmf/updmap.d
+
       shell: bash
 
     # NOTE: patsy added due to scanpy / python2 issue. Should eventually drop
