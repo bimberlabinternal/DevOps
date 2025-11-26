@@ -25,9 +25,8 @@ runs:
     - name: Debug apt/python
       run: |
         sudo apt-get update
-        sudo apt-get install --reinstall python3-dev
-        python3 --version
-        dpkg -s python3
+        sudo apt-get remove tex-common --purge
+        sudo apt-get install --reinstall python3-dev tex-common
       shell: bash
 
     # NOTE: patsy added due to scanpy / python2 issue. Should eventually drop
