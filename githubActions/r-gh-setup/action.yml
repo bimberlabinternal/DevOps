@@ -22,16 +22,12 @@ inputs:
 runs:
   using: 'composite'
   steps:
-#    - name: Debug apt/python
-#      run: |
-#        sudo apt-get update
-#        sudo apt-get remove tex-common --purge
-#        sudo apt-get install --reinstall python3-dev texlive-base tex-common
-#        ls -lah /etc/texmf
-#        sudo updmap-sys --syncwithtrees
-#        cat /etc/texmf/updmap.d
-#
-#      shell: bash
+    - name: Force clean install of apt/python
+      run: |
+        sudo apt-get update
+        sudo apt-get install --reinstall python3-dev
+
+      shell: bash
 
     # NOTE: patsy added due to scanpy / python2 issue. Should eventually drop
     # NOTE: pandas>=2.2.3 used to force compatibility with numpy>2
@@ -62,7 +58,6 @@ runs:
     # libpoppler-cpp-dev added for pdftools, which is part of cellhashR
     # libudunits2-dev added due to units / ggpattern error
     # libgdal-dev added for ggpattern / sf / gdal-config missing error
-    # NOTE: restore @latest action when this is resolved and in a release (probably v1.5.4): https://github.com/awalsh128/cache-apt-pkgs-action/pull/160
     - name: Install apt packages
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
