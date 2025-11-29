@@ -5,7 +5,7 @@ set -e
 #mGAP:
 
 MAJOR=25
-MINOR_FULL="7"
+MINOR_FULL="11"
 MINOR_SHORT=$MINOR_FULL
 
 LABKEY_HOME=/usr/local/labkey
