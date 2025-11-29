@@ -72,6 +72,7 @@ runs:
           libpoppler-cpp-dev 
           libudunits2-dev
           libgdal-dev
+        empty_packages_behavior: 'warn'
         version: ${{ inputs.cache_version || 1 }}
 
     - name: Fix updmap
