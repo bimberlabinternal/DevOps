@@ -47,7 +47,7 @@ runs:
         echo -e "celltypist" >> requirements.txt
         echo -e "leidenalg" >> requirements.txt
         echo -e "scikit-misc" >> requirements.txt
-        echo -e "scikit-learn<=1.8.0" >> requirements.txt
+        echo -e "scikit-learn<1.8.0" >> requirements.txt
         echo -e "tcrdist3" >> requirements.txt
         echo -e "demuxEM" >> requirements.txt
         echo -e "rpy2" >> requirements.txt
