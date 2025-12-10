@@ -109,12 +109,13 @@ runs:
 
     - uses: r-lib/actions/setup-pandoc@v2
 
-#    - name: Perform custom installs
-#      run: |
-#        install.packages('remotes')
-#        # NOTE: fgsea added to avoid BH issue: https://github.com/ctlab/fgsea/issues/165
-#        remotes::install_github("ctlab/fgsea")
-#      shell: Rscript {0}
+    - name: Perform custom installs
+      # NOTE: this is added to try to address the "Error in `req_perform1(req, req_prep, path = path, handle = handle, resend_count = n)`: unused arguments (req_prep, resend_count = n)"
+      # It can probably be removed promptly, as httr2 1.2.2 binaries are on BioConductor
+      run: |
+        install.packages('httr2', type = 'source')
+        install.packages('gypsum', type = 'source')
+      shell: Rscript {0}
 
     - uses: r-lib/actions/setup-r-dependencies@v2
       with:
