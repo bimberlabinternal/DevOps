@@ -32,6 +32,7 @@ runs:
     # NOTE: patsy added due to scanpy / python2 issue. Should eventually drop
     # NOTE: pandas>=2.2.3 used to force compatibility with numpy>2
     # NOTE: anndata>=0.12.0 used to force compatibility with zarr>=3
+    # NOTE: scikit-learn<=1.8.0 used due to incompatibility with celltypist
     - name: Prepare python packages
       run: |
         echo -e "wheel" > requirements.txt
@@ -46,6 +47,7 @@ runs:
         echo -e "celltypist" >> requirements.txt
         echo -e "leidenalg" >> requirements.txt
         echo -e "scikit-misc" >> requirements.txt
+        echo -e "scikit-learn<=1.8.0" >> requirements.txt
         echo -e "tcrdist3" >> requirements.txt
         echo -e "demuxEM" >> requirements.txt
         echo -e "rpy2" >> requirements.txt
