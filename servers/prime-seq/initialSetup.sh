@@ -4,7 +4,7 @@ set -e
 set -x
 
 # Yum:
-yum install -y monit fontconfig gcc gcc-c++ ncurses-devel zlib-devel xz-devel net-tools wget python-pip skopeo
+yum install -y monit fontconfig gcc gcc-c++ ncurses-devel zlib-devel xz-devel net-tools wget python-pip skopeo graphviz
 pip install Stomp
 
 # Monit
