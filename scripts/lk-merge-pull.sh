@@ -50,6 +50,8 @@ echo "STAGING_BRANCH: $STAGING_BRANCH"
 echo "DESTINATION_BRANCH: $DESTINATION_BRANCH"
 echo "PR_REVIEWERS: $PR_REVIEWERS"
 
+git config --global http.sslVerify "false"
+
 git clone -b $SOURCE_BRANCH https://$GITHUB_TOKEN@github.com/${SOURCE_ORG}/${REPO}.git
 cd `basename "$REPO" .git`
 
