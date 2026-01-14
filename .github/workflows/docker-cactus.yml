@@ -43,7 +43,7 @@ jobs:
             "GH_PAT=${{ secrets.PAT }}"
           pull: true
           push: true
-          tags: ghcr.io/bimberlabinternal/cactus:latest
+          tags: ghcr.io/bimberlabinternal/cactus:v3.1.2
           labels: |
             ${{ steps.docker_meta.outputs.labels }}
             org.opencontainers.image.title=cactus
