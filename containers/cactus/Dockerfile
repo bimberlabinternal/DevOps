@@ -17,4 +17,5 @@ RUN cd / && \
     cd vg && \
     make mimalloc=on && \
     chmod +x /vg/bin/vg && \
-    cp /vg/bin/vg /home/cactus/bin/vg
+    cp /vg/bin/vg /home/cactus/bin/vg && \
+    echo "vm.overcommit_memory = 1" >> /etc/sysctl.conf
