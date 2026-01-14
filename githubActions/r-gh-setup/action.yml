@@ -51,6 +51,7 @@ runs:
         echo -e "tcrdist3" >> requirements.txt
         echo -e "demuxEM" >> requirements.txt
         echo -e "rpy2" >> requirements.txt
+        echo -e "importlib.metadata" >> requirements.txt
       shell: bash
 
     # libharfbuzz-dev libfribidi-dev are added to fix textshaping install error

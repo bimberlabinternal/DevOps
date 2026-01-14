@@ -1,11 +1,9 @@
-name: Build Docker for Pangolin
+name: Build Docker for Cactus
 on:
   workflow_dispatch:
-  schedule:
-    - cron:  "0 2 * * *"
 jobs:
   generate:
-    name: Build Pangolin Docker
+    name: Build cactus Docker
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -39,16 +37,16 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v6.10.0
         with:
-          file: ./containers/pangolin/Dockerfile
-          context: ./containers/pangolin
+          file: ./containers/cactus/Dockerfile
+          context: ./containers/cactus
           build-args: |
             "GH_PAT=${{ secrets.PAT }}"
           pull: true
           push: true
-          tags: ghcr.io/bimberlabinternal/pangolin:latest
+          tags: ghcr.io/bimberlabinternal/cactus:latest
           labels: |
             ${{ steps.docker_meta.outputs.labels }}
-            org.opencontainers.image.title=pangolin
-            org.opencontainers.image.description=This builds a container to run pangolin
+            org.opencontainers.image.title=cactus
+            org.opencontainers.image.description=This builds a container to run cactus, without jemalloc
 
 

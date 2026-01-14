@@ -9,7 +9,7 @@ RUN echo "http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositorie
   apk --no-check-certificate update && \
   apk add --no-cache --no-check-certificate git openssh-client ca-certificates hub && \
   update-ca-certificates -f && \
-  echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+  echo "Host *" >> /etc/ssh/ssh_config
 
 ADD *.sh /
 RUN chmod +x *.sh 
