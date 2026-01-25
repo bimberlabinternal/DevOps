@@ -1,0 +1,52 @@
+name: Build Docker for CAT
+on:
+  workflow_dispatch:
+jobs:
+  generate:
+    name: Build CAT Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Docker meta
+        id: docker_meta
+        uses: docker/metadata-action@v5.6.1
+        with:
+          images: ghcr.io/bimberlabinternal/devops
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.2.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.7.1
+
+      - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v6.10.0
+        with:
+          file: ./containers/cat/Dockerfile
+          context: ./containers/cat
+          build-args: |
+            "GH_PAT=${{ secrets.PAT }}"
+          pull: true
+          push: true
+          tags: ghcr.io/bimberlabinternal/CAT
+          labels: |
+            ${{ steps.docker_meta.outputs.labels }}
+            org.opencontainers.image.title=CAT
+            org.opencontainers.image.description=This builds a container to run CAT, including dependencies
+
+
