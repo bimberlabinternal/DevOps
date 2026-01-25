@@ -61,13 +61,15 @@ RUN wget -q https://github.com/biod/sambamba/releases/download/v0.6.7/sambamba_v
 
 # WiggleTools
 RUN git clone https://github.com/dahlo/WiggleTools
-#RUN cd WiggleTools && make \
+#  && cd WiggleTools && make \
 #  && cp /WiggleTools/bin/* /bin/
 
-RUN conda create -y -n cat -c conda-forge -c bioconda -c defaults python=3.7  \
-    && source activate cat \
-    && python3 --version \
-    && python3 -m pip install -y pyfasta luigi seaborn pandas \
+RUN conda create -y -n cat python=3.7 \
+    && echo "conda activate cat" >> ~/.bashrc
+
+RUN python3 --version \
+    && conda install -c conda-forge -c bioconda -c defaults -y \
+      pyfasta luigi seaborn pandas \
       ete3 pysam numpy scipy bx-python bcbio-gff biopython parasail-python configobj sqlalchemy \
       samtools bamtools augustus exonerate wiggletools bedtools \
       ucsc-fatotwobit ucsc-gff3togenepred ucsc-genepredtobed ucsc-genepredtofakepsl ucsc-bamtopsl ucsc-transmappsltogenepred \
@@ -75,12 +77,12 @@ RUN conda create -y -n cat -c conda-forge -c bioconda -c defaults python=3.7  \
       ucsc-gtftogenepred ucsc-genepredtogtf ucsc-pslcdnafilter ucsc-psltobigpsl \
       ucsc-bedsort ucsc-bedtobigbed ucsc-fasize ucsc-wigtobigwig ucsc-hgloadchain
 
-RUN source activate cat \
+RUN conda init && conda activate cat \
     && python3 -m pip install git+https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit.git
 
 RUN python3 --version
 
-RUN source activate cat \
+RUN conda init && conda activate cat \
     python3 --version
 
 RUN mkdir -p /augustus \
