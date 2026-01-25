@@ -67,8 +67,7 @@ RUN git clone https://github.com/dahlo/WiggleTools
 RUN conda create -y -n cat python=3.7 \
     && echo "conda activate cat" >> ~/.bashrc
 
-RUN python3 --version \
-    && conda install -c conda-forge -c bioconda -c defaults -y \
+RUN conda install -n cat -c conda-forge -c bioconda -c defaults -y \
       pyfasta luigi seaborn pandas \
       ete3 pysam numpy scipy bx-python bcbio-gff biopython parasail-python configobj sqlalchemy \
       samtools bamtools augustus exonerate wiggletools bedtools \
@@ -78,7 +77,7 @@ RUN python3 --version \
       ucsc-bedsort ucsc-bedtobigbed ucsc-fasize ucsc-wigtobigwig ucsc-hgloadchain
 
 RUN conda activate cat \
-    && python3 -m pip install git+https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit.git
+    && conda install -n cat -y git+https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit.git
 
 RUN python3 --version
 
