@@ -4,32 +4,27 @@ ARG AUGUSTUS_COMMIT=36ae43d
 
 #RUN add-apt-repository -y ppa:deadsnakes/ppa
 RUN apt-get update \
-  && apt-get install -y libcurl4-openssl-dev
-
-RUN apt-get install -y libcurl4-gnutls-dev
-
-RUN apt-get install --fix-missing -y build-essential libssl-dev libncurses5-dev libcurl4-openssl-dev liblzma-dev libbz2-dev \
+  && apt-get install --fix-missing -y build-essential libssl-dev libncurses5-dev libcurl4-openssl-dev liblzma-dev libbz2-dev \
     libboost-all-dev sqlite3 libsqlite3-0 libsqlite3-dev libgsl0-dev lp-solve liblpsolve55-dev libbamtools-dev wget git \
-    wget bedtools bamtools samtools sqlite3 libgsl0-dev libcolamd2 libcurl4-openssl-dev exonerate \
+    wget bedtools bamtools samtools sqlite3 libgsl0-dev libcolamd2 libcurl4-openssl-dev exonerate augustus augustus-data augustus-doc \
     samtools bcftools libhdf5-dev libbigwig-dev \
   && apt-get install -y libhts-dev
 
-# missing packages: software-properties-common
-RUN apt install -y augustus augustus-data augustus-doc
-
 ## htslib
-RUN git clone --recursive https://github.com/samtools/htslib.git
-RUN cd htslib && make install
+RUN git clone --recursive https://github.com/samtools/htslib.git \
+  && cd htslib \
+  && make install
 
 ## bcftools
-RUN git clone https://github.com/samtools/bcftools.git
-RUN cd bcftools && make
+RUN git clone https://github.com/samtools/bcftools.git \
+  && cd bcftools \
+  && make
 
 ## samtools
-RUN git clone https://github.com/samtools/samtools
-RUN cd samtools \
-    && make \
-    && make install
+RUN git clone https://github.com/samtools/samtools \
+  && cd samtools \
+  && make \
+  && make install
 
 ## MOVE Directories INTO $HOME/tool
 RUN mkdir /root/tools \
@@ -69,13 +64,16 @@ RUN git clone https://github.com/dahlo/WiggleTools
 #RUN cd WiggleTools && make \
 #  && cp /WiggleTools/bin/* /bin/
 
-RUN conda create -y -n cat -c conda-forge -c bioconda -c defaults python=3.7 pyfasta luigi seaborn pandas \
-  ete3 pysam numpy scipy bx-python bcbio-gff biopython parasail-python configobj sqlalchemy \
-  samtools bamtools augustus exonerate wiggletools bedtools \
-  ucsc-fatotwobit ucsc-gff3togenepred ucsc-genepredtobed ucsc-genepredtofakepsl ucsc-bamtopsl ucsc-transmappsltogenepred \
-  ucsc-pslpostarget ucsc-axtchain ucsc-chainmergesort ucsc-pslmap ucsc-pslrecalcmatch ucsc-pslmappostchain \
-  ucsc-gtftogenepred ucsc-genepredtogtf ucsc-pslcdnafilter ucsc-psltobigpsl \
-  ucsc-bedsort ucsc-bedtobigbed ucsc-fasize ucsc-wigtobigwig ucsc-hgloadchain
+RUN conda create -y -n cat -c conda-forge -c bioconda -c defaults python=3.7  \
+    && source activate cat \
+    && python3 --version \
+    && python3 -m pip install -y pyfasta luigi seaborn pandas \
+      ete3 pysam numpy scipy bx-python bcbio-gff biopython parasail-python configobj sqlalchemy \
+      samtools bamtools augustus exonerate wiggletools bedtools \
+      ucsc-fatotwobit ucsc-gff3togenepred ucsc-genepredtobed ucsc-genepredtofakepsl ucsc-bamtopsl ucsc-transmappsltogenepred \
+      ucsc-pslpostarget ucsc-axtchain ucsc-chainmergesort ucsc-pslmap ucsc-pslrecalcmatch ucsc-pslmappostchain \
+      ucsc-gtftogenepred ucsc-genepredtogtf ucsc-pslcdnafilter ucsc-psltobigpsl \
+      ucsc-bedsort ucsc-bedtobigbed ucsc-fasize ucsc-wigtobigwig ucsc-hgloadchain
 
 RUN source activate cat \
     && python3 -m pip install git+https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit.git
@@ -83,7 +81,7 @@ RUN source activate cat \
 RUN python3 --version
 
 RUN source activate cat \
-    python3 --version \
+    python3 --version
 
 RUN mkdir -p /augustus \
     && git clone https://github.com/Gaius-Augustus/Augustus.git \
