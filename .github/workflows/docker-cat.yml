@@ -43,10 +43,10 @@ jobs:
             "GH_PAT=${{ secrets.PAT }}"
           pull: true
           push: true
-          tags: ghcr.io/bimberlabinternal/CAT
+          tags: ghcr.io/bimberlabinternal/cat
           labels: |
             ${{ steps.docker_meta.outputs.labels }}
-            org.opencontainers.image.title=CAT
+            org.opencontainers.image.title=cat
             org.opencontainers.image.description=This builds a container to run CAT, including dependencies
 
 
