@@ -77,12 +77,12 @@ RUN python3 --version \
       ucsc-gtftogenepred ucsc-genepredtogtf ucsc-pslcdnafilter ucsc-psltobigpsl \
       ucsc-bedsort ucsc-bedtobigbed ucsc-fasize ucsc-wigtobigwig ucsc-hgloadchain
 
-RUN conda init && conda activate cat \
+RUN conda activate cat \
     && python3 -m pip install git+https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit.git
 
 RUN python3 --version
 
-RUN conda init && conda activate cat \
+RUN conda activate cat \
     python3 --version
 
 RUN mkdir -p /augustus \
