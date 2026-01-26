@@ -79,7 +79,7 @@ RUN conda install -n cat -c conda-forge -c bioconda -c defaults -y \
       ucsc-bedsort ucsc-bedtobigbed ucsc-fasize ucsc-wigtobigwig ucsc-hgloadchain
 
 RUN conda activate cat \
-    && python3 -m pip install -y https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit.git
+    && python3 -m pip install git+https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit.git
 
 RUN python3 --version
 
