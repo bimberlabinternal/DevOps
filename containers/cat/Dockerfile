@@ -4,32 +4,27 @@ ARG AUGUSTUS_COMMIT=36ae43d
 
 #RUN add-apt-repository -y ppa:deadsnakes/ppa
 RUN apt-get update \
-  && apt-get install -y libcurl4-openssl-dev
-
-RUN apt-get install -y libcurl4-gnutls-dev
-
-RUN apt-get install --fix-missing -y build-essential libssl-dev libncurses5-dev libcurl4-openssl-dev liblzma-dev libbz2-dev \
+  && apt-get install --fix-missing -y build-essential libssl-dev libncurses5-dev libcurl4-openssl-dev liblzma-dev libbz2-dev \
     libboost-all-dev sqlite3 libsqlite3-0 libsqlite3-dev libgsl0-dev lp-solve liblpsolve55-dev libbamtools-dev wget git \
-    wget bedtools bamtools samtools sqlite3 libgsl0-dev libcolamd2 libcurl4-openssl-dev exonerate \
+    wget bedtools bamtools samtools sqlite3 libgsl0-dev libcolamd2 libcurl4-openssl-dev exonerate augustus augustus-data augustus-doc \
     samtools bcftools libhdf5-dev libbigwig-dev \
   && apt-get install -y libhts-dev
 
-# missing packages: software-properties-common
-RUN apt install -y augustus augustus-data augustus-doc
-
 ## htslib
-RUN git clone --recursive https://github.com/samtools/htslib.git
-RUN cd htslib && make install
+RUN git clone --recursive https://github.com/samtools/htslib.git \
+  && cd htslib \
+  && make install
 
 ## bcftools
-RUN git clone https://github.com/samtools/bcftools.git
-RUN cd bcftools && make
+RUN git clone https://github.com/samtools/bcftools.git \
+  && cd bcftools \
+  && make
 
 ## samtools
-RUN git clone https://github.com/samtools/samtools
-RUN cd samtools \
-    && make \
-    && make install
+RUN git clone https://github.com/samtools/samtools \
+  && cd samtools \
+  && make \
+  && make install
 
 ## MOVE Directories INTO $HOME/tool
 RUN mkdir /root/tools \
@@ -66,36 +61,47 @@ RUN wget -q https://github.com/biod/sambamba/releases/download/v0.6.7/sambamba_v
 
 # WiggleTools
 RUN git clone https://github.com/dahlo/WiggleTools
-#RUN cd WiggleTools && make \
+#  && cd WiggleTools && make \
 #  && cp /WiggleTools/bin/* /bin/
 
-RUN conda create -y -n cat -c conda-forge -c bioconda -c defaults python=3.7 pyfasta luigi seaborn pandas \
-  ete3 pysam numpy scipy bx-python bcbio-gff biopython parasail-python configobj sqlalchemy \
-  samtools bamtools augustus exonerate wiggletools bedtools \
-  ucsc-fatotwobit ucsc-gff3togenepred ucsc-genepredtobed ucsc-genepredtofakepsl ucsc-bamtopsl ucsc-transmappsltogenepred \
-  ucsc-pslpostarget ucsc-axtchain ucsc-chainmergesort ucsc-pslmap ucsc-pslrecalcmatch ucsc-pslmappostchain \
-  ucsc-gtftogenepred ucsc-genepredtogtf ucsc-pslcdnafilter ucsc-psltobigpsl \
-  ucsc-bedsort ucsc-bedtobigbed ucsc-fasize ucsc-wigtobigwig ucsc-hgloadchain
+RUN conda create -y -n cat python=3.7 \
+    && echo "conda activate cat" >> ~/.bashrc
 
-RUN source activate cat \
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN conda install -n cat -c conda-forge -c bioconda -c defaults -y \
+      pyfasta luigi seaborn pandas \
+      ete3 pysam numpy scipy bx-python bcbio-gff biopython parasail-python configobj sqlalchemy \
+      samtools bamtools augustus exonerate wiggletools bedtools \
+      ucsc-fatotwobit ucsc-gff3togenepred ucsc-genepredtobed ucsc-genepredtofakepsl ucsc-bamtopsl ucsc-transmappsltogenepred \
+      ucsc-pslpostarget ucsc-axtchain ucsc-chainmergesort ucsc-pslmap ucsc-pslrecalcmatch ucsc-pslmappostchain \
+      ucsc-gtftogenepred ucsc-genepredtogtf ucsc-pslcdnafilter ucsc-psltobigpsl \
+      ucsc-bedsort ucsc-bedtobigbed ucsc-fasize ucsc-wigtobigwig ucsc-hgloadchain
+
+RUN conda activate cat \
     && python3 -m pip install git+https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit.git
 
 RUN python3 --version
 
-RUN source activate cat \
-    python3 --version \
+RUN conda activate cat \
+    && python3 --version
 
 RUN mkdir -p /augustus \
     && git clone https://github.com/Gaius-Augustus/Augustus.git \
     && cp -r /Augustus/config/ /augustus/config/ \
-    && mv Augustus /root/Augustus
+    && mv Augustus /root/tools/Augustus
 
 ENV AUGUSTUS_CONFIG_PATH=/augustus/config/
 
 #COPY --from=builder /augustus/bin/* /bin/
 #COPY --from=builder /augustus/scripts/* /bin/
 
-RUN cd WiggleTools && make \
-  && cp /WiggleTools/bin/* /bin/
+RUN wget -O wiggletools.tar.gz https://github.com/Ensembl/WiggleTools/archive/c1daac89e3775bc8f96376fc1ed7f7e645ce168c.tar.gz \
+    && tar --strip-components=1 -xzf wiggletools.tar.gz \
+    && make LIBS='-lwiggletools -lBigWig -lcurl -lhts -lgsl  -lgslcblas -lz -lpthread -lm -llzma'
+
+
+#RUN cd WiggleTools && make \
+#  && cp /WiggleTools/bin/* /bin/
 
 SHELL ["conda", "run", "--no-capture-output", "-n", "cat", "/bin/bash", "-c"]
