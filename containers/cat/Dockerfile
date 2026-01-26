@@ -89,14 +89,19 @@ RUN conda activate cat \
 RUN mkdir -p /augustus \
     && git clone https://github.com/Gaius-Augustus/Augustus.git \
     && cp -r /Augustus/config/ /augustus/config/ \
-    && mv Augustus /root/Augustus
+    && mv Augustus /root/tools/Augustus
 
 ENV AUGUSTUS_CONFIG_PATH=/augustus/config/
 
 #COPY --from=builder /augustus/bin/* /bin/
 #COPY --from=builder /augustus/scripts/* /bin/
 
-RUN cd WiggleTools && make \
-  && cp /WiggleTools/bin/* /bin/
+RUN wget -O wiggletools.tar.gz https://github.com/Ensembl/WiggleTools/archive/c1daac89e3775bc8f96376fc1ed7f7e645ce168c.tar.gz \
+    && tar --strip-components=1 -xzf wiggletools.tar.gz \
+    && make LIBS='-lwiggletools -lBigWig -lcurl -lhts -lgsl  -lgslcblas -lz -lpthread -lm -llzma'
+
+
+#RUN cd WiggleTools && make \
+#  && cp /WiggleTools/bin/* /bin/
 
 SHELL ["conda", "run", "--no-capture-output", "-n", "cat", "/bin/bash", "-c"]
