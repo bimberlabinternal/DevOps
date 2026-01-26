@@ -67,6 +67,8 @@ RUN git clone https://github.com/dahlo/WiggleTools
 RUN conda create -y -n cat python=3.7 \
     && echo "conda activate cat" >> ~/.bashrc
 
+SHELL ["/bin/bash", "--login", "-c"]
+
 RUN conda install -n cat -c conda-forge -c bioconda -c defaults -y \
       pyfasta luigi seaborn pandas \
       ete3 pysam numpy scipy bx-python bcbio-gff biopython parasail-python configobj sqlalchemy \
@@ -77,12 +79,12 @@ RUN conda install -n cat -c conda-forge -c bioconda -c defaults -y \
       ucsc-bedsort ucsc-bedtobigbed ucsc-fasize ucsc-wigtobigwig ucsc-hgloadchain
 
 RUN conda activate cat \
-    && conda install -n cat -y git+https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit.git
+    && python3 -m pip install -y https://github.com/ComparativeGenomicsToolkit/Comparative-Annotation-Toolkit.git
 
 RUN python3 --version
 
 RUN conda activate cat \
-    python3 --version
+    && python3 --version
 
 RUN mkdir -p /augustus \
     && git clone https://github.com/Gaius-Augustus/Augustus.git \
