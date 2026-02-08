@@ -9,8 +9,16 @@ DONE_FILE=${FILE}.done
 SUBMISSION=$2
 
 ASCP=~/.aspera/connect/bin/ascp
-KEY_FILE=./aspera.openssh
-ASPERA_SCP_PASS=$KEY_FILE
+
+if [[ ! -n "$NCBI_ID" ]]; then
+	echo "Variable NCBI_ID is unset or empty"
+	exit 1
+fi
+
+if [[ ! -n "$KEY_FILE" ]]; then
+	echo "Variable KEY_FILE is unset or empty"
+	exit 1
+fi
 
 export PATH=~/.aspera/connect/bin/:$PATH
 echo 'Starting file: '$FILE
@@ -40,7 +48,7 @@ function retry {
 
 if [ ! -e $DONE_FILE ];then
 	#NOTE: -k0 can be used to force re-upload. k1 allows resume
-	retry $ASCP -i $KEY_FILE -QT -l300m -k0 -d $FILE subasp@upload.ncbi.nlm.nih.gov:uploads/bbimber@gmail.com_oceqPdPd/$SUBMISSION/
+	retry $ASCP -i $KEY_FILE -QT -l300m -k0 -d $FILE subasp@upload.ncbi.nlm.nih.gov:uploads/$NCBI_ID/$SUBMISSION/
 	touch $DONE_FILE
 else
 	echo 'Transfer already complete'
