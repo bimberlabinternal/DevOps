@@ -20,7 +20,7 @@ queryReadData <- function(readsetIds, folderPath = "/Labs/Bimber/") {
   readdata$fileid2_datafileurl <- gsub(x = readdata$fileid2_datafileurl, pattern = 'file://', replacement = '')
   
   readdata$targetname1 <- paste0(readdata$readset, '_', readdata$rowid, '_R1_001.fastq.gz')
-  readdata$targetname2 <- paste0(readdata$readset, '_', readdata$rowid, '_R2_001.fastq.gz')  
+  readdata$targetname2 <- ifelse(is.na(readdata$fileid2_datafileurl), yes = NA, no = paste0(readdata$readset, '_', readdata$rowid, '_R2_001.fastq.gz'))
   
   return(readdata)
 }
@@ -34,11 +34,24 @@ prepareReadFiles <- function(metadata, filePrefix,
   stagingDirName <- paste0('staging.', filePrefix)
   
   files <- queryReadData(metadata$datasetId, folderPath = folderPath)
-  files <- files %>% arrange(readset, targetname1) 
-  files <- files %>% group_by(readset) %>% mutate(TotalPairs = n(), PairNum = row_number())
+  files <- files %>% 
+    arrange(readset, targetname1)
 
-  allFiles <- data.frame(readset = unique(files$readset))
-  hasPaired <- FALSE
+  files <- files %>% 
+      group_by(readset) %>% 
+      mutate(
+        TotalPairs = n(), 
+        PairNum = row_number(),
+        IsPaired = sum(!is.na(targetname2))
+      )
+  
+  if (length(unique(files$IsPaired)) > 1) {
+    stop(paste0('One or more readsets has a mixture of paired and unpaired data'))
+  }
+
+  allFiles <- unique(files[c('readset', 'IsPaired')])
+  allFiles$library_layout <- ifelse(allFiles$IsPaired, yes = 'paired', no = 'single')
+  allFiles$IsPaired <- NULL
   j <- 0
   for (i in 1:max(files$TotalPairs)) {
     j <- j + 1
@@ -52,6 +65,7 @@ prepareReadFiles <- function(metadata, filePrefix,
     
     sourceFields <- c('readset', 'targetname1')
     targetFields <- c('readset', field1)
+    library_layout <- 'single'
     if (!all(is.null(files$targetname2))) {
       j <- j + 1
       field2 <- paste0('filename', j)
@@ -60,17 +74,15 @@ prepareReadFiles <- function(metadata, filePrefix,
       
       sourceFields <- c(sourceFields, 'targetname2')
       targetFields <- c(targetFields, field2)
-      hasPaired <- TRUE
     }
     
     toMerge <- files[files$PairNum == i, sourceFields]
     names(toMerge) <- targetFields
     
-    
     allFiles <- merge(allFiles, toMerge, by = 'readset', all.x = T)
   }
   
-  library_layout = ifelse(hasPaired, yes = 'paired', no = 'single')
+  
     
   toWrite <- data.frame(
     sample_name = metadata$sample_name,
@@ -79,7 +91,6 @@ prepareReadFiles <- function(metadata, filePrefix,
     library_strategy = library_strategy,
     library_source = library_source,
     library_selection = library_selection,
-    library_layout = library_layout,
     platform = metadata$platform,
     instrument_model = instrument_model,
     design_description = metadata$librarytype,
