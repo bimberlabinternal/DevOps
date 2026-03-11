@@ -50,7 +50,7 @@ echo "STAGING_BRANCH: $STAGING_BRANCH"
 echo "DESTINATION_BRANCH: $DESTINATION_BRANCH"
 echo "PR_REVIEWERS: $PR_REVIEWERS"
 
-git config --global http.sslVerify "false"
+#git config --global http.sslVerify "false"
 
 git clone -b $SOURCE_BRANCH https://$GITHUB_TOKEN@github.com/${SOURCE_ORG}/${REPO}.git
 cd `basename "$REPO" .git`
@@ -85,6 +85,7 @@ if [ $NEW_COMMITS != 0 ];then
 	
 	git push --force -u merge-dest $STAGING_BRANCH
 
+	#git config --global http.sslVerify "true"
 	PR_EXISTS=`hub pr list --base ${TARGET_ORG}:${DESTINATION_BRANCH} --head ${TARGET_ORG}:${STAGING_BRANCH} | wc -l`
 	if [ $PR_EXISTS == 0 ]; then
 		# Create pull request

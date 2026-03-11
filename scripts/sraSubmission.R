@@ -45,7 +45,7 @@ prepareReadFiles <- function(metadata, filePrefix,
         IsPaired = sum(!is.na(targetname2))
       )
   
-  if (length(unique(files$IsPaired)) > 1) {
+  if (any(files$IsPaired == 0) && any(files$IsPaired > 0)) {
     stop(paste0('One or more readsets has a mixture of paired and unpaired data'))
   }
 
