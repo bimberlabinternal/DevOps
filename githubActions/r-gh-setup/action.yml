@@ -82,7 +82,7 @@ runs:
         sudo updmap-sys --syncwithtrees || echo 'updmap-sys not found'
       shell: bash
 
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6.2.0
       with:
         python-version: '3.12'
         cache: 'pip'
@@ -124,10 +124,9 @@ runs:
           any::devtools
 
     - name: Perform custom installs
-      # NOTE: this is added to try to address the "Error in `req_perform1(req, req_prep, path = path, handle = handle, resend_count = n)`: unused arguments (req_prep, resend_count = n)"
-      # It can probably be removed promptly, as httr2 1.2.2 binaries are on BioConductor
-      run: |
-        remotes::install_version("httr2", version = "1.2.1")
+      # NOTE: Added to address httr2 incompatibility. Remove when resolved: https://github.com/saezlab/OmnipathR/issues/124
+      run: |        
+        remotes::install_github("saezlab/OmnipathR", ref = "devel")
       shell: Rscript {0}
 
     - name: Setup CoNGA
