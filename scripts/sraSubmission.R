@@ -50,7 +50,7 @@ prepareReadFiles <- function(metadata, filePrefix,
   }
 
   allFiles <- unique(files[c('readset', 'IsPaired')])
-  allFiles$library_layout <- ifelse(allFiles$IsPaired, yes = 'paired', no = 'single')
+  allFiles$library_layout <- ifelse(allFiles$IsPaired > 0, yes = 'paired', no = 'single')
   allFiles$IsPaired <- NULL
   j <- 0
   for (i in 1:max(files$TotalPairs)) {
@@ -169,4 +169,50 @@ prepareSubmissionForReadsets <- function(metadata, filePrefix, folderPath = '/La
   f <- file(paste0(filePrefix, '.sampleinfo.txt'), 'wb')
   write.table(toWrite, file = f, sep = '\t', row.names = F, quote = F, na = '')  
   close(f)
+}
+
+parseSraAccessions <- function(fn, folderPath = "/Labs/Bimber/") {
+  sraData <- read.table(fn, sep = '\t', header = T, stringsAsFactors = F, fill = TRUE, quote = '@')
+  
+  sraData$readset <- sapply(sraData$sample_name, function(x){
+    x <- as.character(x)
+    x <- unlist(strsplit(x = x, split = 'rs'))
+    x <- x[length(x)]
+    
+    return(x)
+  })
+  
+  sraData$readset <- gsub(sraData$readset, pattern = '-B', replacement = '')
+  
+  sraData$readset <- as.integer(sraData$readset)
+  
+  toUpdate <- labkey.selectRows(
+    baseUrl="https://prime-seq.ohsu.edu", 
+    folderPath=folderPath, 
+    schemaName="sequenceanalysis", 
+    queryName="readdata", 
+    colSelect = 'rowid,readset,container,sra_accession',
+    colFilter = makeFilter(
+      c('readset', 'IN', paste0(unique(sraData$readset), collapse = ';'))
+    ),
+    colNameOpt = 'rname'
+  )
+  
+  toUpdate <- toUpdate[is.na(toUpdate$sra_accession),]
+  
+  toUpdate <- merge(toUpdate, sraData[c('readset', 'accession')], by = 'readset', all.x = T, all.y = F)
+  names(toUpdate) <- c('readset', 'rowid', 'container', 'sra_accession_old', 'sra_accession')
+  #toUpdate <- toUpdate[names(toUpdate) != 'readset']
+  toUpdate <- toUpdate[names(toUpdate) != 'sra_accession_old']
+  
+  # if (nrow(toUpdate) != nrow(sraData)) {
+  #   stop('Rows dont match')
+  # }
+  # 
+  if (nrow(toUpdate) == 0) {
+    print('no rows')
+    return()
+  }
+  
+  return(toUpdate)
 }
