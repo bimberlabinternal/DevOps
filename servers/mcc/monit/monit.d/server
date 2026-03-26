@@ -8,12 +8,12 @@ set logfile /var/log/monit
 check host prime-seq.ohsu.edu with address prime-seq.ohsu.edu
         if failed port 80 proto http for 3 cycles then alert
         if failed port 443 type TCPSSL for 3 cycles then alert
-        if failed url https://prime-seq/project/home/begin.view for 3 cycles then alert
+        if failed url https://prime-seq.ohsu.edu/project/home/begin.view for 3 cycles then alert
 
 check host mcc.ohsu.edu with address mcc.ohsu.edu
         if failed port 80 proto http for 3 cycles then alert
         if failed port 443 type TCPSSL for 3 cycles then alert
-        if failed url https://mcc/project/home/begin.view for 3 cycles then alert
+        if failed url https://mcc.ohsu.edu/project/home/begin.view for 3 cycles then alert
 
 # this check will send an alert if the contents of labkey-errors.log change
 check file labkey-errors with path /usr/local/labkey/logs/labkey-errors.log
