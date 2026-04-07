@@ -11,7 +11,7 @@ MINOR_SHORT=$MINOR_FULL
 LABKEY_HOME=/home/exacloud/gscratch/prime-seq/src_arc
 LABKEY_USER=labkey_submit
 
-JAVA_HOME=/home/exacloud/gscratch/prime-seq/java/current
+JAVA_HOME=/home/exacloud/gscratch/prime-seq/java/jdk-25.0.2+10
 JAVA=${JAVA_HOME}/bin/java
 LK_SRC_DIR=${LABKEY_HOME}
 

@@ -16,9 +16,9 @@ service monit restart
 # Java:
 cd /usr/local/src
 wget https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.2%2B10/OpenJDK25U-jdk_x64_linux_hotspot_25.0.2_10.tar.gz
-tar -xf OpenJDK17U-jdk_x64_linux_hotspot_17.0.11_9.tar.gz
+tar -xf OpenJDK25U-jdk_x64_linux_hotspot_25.0.2_10.tar.gz
 mv jdk-25.0.2+10 ../
-rm -Rf OpenJDK17U-jdk_x64_linux_hotspot_17.0.11_9.tar.gz
+rm -Rf OpenJDK25U-jdk_x64_linux_hotspot_25.0.2_10.tar.gz
 cd ../
 ln -s jdk-25.0.2+10 java
 
