@@ -37,7 +37,7 @@
 		<property name="javaHome" value="/home/exacloud/gscratch/java/current"/>
 			<property name="javaOpts">
 			<list>
-				<value>-Xmx8g</value>
+				<value>-Xmx12g</value>
 			</list>
 		</property>
 		<property name="extraSubmitScriptLines">
