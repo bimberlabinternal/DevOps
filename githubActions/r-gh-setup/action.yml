@@ -44,6 +44,7 @@ runs:
         echo -e "umap-learn" >> requirements.txt
         echo -e "phate" >> requirements.txt
         echo -e "sctour" >> requirements.txt
+        echo -e "starcatpy" >> requirements.txt
         echo -e "celltypist" >> requirements.txt
         echo -e "leidenalg" >> requirements.txt
         echo -e "scikit-misc" >> requirements.txt
