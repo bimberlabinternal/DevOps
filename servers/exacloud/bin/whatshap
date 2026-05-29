@@ -1,0 +1,6 @@
+#!/bin/sh
+
+#~/miniconda3/bin/conda create -n whatshap-env whatshap
+source ~/miniconda3/etc/profile.d/conda.sh
+
+~/miniconda3/bin/conda run -n whatshap-env whatshap $@

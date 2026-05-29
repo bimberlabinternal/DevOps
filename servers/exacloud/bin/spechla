@@ -1,0 +1,5 @@
+#!/bin/sh
+
+source ~/miniconda3/etc/profile.d/conda.sh
+
+~/miniconda3/bin/conda run -n spechla_env /home/exacloud/gscratch/prime-seq/bin_arc/SpecHLA/script/whole/SpecHLA.sh $@
