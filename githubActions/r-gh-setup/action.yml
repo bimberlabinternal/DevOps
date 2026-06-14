@@ -63,7 +63,7 @@ runs:
     # libudunits2-dev added due to units / ggpattern error
     # libgdal-dev added for ggpattern / sf / gdal-config missing error
     - name: Install apt packages
-      uses: awalsh128/cache-apt-pkgs-action@latest
+      uses: awalsh128/cache-apt-pkgs-action@v1.6.1
       with:
         packages: |
           libharfbuzz-dev 
