@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Installation:
+# conda create -n kraken2 kraken2
+
+export KRAKEN2_DB=/home/exacloud/gscratch/prime-seq/bin_arc/kraken2_bv_db
+
+# download bacteria + virus custom db (no eukaryotes)
+#kraken2-build \
+#  --download-library bacteria \
+#  --db $KRAKEN2_DB \
+#  --threads 16 \
+#  --use-ftp
+#
+#kraken2-build \
+#   --download-library viral \
+#   --db $KRAKEN2_DB \
+#   --threads 16 \
+#   --use-ftp
+#
+## download taxonomy
+#kraken2-build \
+#   --download-taxonomy \
+#   --db $$KRAKEN2_DB \
+#   --use-ftp
+#
+## build database
+#kraken2-build \
+#  --build \
+#  --db $KRAKEN2_DB \
+#  --threads 16
+#
+source ~/miniconda3/etc/profile.d/conda.sh
+
+~/miniconda3/bin/conda run -n kracken2 kracken2 $@
