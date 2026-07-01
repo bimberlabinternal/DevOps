@@ -126,8 +126,10 @@ runs:
 
     - name: Perform custom installs
       # NOTE: Added to address httr2 incompatibility. Remove when resolved: https://github.com/saezlab/OmnipathR/issues/124
+      # TODO: remove seurat install this after PrepDR5 bug is fixed
       run: |        
-        remotes::install_github("saezlab/OmnipathR", ref = "devel")
+        remotes::install_github("saezlab/OmnipathR", ref = "devel")        
+        remotes::install_version("Seurat", version = "5.5.0")
       shell: Rscript {0}
 
     - name: Setup CoNGA
