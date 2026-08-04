@@ -20,8 +20,8 @@ set -x
 # User specific aliases and functions
 umask 0002
 
-module load python/3.11
-module load r/4.4
+module load python/3.12
+module load r/4.5
 
 export BCFTOOLS_PLUGINS=/home/exacloud/gscratch/prime-seq/bin_arc/bcftools_plugins
 
