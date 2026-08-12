@@ -33,6 +33,9 @@ chmod +x /usr/local/tools/labkey-error-email.sh
 wget -O /usr/local/tools/filterLogMessages.py https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/filterLogMessages.py
 chmod +x /usr/local/tools/filterLogMessages.py
 
+wget -O /usr/local/tools/mgapFtpCheck.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mgap/monit/mgapFtpCheck.sh
+chmod +x /usr/local/tools/mgapFtpCheck.sh
+
 # LabKey
 cd /usr/local/src
 mkdir -p /usr/local/labkey/labkey-tmp

@@ -54,9 +54,6 @@ chmod +x /usr/local/tools/filterLogMessages.py
 wget -O /usr/local/tools/activeMQ-monit.py https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/activeMQ-monit.py
 chmod +x /usr/local/tools/activeMQ-monit.py
 
-wget -O /usr/local/tools/mgapFtpCheck.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mgap/monit/mgapFtpCheck.sh
-chmod +x /usr/local/tools/mgapFtpCheck.sh
-
 # NOTE: you must also create the file: /usr/local/etc/labkey/.dockerRegistry. This can be created using: 
 # skopeo login --compat-auth-file=/usr/local/etc/labkey/.dockerRegistry
 wget -O /usr/local/tools/syncDockerRegistries.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/syncDockerRegistries.sh
