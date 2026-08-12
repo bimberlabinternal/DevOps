@@ -20,6 +20,13 @@ check file labkey-errors with path /usr/local/labkey/logs/labkey-errors.log
         noalert bimber@ohsu.edu
         if changed checksum then exec /usr/local/tools/labkey-error-email.sh
 
+CHECK PROGRAM mGAP-FTP-Test
+       with path /usr/local/tools/mgapFtpCheck.sh
+       if status != 0 then alert
+       alert bimber@ohsu.edu not {instance}
+       # Every hour, at 25 past:
+       every "25 * * * *"
+
 ## Server:
 
 check system server

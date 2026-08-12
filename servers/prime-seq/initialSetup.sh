@@ -9,8 +9,8 @@ pip install Stomp
 
 # Monit
 yum install monit
-wget -O /etc/monitrc https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/prime-seq/monit/monitrc
-wget -O /etc/monit.d/server https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/prime-seq/monit/monit.d/server
+wget -O /etc/monitrc https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mgap/monit/monitrc
+wget -O /etc/monit.d/server https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mgap/monit/monit.d/server
 service monit restart
 
 # Java:
@@ -37,8 +37,8 @@ mkdir /var/log/activemq
 chown -R activemq:activemq /var/log/activemq
 
 # Services:
-wget -O /etc/systemd/system/labkey_server.service https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/prime-seq/labkey_server.service
-wget -O /etc/systemd/system/activemq.service https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/prime-seq/activemq.service
+wget -O /etc/systemd/system/labkey_server.service https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mgap/labkey_server.service
+wget -O /etc/systemd/system/activemq.service https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mgap/activemq.service
 systemctl daemon-reload
 
 if [ ! -e /usr/local/tools/ ]; then
@@ -54,6 +54,9 @@ chmod +x /usr/local/tools/filterLogMessages.py
 wget -O /usr/local/tools/activeMQ-monit.py https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/activeMQ-monit.py
 chmod +x /usr/local/tools/activeMQ-monit.py
 
+wget -O /usr/local/tools/mgapFtpCheck.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mgap/monit/mgapFtpCheck.sh
+chmod +x /usr/local/tools/mgapFtpCheck.sh
+
 # NOTE: you must also create the file: /usr/local/etc/labkey/.dockerRegistry. This can be created using: 
 # skopeo login --compat-auth-file=/usr/local/etc/labkey/.dockerRegistry
 wget -O /usr/local/tools/syncDockerRegistries.sh https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/scripts/syncDockerRegistries.sh
@@ -65,7 +68,7 @@ chmod 0644 /etc/cron.d/syncDockerRegistries
 
 # LabKey
 cd /usr/local/src
-wget https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/prime-seq/installLabkey.sh
+wget https://raw.githubusercontent.com/bimberlabinternal/DevOps/master/servers/mgap/installLabkey.sh
 chmod +x installLabkey.sh
 ./installLabkey.sh
 mkdir /usr/local/labkey/labkey-tmp
