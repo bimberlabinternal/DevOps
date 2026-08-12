@@ -4,8 +4,8 @@ LOG_FILE=/var/log/mgapCurlErrors.txt
 
 testDownload() {
 	FN=$1
-	CODE=`curl --silent -w "%{http_code}" -I $FN`
-	if [ $CODE != '200'];then
+	CODE=`curl --silent -o /dev/null -w "%{http_code}" -I $FN`
+	if [[ $CODE != "200" ]];then
 	  echo "Error ${CODE}: ${FN}"
     exit 1
   fi
