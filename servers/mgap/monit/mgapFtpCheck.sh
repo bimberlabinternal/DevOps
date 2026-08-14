@@ -12,10 +12,8 @@ testDownload() {
 }
 
 # Latest:
-testDownload https://mgapdownload.ohsu.edu/latest/mGap.Rhesus_macaque.v3.0.vcf.gz
-testDownload https://mgapdownload.ohsu.edu/latest/mGap.Rhesus_macaque.v3.0.vcf.gz.tbi
-testDownload https://mgapdownload.ohsu.edu/latest/mGap.Rhesus_macaque.v3.0.sitesOnly.vcf.gz
-testDownload https://mgapdownload.ohsu.edu/latest/mGap.Rhesus_macaque.v3.0.sitesOnly.vcf.gz.tbi
+testDownload https://mgapdownload.ohsu.edu/latest/mGAP.Rhesus_macaque.vcf.gz
+testDownload https://mgapdownload.ohsu.edu/latest/mGAP.Rhesus_macaque.vcf.gz.tbi
 
 # Version 3.0:
 testDownload https://mgapdownload.ohsu.edu/996D1E75-0762-103E-BEEA-F619086A00D2/mGap.Rhesus_macaque.v3.0.vcf.gz
