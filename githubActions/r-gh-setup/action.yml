@@ -133,10 +133,11 @@ runs:
       shell: Rscript {0}
 
     - name: Setup CoNGA
+      # TODO: Once this issue is resolved, switch back to the main repo: https://github.com/phbradley/conga/issues/75
       run: |
         WD=`pwd`
         cd ../
-        git clone https://github.com/phbradley/conga.git conga
+        git clone https://github.com/bbimber/conga.git conga
         cd conga/tcrdist_cpp  
         make
         cd ../../
