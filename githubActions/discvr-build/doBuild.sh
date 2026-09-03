@@ -9,12 +9,9 @@ if [ -e buildSettings.sh ];then
 	source buildSettings.sh
 fi
 
-echo "GITHUB_REF: $GITHUB_REF"
-echo "GITHUB_BASE_REF: $GITHUB_BASE_REF"
-echo "GITHUB_REF_NAME: $GITHUB_REF_NAME"
-
-BRANCH_NAME=${GITHUB_REF##*/}
-BASE_BRANCH_NAME=${GITHUB_BASE_REF##*/}
+# This should drop the first two elements in the path, such as: refs/heads/main. It should leave branches that contain a slash, like dependabot:
+BRANCH_NAME=`echo ${GITHUB_REF} | sed 's|^[^/]*/[^/]*/||g'`
+BASE_BRANCH_NAME=`echo ${GITHUB_BASE_REF} | sed 's|^[^/]*/[^/]*/||g'`
 
 # For PRs, this refers to the target
 if [ ! -z $BASE_BRANCH_NAME ];then
