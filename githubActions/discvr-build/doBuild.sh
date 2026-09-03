@@ -58,26 +58,30 @@ inferBaseVersion() {
 	elif [[ "$INPUT" =~ ^[0-9]+\.[0-9]+_fb ]]; then
 		BASE_VERSION=`echo "$INPUT" | sed -E 's/^([0-9]+\.[0-9]+)_fb.*$/\1/g'`
 	else
-		echo "Unable to infer base version, using default: $DEFAULT_BRANCH"
-		BASE_VERSION=$DEFAULT_BRANCH
+		echo "Unable to infer base version"
+		BASE_VERSION=
 	fi
+}
+
+inferBaseVersion $BRANCH_NAME
+if [ -z $BASE_VERSION ];then
+  echo "Unable to infer base version, using default branch: $DEFAULT_BRANCH"
+  inferBaseVersion $DEFAULT_BRANCH
 
   if [ -z $BASE_VERSION ];then
     echo "Unable to infer BASE_VERSION"
     exit 1
   fi
+fi
 
-  if [ $BASE_VERSION == 'develop' ];then
-    BASE_VERSION_SHORT='develop'
-  else
-    BASE_VERSION_SHORT=`echo $BASE_VERSION | awk -F. '{ print $1"."$2 }'`
-  fi
+if [ $BASE_VERSION == 'develop' ];then
+  BASE_VERSION_SHORT='develop'
+else
+  BASE_VERSION_SHORT=`echo $BASE_VERSION | awk -F. '{ print $1"."$2 }'`
+fi
 
-	echo "Inferred base version: [$BASE_VERSION]"
-	echo "Short base version inferred from branch: [$BASE_VERSION_SHORT]"
-}
-
-inferBaseVersion $BRANCH_NAME
+echo "Inferred base version: [$BASE_VERSION]"
+echo "Short base version inferred from branch: [$BASE_VERSION_SHORT]"
 
 echo "GENERATE_DIST: $GENERATE_DIST"
 date +%F" "%T
@@ -133,6 +137,7 @@ function identifyBranch {
 		fi
 	fi
 
+  # TODO
 	echo "Branch not found, using default: $DEFAULT_BRANCH"
 	BRANCH=$DEFAULT_BRANCH
 }
