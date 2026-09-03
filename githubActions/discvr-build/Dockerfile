@@ -1,7 +1,7 @@
 FROM eclipse-temurin:25
 
 RUN apt-get update -y && \
-	apt-get install -y git less curl subversion bash openssh-server python3-dev build-essential unzip && \
+	apt-get install -y git less curl subversion bash openssh-server python3-dev build-essential unzip jq && \
 	apt-get clean
 
 ADD *.sh /

@@ -44,16 +44,36 @@ if [[ -v NO_SHALLOW ]];then
 	DEPTH_ARG=
 fi
 
-BASE_VERSION=`echo $BRANCH_NAME | grep -E -o '[0-9\.]{4,8}' || echo 'develop'`
+DEFAULT_BRANCH=`curl -s https://${GH_CREDENTIALS}github.com/${GIT_ORG}/${REPONAME}/ | jq -r .default_branch`
+echo "Default branch: $DEFAULT_BRANCH"
 
-if [ $BASE_VERSION == 'develop' ];then
-	BASE_VERSION_SHORT='develop'
-else
-	BASE_VERSION_SHORT=`echo $BASE_VERSION | awk -F. '{ print $1"."$2 }'`
-fi
+inferBaseVersion() {
+	INPUT=$1
+	if [[ "$INPUT" == "release"* ]]; then
+		BASE_VERSION=`echo "$INPUT" | sed 's/^release//g' | sed 's/-SNAPSHOT$//g'`
+	elif [[ "$INPUT" == "discvr-"* ]]; then
+		BASE_VERSION=`echo "$INPUT" | sed 's/^discvr-//g'`
+	elif [[ "$INPUT" == "develop" ]]; then
+		BASE_VERSION=$INPUT
+	elif [[ "$INPUT" =~ ^[0-9]+\.[0-9]+_fb ]]; then
+		BASE_VERSION=`echo "$INPUT" | sed -E 's/^([0-9]+\.[0-9]+)_fb.*$/\1/g'`
+	else
+		echo "Unable to infer base version, using default: $DEFAULT_BRANCH"
+		BASE_VERSION=$DEFAULT_BRANCH
+	fi
 
-echo "Base version inferred from branch: "$BASE_VERSION
-echo "Short base version inferred from branch: "$BASE_VERSION_SHORT
+  if [ $BASE_VERSION == 'develop' ];then
+    BASE_VERSION_SHORT='develop'
+  else
+    BASE_VERSION_SHORT=`echo $BASE_VERSION | awk -F. '{ print $1"."$2 }'`
+  fi
+
+	echo "Inferred base version: [$BASE_VERSION]"
+	echo "Short base version inferred from branch: [$BASE_VERSION_SHORT]"
+}
+
+inferBaseVersion $BRANCH_NAME
+
 echo "GENERATE_DIST: $GENERATE_DIST"
 date +%F" "%T
 
@@ -108,8 +128,8 @@ function identifyBranch {
 		fi
 	fi
 
-	echo 'Branch not found, using default: develop'
-	BRANCH='develop'
+	echo "Branch not found, using default: $DEFAULT_BRANCH"
+	BRANCH=$DEFAULT_BRANCH
 }
 
 function cloneGit {
