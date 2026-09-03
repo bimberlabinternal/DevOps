@@ -9,6 +9,9 @@ if [ -e buildSettings.sh ];then
 	source buildSettings.sh
 fi
 
+echo "GITHUB_REF: $GITHUB_REF"
+echo "GITHUB_BASE_REF: GITHUB_BASE_REF"
+
 BRANCH_NAME=${GITHUB_REF##*/}
 BASE_BRANCH_NAME=${GITHUB_BASE_REF##*/}
 
