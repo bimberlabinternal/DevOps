@@ -44,7 +44,7 @@ if [[ -v NO_SHALLOW ]];then
 	DEPTH_ARG=
 fi
 
-DEFAULT_BRANCH=`curl -s https://${GH_CREDENTIALS}github.com/${GIT_ORG}/${REPONAME}/ | jq -r .default_branch`
+DEFAULT_BRANCH=`curl -s https://${GH_CREDENTIALS}api.github.com/repos/${GIT_ORG}/${REPONAME} | jq -r .default_branch`
 echo "Default branch: $DEFAULT_BRANCH"
 
 inferBaseVersion() {
