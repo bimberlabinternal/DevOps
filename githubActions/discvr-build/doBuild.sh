@@ -44,8 +44,8 @@ if [[ -v NO_SHALLOW ]];then
 	DEPTH_ARG=
 fi
 
-DEFAULT_BRANCH=`curl -s https://${GH_CREDENTIALS}api.github.com/repos/${GIT_ORG}/${REPONAME} | jq -r .default_branch`
-echo "Default branch: $DEFAULT_BRANCH"
+DEFAULT_BRANCH=`curl -s https://${GH_CREDENTIALS}api.github.com/repos/${GITHUB_REPOSITORY} | jq -r .default_branch`
+echo "Default branch: [$DEFAULT_BRANCH]"
 
 inferBaseVersion() {
 	INPUT=$1
@@ -61,6 +61,11 @@ inferBaseVersion() {
 		echo "Unable to infer base version, using default: $DEFAULT_BRANCH"
 		BASE_VERSION=$DEFAULT_BRANCH
 	fi
+
+  if [ -z $BASE_VERSION ];then
+    echo "Unable to infer BASE_VERSION"
+    exit 1
+  fi
 
   if [ $BASE_VERSION == 'develop' ];then
     BASE_VERSION_SHORT='develop'
