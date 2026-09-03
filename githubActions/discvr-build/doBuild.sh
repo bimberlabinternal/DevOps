@@ -137,8 +137,7 @@ function identifyBranch {
 		fi
 	fi
 
-  # TODO
-	echo "Branch not found, using default: $DEFAULT_BRANCH"
+  echo "Branch not found, using default: $DEFAULT_BRANCH"
 	BRANCH=$DEFAULT_BRANCH
 }
 
