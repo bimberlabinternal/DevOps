@@ -50,4 +50,9 @@ if (project.findProject(":server:modules:DiscvrLabKeyModules:QueryExtensions"))
     BuildUtils.addModuleDistributionDependencies(project, [":server:modules:DiscvrLabKeyModules:QueryExtensions"])
 }
 
+if (project.findProject(":server:modules:DiscvrLabKeyModules:BaseStudy"))
+{
+    BuildUtils.addModuleDistributionDependencies(project, [":server:modules:DiscvrLabKeyModules:BaseStudy"])
+}
+
 project.tasks.register("distribution", ModuleDistribution)
